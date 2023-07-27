@@ -1,22 +1,88 @@
+import { useCampaigns } from "@/lib/hooks/useCampaigns";
 import isShopAvailable from "@/utils/middleware/isShopAvailable";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
-import { Layout, LegacyCard, Page } from "@shopify/polaris";
+import {
+  CalloutCard,
+  Card,
+  Divider,
+  EmptyState,
+  Frame,
+  Grid,
+  Icon,
+  Layout,
+  LegacyCard,
+  Loading,
+  MediaCard,
+  Page,
+  SkeletonPage,
+  SkeletonThumbnail,
+  Text,
+} from "@shopify/polaris";
 import { useRouter } from "next/router";
+import { AddMajor } from "@shopify/polaris-icons";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
   return await isShopAvailable(context);
 }
 
-const HomePage = () => {
+const HomePage = (props) => {
   const router = useRouter();
   const app = useAppBridge();
   const redirect = Redirect.create(app);
 
+  const { identifier, campaigns, isLoading } = useCampaigns();
+
+  if (isLoading)
+    return (
+      <Page title="Campaigns">
+        <Layout>
+          <Loading />
+        </Layout>
+      </Page>
+    );
+
   return (
-    <Page title="Home">
+    <Page title="Campaigns">
       <Layout>
+        {!identifier && (
+          <Layout.Section fullWidth>
+            <CalloutCard
+              title="Get your domain"
+              primaryAction={{
+                content: "Configure domain",
+                url: "/app/settings",
+              }}
+              illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
+            >
+              <p>
+                Get your custom Atelier domain so your customers can easily
+                identify you.
+              </p>
+            </CalloutCard>
+          </Layout.Section>
+        )}
+
+        {!campaigns.length && (
+          <Layout.Section fullWidth>
+            <EmptyState
+              heading="Setup your first campaign"
+              image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+              action={{
+                content: "Create campaign",
+                icon: () => <Icon source={AddMajor} />,
+              }}
+            >
+              <p className="mb-12">
+                A campaign is the foundation of Atelier, you can create as many
+                campaigns as you want, each getting its own url, product listing
+                and theme.
+              </p>
+            </EmptyState>
+          </Layout.Section>
+        )}
+
         <Layout.Section fullWidth>
           <LegacyCard
             title="Debug Cards"
