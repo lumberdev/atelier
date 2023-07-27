@@ -1,14 +1,10 @@
 {
-  "name": "shopify-nextjs-prisma-app",
+  "name": "atelier",
   "version": "0.0.1",
   "type": "module",
-  "author": {
-    "name": "Harshdeep Singh Hura",
-    "url": "https://harshdeephura.com"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kinngh/shopify-nextjs-prisma-app.git"
+    "url": "https://github.com/lumber/atelier.git"
   },
   "scripts": {
     "dev": "next dev",
@@ -40,12 +36,15 @@
     "@shopify/app-bridge-react": "^3.7.8",
     "@shopify/polaris": "^11.7.0",
     "@shopify/shopify-api": "^7.5.0",
+    "autoprefixer": "^10.4.14",
     "cryptr": "^6.2.0",
     "graphql": "^16.7.1",
     "next": "13.4.10",
     "next-api-middleware": "^2.0.1",
+    "postcss": "^8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0"
+    "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
     "@shopify/app": "^3.47.5",

@@ -4,6 +4,7 @@ import "@shopify/polaris/build/esm/styles.css";
 import translations from "@shopify/polaris/locales/en.json";
 import AppBridgeProvider from "../components/providers/AppBridgeProvider";
 import { useRouter } from "next/router";
+import "./global.css";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
