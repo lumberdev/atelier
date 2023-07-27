@@ -1,9 +1,11 @@
 import { NavigationMenu } from "@shopify/app-bridge-react";
-import { AppProvider as PolarisProvider } from "@shopify/polaris";
+import { Frame, AppProvider as PolarisProvider } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import translations from "@shopify/polaris/locales/en.json";
 import AppBridgeProvider from "../components/providers/AppBridgeProvider";
 import { useRouter } from "next/router";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "@/utils/queryClient";
 import "./global.css";
 
 export default function App({ Component, pageProps }) {
@@ -14,17 +16,18 @@ export default function App({ Component, pageProps }) {
         <NavigationMenu
           navigationLinks={[
             {
-              label: "Fetch Data",
-              destination: "/debug/getData",
-            },
-            {
-              label: "Billing API",
-              destination: "/debug/billing",
+              label: "Settings",
+              destination: "/settings",
             },
           ]}
           matcher={(link) => router.pathname === link.destination}
         />
-        <Component {...pageProps} />
+
+        <QueryClientProvider client={queryClient}>
+          <Frame>
+            <Component {...pageProps} />
+          </Frame>
+        </QueryClientProvider>
       </AppBridgeProvider>
     </PolarisProvider>
   );
