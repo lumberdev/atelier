@@ -4,20 +4,12 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
 import {
   CalloutCard,
-  Card,
-  Divider,
   EmptyState,
-  Frame,
-  Grid,
   Icon,
   Layout,
   LegacyCard,
   Loading,
-  MediaCard,
   Page,
-  SkeletonPage,
-  SkeletonThumbnail,
-  Text,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
 import { AddMajor } from "@shopify/polaris-icons";
@@ -27,7 +19,7 @@ export async function getServerSideProps(context) {
   return await isShopAvailable(context);
 }
 
-const HomePage = (props) => {
+const HomePage = () => {
   const router = useRouter();
   const app = useAppBridge();
   const redirect = Redirect.create(app);
@@ -52,7 +44,9 @@ const HomePage = (props) => {
               title="Get your domain"
               primaryAction={{
                 content: "Configure domain",
-                url: "/app/settings",
+                onAction: () => {
+                  router.push("/settings");
+                },
               }}
               illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
             >
@@ -71,6 +65,9 @@ const HomePage = (props) => {
               image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
               action={{
                 content: "Create campaign",
+                onAction: () => {
+                  router.push("/campaign/new");
+                },
                 icon: () => <Icon source={AddMajor} />,
               }}
             >
@@ -100,49 +97,7 @@ const HomePage = (props) => {
             </p>
           </LegacyCard>
         </Layout.Section>
-        <Layout.Section oneHalf>
-          <LegacyCard
-            sectioned
-            title="Repository"
-            primaryFooterAction={{
-              content: "GitHub",
-              onAction: () => {
-                redirect.dispatch(Redirect.Action.REMOTE, {
-                  url: "https://github.com/kinngh/shopify-nextjs-prisma-app",
-                  newContext: true,
-                });
-              },
-            }}
-            secondaryFooterActions={[
-              {
-                content: "Open Issue",
-                onAction: () => {
-                  redirect.dispatch(Redirect.Action.REMOTE, {
-                    url: "https://github.com/kinngh/shopify-nextjs-prisma-app/issues?q=is%3Aissue",
-                    newContext: true,
-                  });
-                },
-              },
-            ]}
-          >
-            <p>Star the repository, open a new issue or start a discussion.</p>
-          </LegacyCard>
-          <LegacyCard
-            sectioned
-            title="Changelog"
-            primaryFooterAction={{
-              content: "Explore",
-              onAction: () => {
-                redirect.dispatch(Redirect.Action.REMOTE, {
-                  url: "https://shopify.dev/changelog/",
-                  newContext: true,
-                });
-              },
-            }}
-          >
-            <p>Explore changelog on Shopify.dev and follow updates.</p>
-          </LegacyCard>
-        </Layout.Section>
+
         <Layout.Section oneHalf>
           <LegacyCard
             sectioned
@@ -172,33 +127,8 @@ const HomePage = (props) => {
               Explore the GraphQL APIs in Graphiql or read design guidelines.
             </p>
           </LegacyCard>
-          <LegacyCard
-            sectioned
-            title="Hiring?"
-            primaryFooterAction={{
-              content: "Twitter",
-              onAction: () => {
-                redirect.dispatch(Redirect.Action.REMOTE, {
-                  url: "https://www.twitter.com/kinngh",
-                  newContext: true,
-                });
-              },
-            }}
-            secondaryFooterActions={[
-              {
-                content: "LinkedIn",
-                onAction: () => {
-                  redirect.dispatch(Redirect.Action.REMOTE, {
-                    url: "https://www.linkedin.com/in/theharshdeep/",
-                    newContext: true,
-                  });
-                },
-              },
-            ]}
-          >
-            <p>🌎 / 🇨🇦 and looking to expand your engineering team?</p>
-          </LegacyCard>
         </Layout.Section>
+
         <Layout.Section fullWidth>
           <LegacyCard
             sectioned
