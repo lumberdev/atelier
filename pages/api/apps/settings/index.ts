@@ -24,7 +24,7 @@ router.get(async (req, res) => {
       },
     });
 
-  res.status(200).json({ settings: { domain: store.identifier } });
+  res.status(200).json({ settings: { shop, domain: store.identifier } });
 });
 
 router.put(async (req, res) => {
@@ -60,7 +60,7 @@ router.put(async (req, res) => {
 
   return res
     .status(200)
-    .json({ settings: { domain: updatedStore.identifier } });
+    .json({ settings: { shop, domain: updatedStore.identifier } });
 });
 
 export default router.handler();

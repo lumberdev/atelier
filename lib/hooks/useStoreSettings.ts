@@ -7,11 +7,11 @@ export const useStoreSettings = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const {
-    data = { settings: { domain: null } },
+    data = { settings: { shop: null, domain: null } },
     isLoading,
     refetch: refetchSettings,
   } = useQuery<{
-    settings: { domain?: string };
+    settings: { shop: string; domain?: string };
   }>("settings", () =>
     fetch("/api/apps/settings").then((response) => response.json())
   );
@@ -19,7 +19,7 @@ export const useStoreSettings = () => {
   const { mutate: updateStoreDomain, isLoading: isUpdatingStoreDomain } =
     useMutation<
       {
-        settings?: { domain?: string };
+        settings?: { shop: string; domain?: string };
         error?: { code: string; message: string };
       },
       { error: { code: string; message: string } },
