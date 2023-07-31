@@ -25,23 +25,23 @@ model session {
   shop    String?
 }
 
-enum ProductListingType {
+enum ResourceType {
   COLLECTIONS
   PRODUCTS
 }
 
 model campaigns {
-  id          String             @id
-  storeId     String
-  store       stores             @relation(fields: [storeId], references: [shop])
-  title       String
-  handle      String
-  description String             @db.Text
-  listType    ProductListingType
-  resourceIds String[]
-  variantIds  String[]
-  image       String?
-  isActive    Boolean            @default(false)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id           String       @id @default(cuid())
+  storeId      String
+  store        stores       @relation(fields: [storeId], references: [shop])
+  title        String
+  handle       String
+  description  String       @db.Text
+  resourceType ResourceType
+  resourceIds  String[]
+  variantIds   String[]
+  image        String?
+  isActive     Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
