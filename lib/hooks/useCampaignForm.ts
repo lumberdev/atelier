@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import useFetch from "@/components/hooks/useFetch";
-import { supabase } from "@/utils/supabase";
+import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "./useStoreSettings";
 import { CampaignInput } from "../types";
 import { useRouter } from "next/router";
@@ -77,9 +77,11 @@ export const useCampaignForm = (campaign?: campaigns) => {
     const fileName = fields.handle;
     const [fileExt] = imageFile.name.split(".").reverse();
 
-    const storageResponse = await supabase.storage
-      .from("campaigns")
-      .upload(`${shopId}/${fileName}.${fileExt}`, imageFile, { upsert: true });
+    const storageResponse = await supabaseStorage.upload(
+      `${shopId}/${fileName}.${fileExt}`,
+      imageFile,
+      { upsert: true }
+    );
     const image = storageResponse.data?.path ?? "";
 
     // 2. Upload data

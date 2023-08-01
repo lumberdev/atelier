@@ -21,12 +21,13 @@ Private sales for your Shopify store.
 4. Duplicate `.env.example` and rename to `.env`. Fill in the variables with the app API values.
    - Fill in `DATABASE_URL` with your database connection URL
    - You can leave `SHOPIFY_APP_URL` empty for now, will be filled in the development workflow section
+   - File uploads use the Supabase instance, in order to not mix prod and dev uploads we provide the `NEXT_PUBLIC_SUPABASE_STORAGE_KEY` variable that defines the folder where assets are saved. You can check the name of your folder in [Supabase](https://app.supabase.com/project/lypfjowlwsqnrjphjfgs/storage/buckets)
 5. Push the database schema to your database with `yarn prisma db push`
 
 ## Development workflow
 
 1. Start your local server with `yarn ngrok`
-2. Copy the forwarding `https` url from ngrok and add it to `SHOPIFY_APP_URL`. Add a `/app` to it (ie `https://atelier.sale/app`)
+2. Copy the forwarding `https` url from ngrok and add it to `SHOPIFY_APP_URL`
 3. Update the Shopify App urls to point to your local server with `yarn update:url`
 4. Open `<SHOPIFY_APP_URL>/api/auth?shop=<shopify store domain>` (ie `https://<id>.ngrok-free.app/api/auth?shop=river-theme.myshopify.com`)
    - This will open your development app (served by your local server) on the provided store

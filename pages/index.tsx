@@ -24,7 +24,7 @@ import {
 import { useRouter } from "next/router";
 import { AddMajor } from "@shopify/polaris-icons";
 import { campaigns } from "@prisma/client";
-import { supabase } from "@/utils/supabase";
+import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
 
 //On first install, check if the store is installed and redirect accordingly
@@ -78,9 +78,7 @@ const HomePage = () => {
             <Grid>
               {campaigns.map((campaign) => {
                 const image = campaign.image
-                  ? supabase.storage
-                      .from("campaigns")
-                      .getPublicUrl(campaign.image)
+                  ? supabaseStorage.getPublicUrl(campaign.image)
                   : "";
 
                 return (
@@ -161,9 +159,7 @@ const HomePage = () => {
                 renderItem={(resource) => {
                   const campaign = resource as campaigns;
                   const image = campaign.image
-                    ? supabase.storage
-                        .from("campaigns")
-                        .getPublicUrl(campaign.image)
+                    ? supabaseStorage.getPublicUrl(campaign.image)
                     : "";
 
                   return (
