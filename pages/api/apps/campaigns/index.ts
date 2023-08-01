@@ -15,7 +15,10 @@ router.use(verifyRequest);
 router.get(async (req, res) => {
   const shop = req.user_session.shop;
 
-  const store = await prisma.stores.findUnique({ where: { shop } });
+  const store = await prisma.stores.findUnique({
+    where: { shop },
+    include: { campaigns: true },
+  });
 
   if (!store)
     return res.status(500).json({
@@ -25,7 +28,9 @@ router.get(async (req, res) => {
       },
     });
 
-  return res.status(200).json({ identifier: store?.identifier, campaigns: [] });
+  return res
+    .status(200)
+    .json({ identifier: store?.identifier, campaigns: store.campaigns });
 });
 
 router.post(async (req, res) => {

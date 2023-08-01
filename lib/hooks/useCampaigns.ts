@@ -1,4 +1,5 @@
 import useFetch from "@/components/hooks/useFetch";
+import { campaigns as Campaigns } from "@prisma/client";
 import { useQuery } from "react-query";
 
 export const useCampaigns = () => {
@@ -6,7 +7,7 @@ export const useCampaigns = () => {
 
   const { data = { identifier: "", campaigns: [] }, isLoading } = useQuery<{
     identifier?: string;
-    campaigns: [];
+    campaigns: Campaigns[];
   }>("campaigns", () =>
     fetch("/api/apps/campaigns").then((response) => response.json())
   );
