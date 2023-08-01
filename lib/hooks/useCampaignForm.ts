@@ -24,7 +24,7 @@ const schema = yup
   })
   .required();
 
-export const useCampaignForm = (campaign?: CampaignInput) => {
+export const useCampaignForm = (campaign?: campaigns) => {
   const router = useRouter();
   const fetch = useFetch();
   const {
@@ -35,7 +35,7 @@ export const useCampaignForm = (campaign?: CampaignInput) => {
 
   const { handleSubmit, ...form } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: campaign || {
+    defaultValues: (campaign as any) || {
       resourceIds: [],
       variantIds: [],
       isActive: false,
@@ -63,6 +63,7 @@ export const useCampaignForm = (campaign?: CampaignInput) => {
 
         form.reset();
         setIsLoading(false);
+        console.log("[AT] DONE", campaign);
         router.push(`/campaign/${campaign.id}`);
       },
     }
