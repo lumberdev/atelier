@@ -1,31 +1,33 @@
-# Shopify Next.js x Prisma Boilerplate
+# Atelier
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fkinngh%2Fshopify-nextjs-prisma-app&env=SHOPIFY_API_KEY,SHOPIFY_API_SECRET,SHOPIFY_API_SCOPES,SHOPIFY_APP_URL,SHOPIFY_API_VERSION,DATABASE_URL,ENCRYPTION_STRING&project-name=shopify-next-prisma-app&repository-name=kinngh-shopify-next-prisma-app&redirect-url=https%3A%2F%2Ftwitter.com%2Fkinngh)
+Private sales for your Shopify store.
 
-An embedded app starter template to get up and ready with Shopify app development with Next.js and Prisma.
+## Requirements
 
-I've included [notes](/docs/NOTES.md) on this repo which goes over the repo on why certain choices were made.
+- Node.js (v18.17.0 or newer)
+- Yarn (v1.22.19 or newer)
+- (For local development) A PostgreSQL database
 
-## Video
+## Up and Running
 
-I made a video that goes over the entire repo, creating theme extension and deploying with Vercel and PlanetScale.
+1. Create a local PostgreSQL database
+2. Install dependencies with `yarn install`
+3. Create your development app on the [Shopify Partner Dashboard](https://partners.shopify.com/1011478/apps)
 
-[![Creating a Shopify app from scratch](http://i3.ytimg.com/vi/Z_JFpEJRh_g/hqdefault.jpg)](https://www.youtube.com/watch?v=Z_JFpEJRh_g)
+- Click `Create App`
+- Choose `Create App Manually`
+- Add a name in the format `Atelier - <Your Name>` so you can identify it easily
 
-## Supporting repositories
+4. Duplicate `.env.example` and rename to `.env`. Fill in the variables with the app API values.
 
-- [`@kinngh/shopify-node-express-mongodb-app`](https://github.com/kinngh/shopify-node-express-mongodb-app): Shopify app starter repo built with Express.js, React.js and Vite.
+- Fill in `DATABASE_URL` with your database connection URL
+- You can leave `SHOPIFY_APP_URL` empty for now, will be filled in the development workflow section
 
-## Tech Stack
+## Development workflow
 
-- Next.js 13
-- Prisma (Postgresql)
+1. Start your local server with `yarn ngrok`
+2. Copy the forwarding `https` url from ngrok and add it to `SHOPIFY_APP_URL`
+3. Update the Shopify App urls to point to your local server with `yarn update:url`
+4. Open `<SHOPIFY_APP_URL>/api/auth?shop=<shopify store domain>` (ie `https://<id>.ngrok-free.app/api/auth?shop=river-theme.myshopify.com`)
 
-## Why I made this
-
-Building with Express and React was great but eventually there comes a time where you have to remind yourself that you need to get on with the times and use what's new and stable. Serverless made sense, and Next.js made even more.
-
-## Notes
-
-- Refer to [SETUP](/docs/SETUP.md)
-- The project comes with snippets to speed up development. Refer to [Snippets](/docs/SNIPPETS.md).
+- This will open your development app (served by your local server) on the provided store
