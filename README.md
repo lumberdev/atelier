@@ -35,4 +35,4 @@ Private sales for your Shopify store.
    - This will open your development app (served by your local server) on the provided store
 
 The script `start.sh` automates the above commands.
-To run ensure your ngrok token is stored in `.env` as `NGROK_TOKEN` and that **tmux**, **awk** & **google-chrome** are all working/installed.
+To run ensure your ngrok token is stored in `.env` as `NGROK_TOKEN` and that **tmux**, **jq**, **awk** & **google-chrome** are all working/installed.
