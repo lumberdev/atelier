@@ -27,7 +27,12 @@ Private sales for your Shopify store.
 ## Development workflow
 
 1. Start your local server with `yarn ngrok`
+   - If ngrok is not globally authenticated you can pass the auth token manually:
+     `yarn ngrok --authtoken <ngrok_token>`
 2. Copy the forwarding `https` url from ngrok and add it to `SHOPIFY_APP_URL`
 3. Update the Shopify App urls to point to your local server with `yarn update:url`
 4. Open `<SHOPIFY_APP_URL>/api/auth?shop=<shopify store domain>` (ie `https://<id>.ngrok-free.app/api/auth?shop=river-theme.myshopify.com`)
    - This will open your development app (served by your local server) on the provided store
+
+The script `start.sh` automates the above commands.
+To run ensure your ngrok token is stored in `.env` as `NGROK_TOKEN` and that **tmux**, **awk** & **google-chrome** are all working/installed.
