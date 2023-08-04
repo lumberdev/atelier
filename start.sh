@@ -21,6 +21,7 @@ tmux send-keys -t my_session:0.2 "$(cat <<EOF
     forwarding_address=\$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
     existing_value=\$(grep -oP '^SHOPIFY_APP_URL="\K[^"]*' .env)
     awk -v old="\$existing_value" -v new="\$forwarding_address" 'BEGIN{FS=OFS="="} \$1=="SHOPIFY_APP_URL" {gsub(old,new)}1' .env > temp.env && mv temp.env .env
+    yarn update:url
 
 # Start the development server
     tmux send-keys -t my_session:0.1 'yarn dev' C-m
