@@ -89,14 +89,16 @@ const HomePage = () => {
                       description=""
                       primaryAction={{
                         content: "Manage",
-                        onAction: () => {},
-                      }}
-                      secondaryAction={{
-                        content: "Preview",
                         onAction: () => {
                           console.log(
                             `https://${subdomain}.atelier.sale/campaign/${campaign.handle}`
                           );
+                        },
+                      }}
+                      secondaryAction={{
+                        content: "Preview",
+                        onAction: () => {
+                          router.push("/campaign/home");
                         },
                       }}
                     >
