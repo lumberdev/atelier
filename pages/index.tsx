@@ -18,6 +18,7 @@ import {
   Page,
   ResourceItem,
   ResourceList,
+  ResourceListProps,
   Text,
   VerticalStack,
 } from "@shopify/polaris";
@@ -26,6 +27,7 @@ import { AddMajor } from "@shopify/polaris-icons";
 import { campaigns } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
+import { useState } from "react";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
@@ -36,8 +38,18 @@ const HomePage = () => {
   const router = useRouter();
   const app = useAppBridge();
   const redirect = Redirect.create(app);
+  const [selectedItems, setSelectedItems] = useState<
+    ResourceListProps["selectedItems"]
+  >([]);
 
-  const { identifier, campaigns, isLoading } = useCampaigns();
+  const {
+    identifier,
+    campaigns,
+    isLoading,
+    unpublishCampaigns,
+    deleteCampaigns,
+    publishCampaigns,
+  } = useCampaigns();
   const { settings } = useStoreSettings();
   const subdomain = settings.domain;
 
@@ -153,7 +165,38 @@ const HomePage = () => {
                   </Button>
                 }
                 selectable
+                selectedItems={selectedItems}
+                onSelectionChange={setSelectedItems}
                 items={campaigns}
+                promotedBulkActions={[
+                  {
+                    content: "Delete",
+                    onAction: () => {
+                      if (selectedItems.length)
+                        deleteCampaigns({ ids: selectedItems as string[] });
+                    },
+                  },
+                  {
+                    content: "Unpublish",
+                    onAction: () => {
+                      if (selectedItems.length)
+                        unpublishCampaigns(
+                          { ids: selectedItems as string[] },
+                          { onSuccess: () => setSelectedItems([]) }
+                        );
+                    },
+                  },
+                  {
+                    content: "Publish",
+                    onAction: () => {
+                      if (selectedItems.length)
+                        publishCampaigns(
+                          { ids: selectedItems as string[] },
+                          { onSuccess: () => setSelectedItems([]) }
+                        );
+                    },
+                  },
+                ]}
                 renderItem={(resource) => {
                   const campaign = resource as campaigns;
                   const image = campaign.image
