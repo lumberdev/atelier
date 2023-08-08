@@ -78,20 +78,26 @@ export const useCampaignForm = (campaign?: campaigns) => {
   const onSubmit = handleSubmit(async (fields: CampaignInput, event) => {
     setIsLoading(true);
 
-    // 1. Upload image
-    const [shopId] = shop.split(".");
-    const fileName = fields.handle;
-    const [fileExt] = imageFile.name.split(".").reverse();
+    if (imageFile) {
+      // 1. Upload image
+      const [shopId] = shop.split(".");
+      const fileName = fields.handle;
+      const [fileExt] = imageFile.name.split(".").reverse();
 
-    const storageResponse = await supabaseStorage.upload(
-      `${shopId}/${fileName}.${fileExt}`,
-      imageFile,
-      { upsert: true }
-    );
-    const image = storageResponse.data?.path ?? "";
+      const storageResponse = await supabaseStorage.upload(
+        `${shopId}/${fileName}.${fileExt}`,
+        imageFile,
+        { upsert: true }
+      );
+      const image = storageResponse.data?.path ?? "";
 
-    // 2. Upload data
-    upsertCampaign({ data: { ...fields, image } });
+      // 2. Upload data
+      upsertCampaign({ data: { ...fields, image } });
+
+      return;
+    }
+
+    upsertCampaign({ data: { ...fields } });
   });
 
   useEffect(() => {
