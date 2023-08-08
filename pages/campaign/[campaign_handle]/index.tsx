@@ -15,7 +15,7 @@ const HomeCampaignPage = () => {
     <div className="flex flex-col items-center justify-center">
       <div className="w-1/2">{JSON.stringify(campaign)}</div>
       <NavBar {...{ campaign }} />
-      <ProductGrid products={null} />
+      <ProductGrid {...{ campaign }} />
     </div>
   );
 };

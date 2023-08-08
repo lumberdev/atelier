@@ -14,7 +14,7 @@ const NavBar = ({ campaign }) => {
       <Section>
         <div className="flex flex-col items-center justify-center">
           <h1 style={{ fontFamily: "Pacifico" }} className="text-4xl mx-1 my-8">
-            {campaign.title}
+            {campaign?.title}
           </h1>
           <nav className="flex flex-row my-8">
             {["Home", "Collections", "About", "Contact"].map((linkTitle) => (
