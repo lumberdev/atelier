@@ -1,6 +1,6 @@
-import Section from "./section";
+import Section from "./Section";
 
-const NavBar = () => {
+const NavBar = ({ campaign }) => {
   return (
     <>
       <link
@@ -14,7 +14,7 @@ const NavBar = () => {
       <Section>
         <div className="flex flex-col items-center justify-center">
           <h1 style={{ fontFamily: "Pacifico" }} className="text-4xl mx-1 my-8">
-            Claro Fashion
+            {campaign.title}
           </h1>
           <nav className="flex flex-row my-8">
             {["Home", "Collections", "About", "Contact"].map((linkTitle) => (

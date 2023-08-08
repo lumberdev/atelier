@@ -98,7 +98,7 @@ const HomePage = () => {
                       secondaryAction={{
                         content: "Preview",
                         onAction: () => {
-                          router.push("/campaign/home");
+                          router.push("/campaign/" + campaign.handle);
                         },
                       }}
                     >

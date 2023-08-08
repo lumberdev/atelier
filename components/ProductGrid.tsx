@@ -1,4 +1,4 @@
-import Section from "./section";
+import Section from "./Section";
 
 const ProductGrid = ({ products }) => {
   return (
