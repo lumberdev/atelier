@@ -56,23 +56,21 @@ const HomePage = () => {
         <Layout.Section fullWidth>
           <VerticalStack gap="4">
             {!identifier && (
-              <Layout.Section fullWidth>
-                <CalloutCard
-                  title="Get your domain"
-                  primaryAction={{
-                    content: "Configure domain",
-                    onAction: () => {
-                      router.push("/settings");
-                    },
-                  }}
-                  illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
-                >
-                  <p>
-                    Get your custom Atelier domain so your customers can easily
-                    identify you.
-                  </p>
-                </CalloutCard>
-              </Layout.Section>
+              <CalloutCard
+                title="Get your domain"
+                primaryAction={{
+                  content: "Configure domain",
+                  onAction: () => {
+                    router.push("/settings");
+                  },
+                }}
+                illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
+              >
+                <p>
+                  Get your custom Atelier domain so your customers can easily
+                  identify you.
+                </p>
+              </CalloutCard>
             )}
 
             <Grid>
@@ -165,7 +163,7 @@ const HomePage = () => {
                   return (
                     <ResourceItem
                       id={campaign.id}
-                      url={`/campaign/${campaign.id}`}
+                      onClick={() => router.push(`/campaign/${campaign.id}`)}
                       media={
                         <div className="w-14 h-14 md:w-20 md:h-20 rounded-md bg-gray-200 overflow-hidden">
                           {image && (
