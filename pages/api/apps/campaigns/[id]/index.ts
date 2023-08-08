@@ -21,6 +21,35 @@ router.get(async (req, res) => {
 
   const resourceType = campaign.resourceType;
 
+  if (resourceType === "COLLECTIONS") {
+    const { client } = await clientProvider.offline.graphqlClient({
+      shop: req.user_session.shop,
+    });
+
+    const queryPromises = campaign.resourceIds.map((id) =>
+      client.query<{ data: { collection: any | null } }>({
+        data: `{
+        collection(id: "${id}") {
+          id
+          handle
+          title
+          image {
+            src: url
+          }
+          productsCount
+        }
+      }`,
+      })
+    );
+
+    const response = await Promise.all(queryPromises);
+    const resources = response
+      .map((response) => response.body.data?.collection)
+      .filter(Boolean);
+
+    return res.status(200).json({ campaign, resources });
+  }
+
   const { client } = await clientProvider.offline.restClient({
     shop: req.user_session.shop,
   });
@@ -32,32 +61,24 @@ router.get(async (req, res) => {
     })
     .join(",");
 
-  const response = await client.get<{ collections: any[]; products: any[] }>({
-    path: `/${
-      resourceType === "COLLECTIONS" ? "custom_collections" : "products"
-    }.json?ids=${ids}`,
-  });
+  const response = await client.get<{
+    products: any[];
+  }>({ path: `/products.json?ids=${ids}` });
 
-  const resources =
-    resourceType === "COLLECTIONS"
-      ? response.body.collections.map((collection) => ({
-          ...collection,
-          id: `gid://shopify/Collection/${collection.id}`,
+  const resources = response.body.products.map((product) => ({
+    ...product,
+    id: `gid://shopify/Product/${product.id}`,
+    variants: [
+      ...product.variants
+        .map((variant) => ({
+          ...variant,
+          id: `gid://shopify/ProductVariant/${variant.id}`,
         }))
-      : response.body.products.map((product) => ({
-          ...product,
-          id: `gid://shopify/Product/${product.id}`,
-          variants: [
-            ...product.variants
-              .map((variant) => ({
-                ...variant,
-                id: `gid://shopify/ProductVariant/${variant.id}`,
-              }))
-              .filter((variant) => campaign.variantIds.includes(variant.id)),
-          ],
-        }));
+        .filter((variant) => campaign.variantIds.includes(variant.id)),
+    ],
+  }));
 
-  return res.status(200).json({ campaign, resources: resources });
+  return res.status(200).json({ campaign, resources });
 });
 
 export default router.handler();
