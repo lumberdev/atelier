@@ -12,7 +12,10 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   // ATELIER SHOPIFY APP
-  if (router.pathname.indexOf("/app") === 0)
+  if (
+    router.pathname.indexOf("/app") === 0 ||
+    router.pathname.indexOf("/exitframe") === 0
+  )
     return (
       <PolarisProvider i18n={translations}>
         <AppBridgeProvider>
