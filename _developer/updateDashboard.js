@@ -100,7 +100,7 @@ const updateDashboardURLs = async (apiKey, appUrl) => {
     : [`${appUrl}/api/auth/tokens`, `${appUrl}/api/auth/callback`];
 
   const urls = {
-    applicationUrl: appUrl,
+    applicationUrl: appUrl.endsWith("/") ? `${appUrl}app` : `${appUrl}/app`,
     redirectUrlWhitelist: redirectURLs,
   };
 
