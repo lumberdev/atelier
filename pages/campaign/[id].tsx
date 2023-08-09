@@ -42,7 +42,7 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
   return (
     <Page
       title={campaign.title}
-      backAction={{ content: "Campaigns", onAction: () => router.push("/") }}
+      backAction={{ content: "Campaigns", onAction: () => router.push("/app") }}
     >
       {data && (
         <CampaignForm campaign={data.campaign} resources={data.resources} />
