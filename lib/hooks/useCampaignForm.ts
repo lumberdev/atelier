@@ -70,7 +70,7 @@ export const useCampaignForm = (campaign?: campaigns) => {
 
         form.reset();
         setIsLoading(false);
-        router.push(`/campaign/${campaign.id}`);
+        router.push(`/app/campaign/${campaign.id}`);
       },
     }
   );
