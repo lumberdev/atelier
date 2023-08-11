@@ -17,8 +17,8 @@ const NavBar = ({ campaign }) => {
             {campaign?.title}
           </h1>
           <nav className="flex flex-row my-8">
-            {["Home", "Collections", "About", "Contact"].map((linkTitle) => (
-              <a href="/" className="mx-1">
+            {["Dresses", "Jeans", "Hat"].map((linkTitle) => (
+              <a href="/" className="mx-1" key={linkTitle}>
                 {linkTitle}
               </a>
             ))}

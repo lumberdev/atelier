@@ -1,6 +1,11 @@
+import { useProducts } from "@/lib/hooks/useProducts";
+
 const ProductCard = ({ productURL }) => {
+  const products = useProducts().products;
+  console.log(products);
+
   return (
-    <div className="border border-solid border-black p-4">
+    <div className="border border-solid border-black p-4 overflow-hidden">
       <img
         className="w-48 h-48 object-cover max-w-full"
         src={
@@ -17,38 +22,3 @@ const ProductCard = ({ productURL }) => {
 };
 
 export default ProductCard;
-
-/*
-
-  const { data, isLoading, isError } = useQuery(
-    ["product", productId],
-    async () => {
-      const response = await fetch(
-        `https://river-theme.myshopify.com/api/2023-07/graphql.json`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Shopify-Storefront-Access-Token": "YOUR_ACCESS_TOKEN",
-          },
-          body: JSON.stringify({
-            query: `
-              query($productId: ID!) {
-                product(id: $productId) {
-                  id
-                  title
-                  description
-                  # Other fields you want to retrieve
-                }
-              }
-            `,
-            variables: { productId },
-          }),
-        }
-      );
-      const result = await response.json();
-      return result.data.product;
-    }
-  );
-
-*/

@@ -13,7 +13,7 @@ const HomeCampaignPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-1/2">{JSON.stringify(campaign)}</div>
+      {/* <div className="w-1/2">{JSON.stringify(campaign)}</div> */}
       <NavBar {...{ campaign }} />
       <ProductGrid {...{ campaign }} />
     </div>
