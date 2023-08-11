@@ -1,16 +1,20 @@
 import ProductCard from "./ProductCard";
 import Section from "./Section";
+import { useProducts } from "@/lib/hooks/useProducts";
 
 const ProductGrid = ({ campaign }) => {
   const campaignHandle = campaign?.handle;
-  const products = campaign?.resourceIds;
+  const productIDs = campaign?.resourceIds;
+  const allProducts = useProducts().products;
+  const products = allProducts.filter((product) =>
+    productIDs.includes(product.id)
+  );
 
   return (
     <Section>
       <div className="grid grid-cols-4 items-center justify-center gap-8 w-full">
-        {products?.map((productURL) => {
-          const productId = productURL.split("/").pop();
-          return <ProductCard {...{ productURL }} key={productId} />;
+        {products?.map((product) => {
+          return <ProductCard {...{ product }} key={product.id} />;
         })}
       </div>
     </Section>

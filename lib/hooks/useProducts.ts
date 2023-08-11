@@ -16,6 +16,7 @@ export const useProducts = () => {
           products: data.products.map((product) => {
             return {
               id: product.node.id,
+              title: product.node.title,
               updatedAt: product.node.updatedAt,
               handle: product.node.handle,
               featuredImage: product.node.featuredImage,
