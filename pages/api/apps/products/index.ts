@@ -16,6 +16,7 @@ const PRODUCTS_QUERY = gql`
     products(first: 100) {
       edges {
         node {
+          id
           updatedAt
           handle
           featuredImage {
