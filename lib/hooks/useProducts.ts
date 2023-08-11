@@ -17,6 +17,7 @@ export const useProducts = () => {
             return {
               id: product.node.id,
               title: product.node.title,
+              priceRangeV2: product.node.priceRangeV2,
               updatedAt: product.node.updatedAt,
               handle: product.node.handle,
               featuredImage: product.node.featuredImage,
