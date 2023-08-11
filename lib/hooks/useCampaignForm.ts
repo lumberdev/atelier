@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import useFetch from "@/components/hooks/useFetch";
 import { supabaseStorage } from "@/utils/supabase";
@@ -31,6 +31,13 @@ export const useCampaignForm = (campaign?: campaigns) => {
     settings: { shop },
   } = useStoreSettings();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>(() => {
+    if (!campaign) return "";
+    const image = supabaseStorage.getPublicUrl(campaign.image);
+
+    return image?.data.publicUrl ?? "";
+  });
   const [imageFile, setImageFile] = useState<File>();
 
   const { handleSubmit, ...form } = useForm({
@@ -63,8 +70,7 @@ export const useCampaignForm = (campaign?: campaigns) => {
 
         form.reset();
         setIsLoading(false);
-        console.log("[AT] DONE", campaign);
-        router.push(`/campaign/${campaign.id}`);
+        router.push(`/app/campaign/${campaign.id}`);
       },
     }
   );
@@ -72,25 +78,44 @@ export const useCampaignForm = (campaign?: campaigns) => {
   const onSubmit = handleSubmit(async (fields: CampaignInput, event) => {
     setIsLoading(true);
 
-    // 1. Upload image
-    const [shopId] = shop.split(".");
-    const fileName = fields.handle;
-    const [fileExt] = imageFile.name.split(".").reverse();
+    if (imageFile) {
+      // 1. Upload image
+      const [shopId] = shop.split(".");
+      const fileName = fields.handle;
+      const [fileExt] = imageFile.name.split(".").reverse();
 
-    const storageResponse = await supabaseStorage.upload(
-      `${shopId}/${fileName}.${fileExt}`,
-      imageFile,
-      { upsert: true }
-    );
-    const image = storageResponse.data?.path ?? "";
+      const storageResponse = await supabaseStorage.upload(
+        `${shopId}/${fileName}.${fileExt}`,
+        imageFile,
+        { upsert: true }
+      );
+      const image = storageResponse.data?.path ?? "";
 
-    // 2. Upload data
-    upsertCampaign({ data: { ...fields, image } });
+      // 2. Upload data
+      upsertCampaign({ data: { ...fields, image } });
+
+      return;
+    }
+
+    upsertCampaign({ data: { ...fields } });
   });
+
+  useEffect(() => {
+    if (!imageFile && didSelectImageFile) {
+      setImageUrl("");
+      return;
+    }
+
+    if (imageFile) {
+      setImageUrl(window.URL.createObjectURL(imageFile));
+      setDidSelectImageFile(true);
+    }
+  }, [imageFile]);
 
   return {
     ...form,
     isLoading,
+    imageUrl,
     imageFile,
     setImageFile,
     onSubmit,

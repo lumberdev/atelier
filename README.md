@@ -19,6 +19,7 @@ Private sales for your Shopify store.
    - Add a name in the format `Atelier - <Your Name>` so you can identify it easily
 
 4. Duplicate `.env.example` and rename to `.env`. Fill in the variables with the app API values.
+   - Copy client ID & client secret from your app in the [Partner's Dashboard](https://partners.shopify.com/1011478/apps) to `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET`
    - Fill in `DATABASE_URL` with your database connection URL
    - You can leave `SHOPIFY_APP_URL` empty for now, will be filled in the development workflow section
    - File uploads use the Supabase instance, in order to not mix prod and dev uploads we provide the `NEXT_PUBLIC_SUPABASE_STORAGE_KEY` variable that defines the folder where assets are saved. You can check the name of your folder in [Supabase](https://app.supabase.com/project/lypfjowlwsqnrjphjfgs/storage/buckets)

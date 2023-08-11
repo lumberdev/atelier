@@ -23,11 +23,11 @@ const handler = async (req, res) => {
     await prisma.stores.upsert({
       where: { shop: shop },
       update: { isActive: true },
-      create: { shop: shop, identifier: shop, isActive: true },
+      create: { shop: shop, isActive: true },
     });
 
     // Redirect to app with shop parameter upon auth
-    res.redirect(`/?shop=${shop}&host=${host}`);
+    res.redirect(`/app?shop=${shop}&host=${host}`);
   } catch (e) {
     console.error("---> An error occured at /auth/callback", e);
     const { shop } = req.query;

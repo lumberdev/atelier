@@ -10,25 +10,38 @@ import "./global.css";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  return (
-    <PolarisProvider i18n={translations}>
-      <AppBridgeProvider>
-        <NavigationMenu
-          navigationLinks={[
-            {
-              label: "Settings",
-              destination: "/settings",
-            },
-          ]}
-          matcher={(link) => router.pathname === link.destination}
-        />
 
-        <QueryClientProvider client={queryClient}>
-          <Frame>
-            <Component {...pageProps} />
-          </Frame>
-        </QueryClientProvider>
-      </AppBridgeProvider>
-    </PolarisProvider>
+  // ATELIER SHOPIFY APP
+  if (
+    router.pathname.indexOf("/app") === 0 ||
+    router.pathname.indexOf("/exitframe") === 0
+  )
+    return (
+      <PolarisProvider i18n={translations}>
+        <AppBridgeProvider>
+          <NavigationMenu
+            navigationLinks={[
+              {
+                label: "Settings",
+                destination: "/settings",
+              },
+            ]}
+            matcher={(link) => router.pathname === link.destination}
+          />
+
+          <QueryClientProvider client={queryClient}>
+            <Frame>
+              <Component {...pageProps} />
+            </Frame>
+          </QueryClientProvider>
+        </AppBridgeProvider>
+      </PolarisProvider>
+    );
+
+  // ATELIER WEBSITE
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+    </QueryClientProvider>
   );
 }
