@@ -6,6 +6,7 @@ export interface CampaignInput {
   resourceType: "COLLECTIONS" | "PRODUCTS";
   resourceIds: string[];
   variantIds: string[];
+  password?: string;
   image?: string;
   isActive: boolean;
 }
