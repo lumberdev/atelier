@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="border border-solid border-black overflow-hidden w-fit mx-auto bg-white">
       <img
-        className="w-48 h-48 object-cover max-w-full"
+        className="w-48 h-48 object-cover max-w-full border-0 border-b border-solid border-black"
         src={product.featuredImage?.url}
       />
       <div className="flex flex-col w-48 p-3">
