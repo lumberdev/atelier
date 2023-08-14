@@ -103,11 +103,10 @@ const AppHomePage = () => {
                       }}
                       secondaryAction={{
                         content: "Preview",
-                        onAction: () => {
-                          console.log(
+                        onAction: () =>
+                          window.open(
                             `https://${subdomain}.atelier.sale/campaign/${campaign.handle}`
-                          );
-                        },
+                          ),
                       }}
                     >
                       <div className="relative w-full h-[16rem] bg-gray-200 shadow-inner">

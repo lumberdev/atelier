@@ -3,7 +3,6 @@ import Section from "./Section";
 import { useProducts } from "@/lib/hooks/useProducts";
 
 const ProductGrid = ({ campaign }) => {
-  const campaignHandle = campaign?.handle;
   const productIDs = campaign?.resourceIds;
   const allProducts = useProducts().products;
   const products = allProducts.filter((product) =>
