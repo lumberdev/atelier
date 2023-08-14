@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }) {
             navigationLinks={[
               {
                 label: "Settings",
-                destination: "/settings",
+                destination: "/app/settings",
               },
             ]}
             matcher={(link) => router.pathname === link.destination}
