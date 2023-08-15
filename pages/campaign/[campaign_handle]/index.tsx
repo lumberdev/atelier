@@ -1,12 +1,12 @@
 import NavBar from "../../../components/Navbar";
 import ProductGrid from "../../../components/ProductGrid";
 import { useRouter } from "next/router";
-import { useCampaignOnSite } from "@/lib/hooks/useCampaignOnSite";
+import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 
 const HomeCampaignPage = () => {
   const router = useRouter();
   const { campaign_handle } = router.query;
-  const campaign = useCampaignOnSite({ campaign_handle }).campaign;
+  const campaign = useCampaignOnStore({ campaign_handle }).campaign;
   console.log(campaign);
 
   return (

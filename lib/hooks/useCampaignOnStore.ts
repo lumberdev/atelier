@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-export const useCampaignOnSite = ({ campaign_handle }) => {
+export const useCampaignOnStore = ({ campaign_handle }) => {
   const { data = { campaign: {} }, isLoading } = useQuery<{
     campaign: any;
   }>(["campaign", campaign_handle], () =>
