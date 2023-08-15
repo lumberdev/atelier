@@ -1,6 +1,7 @@
 import ProductCard from "./ProductCard";
 import Section from "./Section";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
+import Spinner from "@/components/Spinner";
 
 const ProductGrid = ({ campaign }) => {
   const productIDs = campaign?.resourceIds;
@@ -10,7 +11,7 @@ const ProductGrid = ({ campaign }) => {
   const products = allProducts.filter((product) =>
     productIDs.includes(product.id)
   );
-  console.log(allProducts);
+
   return (
     <Section>
       <div className="grid grid-cols-4 items-center justify-center gap-8 w-full">
@@ -19,7 +20,12 @@ const ProductGrid = ({ campaign }) => {
             return <ProductCard {...{ product }} key={product.id} />;
           })
         ) : (
-          <div>loading products</div>
+          <div className="col-span-4 flex flex-col items-center justify-center">
+            Loading products
+            <br />
+            <br />
+            <Spinner />
+          </div>
         )}
       </div>
     </Section>
