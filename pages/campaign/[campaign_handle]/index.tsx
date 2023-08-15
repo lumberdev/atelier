@@ -11,11 +11,10 @@ const HomeCampaignPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {/* <div className="w-1/2">{JSON.stringify(campaign)}</div> */}
       {campaign ? (
         <>
           <NavBar {...{ campaign }} />
-          <ProductGrid {...{ campaign }} />
+          <ProductGrid {...{ campaign, campaign_handle }} />
         </>
       ) : (
         <div className="h-screen flex flex-col items-center justify-center">

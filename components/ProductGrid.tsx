@@ -3,7 +3,7 @@ import Section from "./Section";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
 import Spinner from "@/components/Spinner";
 
-const ProductGrid = ({ campaign }) => {
+const ProductGrid = ({ campaign, campaign_handle }) => {
   const productIDs = campaign?.resourceIds;
   const allProducts = useProductsOnStore({
     store_id: campaign.storeId,
@@ -17,7 +17,9 @@ const ProductGrid = ({ campaign }) => {
       <div className="grid grid-cols-4 items-center justify-center gap-8 w-full">
         {products && products.length > 0 ? (
           products.map((product) => {
-            return <ProductCard {...{ product }} key={product.id} />;
+            return (
+              <ProductCard {...{ product, campaign_handle }} key={product.id} />
+            );
           })
         ) : (
           <div className="col-span-4 flex flex-col items-center justify-center">

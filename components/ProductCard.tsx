@@ -1,4 +1,4 @@
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, campaign_handle }) => {
   const currencyFormatter = ({ amount, currencyCode }) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -6,9 +6,15 @@ const ProductCard = ({ product }) => {
     }).format(amount);
 
   const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
+  console.log(product);
 
   return (
-    <div className="border border-solid border-black overflow-hidden w-fit mx-auto bg-white">
+    <a
+      href={`/campaign/${campaign_handle}/products/${
+        product.id.split("gid://shopify/Product/")[1]
+      }`}
+      className="border border-solid border-black overflow-hidden w-fit mx-auto bg-white"
+    >
       <img
         className="w-48 h-48 object-cover max-w-full border-0 border-b border-solid border-black"
         src={product.featuredImage?.url}
@@ -22,7 +28,7 @@ const ProductCard = ({ product }) => {
           <h3>{currencyFormatter(minVariantPrice)}</h3>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
