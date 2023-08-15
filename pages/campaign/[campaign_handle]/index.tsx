@@ -7,6 +7,7 @@ const HomeCampaignPage = () => {
   const router = useRouter();
   const { campaign_handle } = router.query;
   const campaign = useCampaignOnSite({ campaign_handle }).campaign;
+  console.log(campaign);
 
   return (
     <div className="flex flex-col items-center justify-center">

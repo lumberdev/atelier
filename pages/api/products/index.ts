@@ -1,15 +1,13 @@
 import { gql } from "graphql-request";
-import verifyRequest from "@/utils/middleware/verifyRequest";
 import { Session } from "@shopify/shopify-api";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
+import sessionHandler from "@/utils/sessionHandler.js";
 
 const router = createRouter<
   NextApiRequest & { user_session: Session },
   NextApiResponse
 >();
-
-router.use(verifyRequest);
 
 const PRODUCTS_QUERY = gql`
   query Products {
@@ -41,9 +39,13 @@ const PRODUCTS_QUERY = gql`
 `;
 
 router.get(async (req, res) => {
+  const storeId = req.query.store_id as string;
   const shopifyStore = "river-theme";
   const shopifyStoreUrl = `https://${shopifyStore}.myshopify.com/admin/api/2023-04/graphql.json`;
-  const accessToken = req.user_session.accessToken;
+
+  const session = await sessionHandler.loadSession(`offline_${storeId}`);
+  const accessToken = session.accessToken;
+
   const options = {
     method: "POST",
     headers: {
@@ -57,9 +59,7 @@ router.get(async (req, res) => {
     const raw = await fetch(shopifyStoreUrl, options).then((response) =>
       response.json()
     );
-    res
-      .status(200)
-      .json({ identifier: "id", products: raw.data.products.edges });
+    res.status(200).json({ products: raw.data.products.edges });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error });

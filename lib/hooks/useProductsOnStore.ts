@@ -1,15 +1,13 @@
 import { useQuery } from "react-query";
 
-export const useProducts = () => {
-  const { data = { identifier: "", products: [] }, isLoading } = useQuery<{
-    identifier?: string;
+export const useProductsOnStore = ({ store_id }) => {
+  const { data = { products: [] }, isLoading } = useQuery<{
     products: any[];
-  }>("products", () =>
-    fetch("/api/products")
+  }>(["products", store_id], () =>
+    fetch(`/api/products?store_id=${store_id}`)
       .then((response) => response.json())
       .then((data) => {
         return {
-          identifier: data.identifier,
           products: data.products.map((product) => {
             return {
               id: product.node.id,
@@ -26,7 +24,6 @@ export const useProducts = () => {
 
   return {
     isLoading,
-    identifier: data.identifier,
     products: data.products,
   };
 };
