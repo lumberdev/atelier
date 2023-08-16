@@ -7,12 +7,14 @@ import Spinner from "../../../../../components/Spinner";
 const ProductCampaignPage = () => {
   const router = useRouter();
   const { campaign_handle, product_id } = router.query;
-  const campaign = useCampaignOnStore({ campaign_handle }).campaign;
+  const { isLoading, campaign } = useCampaignOnStore({
+    campaign_handle,
+  });
 
   return (
     <div className="flex flex-col items-center justify-center">
       <NavBar {...{ campaign }} />
-      {!campaign.isLoading ? (
+      {!isLoading ? (
         <>
           <ProductPage {...{ campaign, product_id }} />
         </>
