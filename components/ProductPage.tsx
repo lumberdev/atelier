@@ -7,7 +7,7 @@ const ProductPage = ({ campaign, product_id }) => {
     store_id: campaign.storeId,
     product_id: product_id,
   });
-
+  console.log(product);
   return !isLoading ? (
     <div className="container mx-auto p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -18,38 +18,39 @@ const ProductPage = ({ campaign, product_id }) => {
         </div>
         <div>
           <h1 className="text-2xl font-semibold mb-4">{product.title}</h1>
-          <p className="text-lg font-semibold mb-2">
+          <p className="text-l mb-4">{product.description}</p>
+          <p className="text-lg mb-2">
             <span className="line-through mr-1">
               {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
             </span>
-            <span>
+            <span className="font-semibold">
               {currencyFormatter(product.priceRangeV2.minVariantPrice)}
             </span>
           </p>
-          <form className="mb-4">
-            <label for="size" className="block mb-2">
-              Size:
-            </label>
-            <select name="size" id="size" className="border rounded p-2 w-full">
-              <option value="small">Small</option>
-              <option value="medium">Medium</option>
-              <option value="large">Large</option>
-            </select>
+          <form className="mb-4 flex flex-col w-48">
+            {product.options.map((option) => (
+              <>
+                <label for={option.name} className="block mb-2">
+                  {option.name}:
+                </label>
+                <select
+                  name={option.name}
+                  id={option.name}
+                  className="border rounded p-2 "
+                >
+                  {option.values.map((value) => (
+                    <option value={value}>{value}</option>
+                  ))}
+                </select>
+              </>
+            ))}
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer"
             >
               Add to Cart
             </button>
           </form>
-          <div className="border-t pt-4">
-            <h2 className="text-lg font-semibold mb-2">
-              Additional Information
-            </h2>
-            <p className="text-gray-600">
-              Product specifications and other info can be placed here.
-            </p>
-          </div>
         </div>
       </div>
     </div>

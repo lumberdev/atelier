@@ -11,8 +11,9 @@ export const useProductOnStore = ({ store_id, product_id }) => {
           product: {
             id: data.product.id,
             title: data.product.title,
+            description: data.product.description,
             priceRangeV2: data.product.priceRangeV2,
-            updatedAt: data.product.updatedAt,
+            options: data.product.options,
             handle: data.product.handle,
             images: data.product.images.edges.map((edge) => edge.node),
           },

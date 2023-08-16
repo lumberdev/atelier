@@ -14,7 +14,12 @@ const PRODUCT_QUERY_BY_ID = gql`
     product(id: $productId) {
       id
       title
-      updatedAt
+      description
+      options {
+        id
+        name
+        values
+      }
       handle
       priceRangeV2 {
         minVariantPrice {
