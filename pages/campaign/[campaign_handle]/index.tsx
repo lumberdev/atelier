@@ -13,7 +13,7 @@ const HomeCampaignPage = () => {
     <div className="flex flex-col items-center justify-center">
       {campaign ? (
         <>
-          <NavBar {...{ campaign }} />
+          <NavBar {...{ campaign, campaign_handle }} />
           <ProductGrid {...{ campaign, campaign_handle }} />
         </>
       ) : (

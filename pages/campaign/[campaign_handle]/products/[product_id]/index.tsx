@@ -13,7 +13,7 @@ const ProductCampaignPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <NavBar {...{ campaign }} />
+      <NavBar {...{ campaign, campaign_handle }} />
       {!isLoading ? (
         <>
           <ProductPage {...{ campaign, product_id }} />

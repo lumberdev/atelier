@@ -1,6 +1,6 @@
 import Section from "./Section";
 
-const NavBar = ({ campaign }) => {
+const NavBar = ({ campaign, campaign_handle }) => {
   return (
     <>
       <link
@@ -13,9 +13,14 @@ const NavBar = ({ campaign }) => {
       />
       <Section>
         <div className="flex flex-col items-center justify-center">
-          <h1 style={{ fontFamily: "Pacifico" }} className="text-4xl mx-1 my-8">
-            {campaign?.title}
-          </h1>
+          <a href={`/campaign/${campaign_handle}`}>
+            <h1
+              style={{ fontFamily: "Pacifico" }}
+              className="text-4xl mx-1 my-8"
+            >
+              {campaign?.title}
+            </h1>
+          </a>
           <nav className="flex flex-row my-8">
             {["Dresses", "Jeans", "Hat"].map((linkTitle) => (
               <a href="/" className="mx-1" key={linkTitle}>
