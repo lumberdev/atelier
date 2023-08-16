@@ -15,7 +15,6 @@ const ProductCampaignPage = () => {
       {!campaign.isLoading ? (
         <>
           <ProductPage {...{ campaign, product_id }} />
-          <div>{JSON.stringify(campaign)}</div>
         </>
       ) : (
         <div className="flex flex-col items-center justify-center">

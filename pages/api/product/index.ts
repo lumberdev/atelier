@@ -26,9 +26,13 @@ const PRODUCT_QUERY_BY_ID = gql`
           currencyCode
         }
       }
-      featuredImage {
-        url
-        altText
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
       }
     }
   }
@@ -42,8 +46,6 @@ router.get(async (req, res) => {
 
   const session = await sessionHandler.loadSession(`offline_${storeId}`);
   const accessToken = session.accessToken;
-
-  console.log(productId);
 
   const options = {
     method: "POST",
@@ -63,7 +65,7 @@ router.get(async (req, res) => {
     const raw = await fetch(shopifyStoreUrl, options).then((response) =>
       response.json()
     );
-    res.status(200).json({ product: raw });
+    res.status(200).json({ product: raw.data.product });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error });
