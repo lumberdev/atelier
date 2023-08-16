@@ -1,12 +1,7 @@
-const ProductCard = ({ product, campaign_handle }) => {
-  const currencyFormatter = ({ amount, currencyCode }) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currencyCode,
-    }).format(amount);
+import { currencyFormatter } from "@/lib/helper/currency";
 
+const ProductCard = ({ product, campaign_handle }) => {
   const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
-  console.log(product);
 
   return (
     <a

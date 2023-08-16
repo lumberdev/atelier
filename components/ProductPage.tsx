@@ -1,3 +1,4 @@
+import { currencyFormatter } from "@/lib/helper/currency";
 import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
 import Spinner from "./Spinner";
 
@@ -7,29 +8,24 @@ const ProductPage = ({ campaign, product_id }) => {
     product_id: product_id,
   });
 
-  return (
+  return !isLoading ? (
     <div className="container mx-auto p-8">
-      <div>{JSON.stringify(product)}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="sticky top-20">
-          {!isLoading ? (
-            product.images.map((product) => (
-              <img
-                src={product.url}
-                alt="Product Image"
-                className="w-full mb-4"
-              />
-            ))
-          ) : (
-            <div className="flex flex-col items-center justify-center">
-              <Spinner />
-            </div>
-          )}
+          {product.images.map((image) => (
+            <img src={image.url} alt="Product Image" className="w-full mb-4" />
+          ))}
         </div>
         <div>
-          <h1 className="text-2xl font-semibold mb-4">Product Title</h1>
-          <p className="text-gray-600 mb-4">Product description goes here.</p>
-          <p className="text-lg font-semibold mb-2">$XX.XX</p>
+          <h1 className="text-2xl font-semibold mb-4">{product.title}</h1>
+          <p className="text-lg font-semibold mb-2">
+            <span className="line-through mr-1">
+              {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
+            </span>
+            <span>
+              {currencyFormatter(product.priceRangeV2.minVariantPrice)}
+            </span>
+          </p>
           <form className="mb-4">
             <label for="size" className="block mb-2">
               Size:
@@ -56,6 +52,10 @@ const ProductPage = ({ campaign, product_id }) => {
           </div>
         </div>
       </div>
+    </div>
+  ) : (
+    <div className="flex flex-col items-center justify-center">
+      <Spinner />
     </div>
   );
 };
