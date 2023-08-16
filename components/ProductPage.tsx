@@ -1,7 +1,8 @@
 import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
+import Spinner from "./Spinner";
 
 const ProductPage = ({ campaign, product_id }) => {
-  const product = useProductOnStore({
+  const { isLoading, product } = useProductOnStore({
     store_id: campaign.storeId,
     product_id: product_id,
   });
@@ -11,21 +12,19 @@ const ProductPage = ({ campaign, product_id }) => {
       <div>{JSON.stringify(product)}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="sticky top-20">
-          <img
-            src="product-image.jpg"
-            alt="Product Image"
-            className="w-full mb-4"
-          />
-          <img
-            src="product-image2.jpg"
-            alt="Product Image 2"
-            className="w-full mb-4"
-          />
-          <img
-            src="product-image3.jpg"
-            alt="Product Image 3"
-            className="w-full"
-          />
+          {!isLoading ? (
+            product.images.map((product) => (
+              <img
+                src={product.url}
+                alt="Product Image"
+                className="w-full mb-4"
+              />
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <Spinner />
+            </div>
+          )}
         </div>
         <div>
           <h1 className="text-2xl font-semibold mb-4">Product Title</h1>
