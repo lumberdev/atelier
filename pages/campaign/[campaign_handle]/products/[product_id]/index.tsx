@@ -1,12 +1,30 @@
 import { useRouter } from "next/router";
+import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
+import NavBar from "../../../../../components/Navbar";
+import ProductPage from "../../../../../components/ProductPage";
+import Spinner from "../../../../../components/Spinner";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
-  const { product_id } = router.query;
+  const { campaign_handle, product_id } = router.query;
+  const campaign = useCampaignOnStore({ campaign_handle }).campaign;
+
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1>Product Campaign Page</h1>
-      <p>Product ID: {product_id}</p>
+      <NavBar {...{ campaign }} />
+      {!campaign.isLoading ? (
+        <>
+          <ProductPage {...{ campaign, product_id }} />
+          <div>{JSON.stringify(campaign)}</div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          Loading product page
+          <br />
+          <br />
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };
