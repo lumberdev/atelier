@@ -10,7 +10,7 @@ const ProductPage = ({ campaign, product_id }) => {
   console.log(product);
   return !isLoading ? (
     <div className="container mx-auto p-8">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
         <div className="">
           {product.images.map((image) => (
             <img src={image.url} alt="Product Image" className="w-full mb-4" />
