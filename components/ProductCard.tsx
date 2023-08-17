@@ -1,11 +1,12 @@
 import { currencyFormatter } from "@/lib/helper/currency";
+import Link from "next/link";
 
 const ProductCard = ({ product, campaign_handle }) => {
   const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
 
   return (
     <div className="overflow-hidden w-fit mx-auto bg-white">
-      <a
+      <Link
         href={`/campaign/${campaign_handle}/products/${
           product.id.split("gid://shopify/Product/")[1]
         }`}
@@ -15,9 +16,9 @@ const ProductCard = ({ product, campaign_handle }) => {
           className="w-48 h-48 object-cover max-w-full"
           src={product.featuredImage?.url}
         />
-      </a>
+      </Link>
       <div className="flex flex-col w-48 py-2 text-base">
-        <a
+        <Link
           href={`/campaign/${campaign_handle}/products/${
             product.id.split("gid://shopify/Product/")[1]
           }`}
@@ -26,7 +27,7 @@ const ProductCard = ({ product, campaign_handle }) => {
           <h3 className="text-black truncate overflow-hidden font-bold	">
             {product.title}
           </h3>
-        </a>
+        </Link>
         <div className="flex flex-row pt-1">
           <h3 className="line-through	mr-1">
             {currencyFormatter(maxVariantPrice)}

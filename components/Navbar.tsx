@@ -1,4 +1,5 @@
 import Section from "./Section";
+import Link from "next/link";
 
 const NavBar = ({ campaign, campaign_handle }) => {
   return (
@@ -13,32 +14,22 @@ const NavBar = ({ campaign, campaign_handle }) => {
       />
       <Section>
         <div className="flex flex-col items-center justify-center">
-          <a href={`/campaign/${campaign_handle}`}>
+          <Link href={`/campaign/${campaign_handle}`}>
             <h1
               style={{ fontFamily: "Pacifico" }}
               className="text-4xl mx-1 my-8"
             >
               {campaign?.title}
             </h1>
-          </a>
+          </Link>
           <nav className="flex flex-row my-8">
             {["Dresses", "Jeans", "Hat"].map((linkTitle) => (
-              <a href="/" className="mx-1" key={linkTitle}>
+              <Link href="/" className="mx-1" key={linkTitle}>
                 {linkTitle}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
-        {/* <div className="flex flex-row items-center justify-center">
-          <a href="/" className="">
-            <span className="material-symbols-outlined">search</span>
-          </a>
-          <a href="/" className="">
-            <span className="material-symbols-outlined">
-              shopping_cart_checkout
-            </span>
-          </a>
-        </div> */}
       </Section>
     </>
   );
