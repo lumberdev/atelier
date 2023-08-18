@@ -1,13 +1,18 @@
 import { currencyFormatter } from "@/lib/helper/currency";
-import Spinner from "./Spinner";
+import React from "react";
 
 const ProductPage = ({ product }) => {
   return (
     <div className="container mx-auto p-8">
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
         <div className="">
-          {product.images.map((image) => (
-            <img src={image.url} alt="Product Image" className="w-full mb-4" />
+          {product.images.map((image, index) => (
+            <img
+              src={image.url}
+              alt="Product Image"
+              className="w-full mb-4"
+              key={index}
+            />
           ))}
         </div>
         <div className="sticky top-20 h-fit">
@@ -22,21 +27,28 @@ const ProductPage = ({ product }) => {
             </span>
           </p>
           <form className="mb-4 flex flex-col w-48">
-            {product.options.map((option) => (
-              <>
-                <label for={option.name} className="block mb-2">
+            {product.options.map((option, index) => (
+              <React.Fragment key={index}>
+                <label
+                  htmlFor={option.name}
+                  className="block mb-2"
+                  key={`label${index}`}
+                >
                   {option.name}:
                 </label>
                 <select
                   name={option.name}
                   id={option.name}
                   className="border rounded p-2 "
+                  key={`select${index}`}
                 >
-                  {option.values.map((value) => (
-                    <option value={value}>{value}</option>
+                  {option.values.map((value, index) => (
+                    <option value={value} key={index}>
+                      {value}
+                    </option>
                   ))}
                 </select>
-              </>
+              </React.Fragment>
             ))}
             <button
               type="submit"
