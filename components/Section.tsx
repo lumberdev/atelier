@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 
 interface ParentComponentProps {
   children: ReactNode; // Use ReactNode type to represent any JSX content
@@ -6,7 +6,7 @@ interface ParentComponentProps {
 
 const Section: React.FC<ParentComponentProps> = ({ children }) => {
   return (
-    <div className="flex flex-row items-center justify-center max-w-screen-lg w-full m-4">
+    <div className="flex flex-row items-center justify-center w-full m-4">
       {children}
     </div>
   );
