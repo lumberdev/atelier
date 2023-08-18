@@ -48,6 +48,7 @@ router.post(async (req, res) => {
       variantIds: body.variantIds,
       image: body.image,
       isActive: body.isActive,
+      password: body.password,
       store: {
         connect: {
           shop,
@@ -63,6 +64,7 @@ router.post(async (req, res) => {
       variantIds: body.variantIds,
       image: body.image,
       isActive: body.isActive,
+      password: body.password,
     },
   });
 

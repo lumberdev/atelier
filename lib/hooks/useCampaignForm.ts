@@ -20,6 +20,7 @@ const schema = yup
     resourceIds: yup.array().of(yup.string()),
     variantIds: yup.array().of(yup.string()),
     image: yup.string().optional(),
+    password: yup.string().optional(),
     isActive: yup.boolean().default(false),
   })
   .required();

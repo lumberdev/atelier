@@ -502,6 +502,26 @@ const CampaignForm: FC<{
                 </DropZone>
               </VerticalStack>
             </Card>
+
+            <Card roundedAbove="sm">
+              <VerticalStack gap="4">
+                <Text as="h3" variant="headingSm">
+                  Access Control
+                </Text>
+
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <TextField
+                      label="Password"
+                      autoComplete="false"
+                      {...field}
+                    />
+                  )}
+                />
+              </VerticalStack>
+            </Card>
           </VerticalStack>
         </HorizontalGrid>
       </Form>
