@@ -22,7 +22,7 @@ const ProductGrid = ({ campaign, campaign_handle }) => {
             );
           })
         ) : (
-          <div className="col-span-2 sm:col-span-3 lg:col-span-4 flex flex-col items-center justify-center">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-4 xl:grid-cols-5 flex flex-col items-center justify-center">
             Loading products
             <br />
             <br />

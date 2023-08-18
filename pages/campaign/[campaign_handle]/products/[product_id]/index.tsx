@@ -8,6 +8,7 @@ import Spinner from "../../../../../components/Spinner";
 const ProductCampaignPage = () => {
   const router = useRouter();
   const { campaign_handle, product_id } = router.query;
+
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
     campaign_handle,
   });
