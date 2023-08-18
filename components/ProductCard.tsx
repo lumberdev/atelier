@@ -5,15 +5,15 @@ const ProductCard = ({ product, campaign_handle }) => {
   const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
 
   return (
-    <div className="overflow-hidden w-fit mx-auto bg-white">
+    <div className="overflow-hidden w-fit mx-auto bg-white max-w-full w-full">
       <Link
         href={`/campaign/${campaign_handle}/products/${
           product.id.split("gid://shopify/Product/")[1]
         }`}
-        className="flex h-fit "
+        className="flex h-fit w-full aspect-square	"
       >
         <img
-          className="w-48 h-48 object-cover max-w-full"
+          className="w-48 h-48 object-cover max-w-full w-full h-full"
           src={product.featuredImage?.url}
         />
       </Link>
