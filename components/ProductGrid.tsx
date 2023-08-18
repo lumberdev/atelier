@@ -14,7 +14,7 @@ const ProductGrid = ({ campaign, campaign_handle }) => {
 
   return (
     <Section>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-8 w-full mx-16">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-center justify-center gap-8 w-full mx-16">
         {products && products.length > 0 ? (
           products.map((product) => {
             return (
