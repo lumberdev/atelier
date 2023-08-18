@@ -1,14 +1,8 @@
 import { currencyFormatter } from "@/lib/helper/currency";
-import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
 import Spinner from "./Spinner";
 
-const ProductPage = ({ campaign, product_id }) => {
-  const { isLoading, product } = useProductOnStore({
-    store_id: campaign.storeId,
-    product_id: product_id,
-  });
-  console.log(product);
-  return !isLoading ? (
+const ProductPage = ({ product }) => {
+  return (
     <div className="container mx-auto p-8">
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
         <div className="">
@@ -53,10 +47,6 @@ const ProductPage = ({ campaign, product_id }) => {
           </form>
         </div>
       </div>
-    </div>
-  ) : (
-    <div className="flex flex-col items-center justify-center">
-      <Spinner />
     </div>
   );
 };
