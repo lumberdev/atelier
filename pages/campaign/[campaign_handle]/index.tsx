@@ -3,7 +3,7 @@ import ProductGrid from "../../../components/ProductGrid";
 import { useRouter } from "next/router";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
-import Spinner from "@/components/Spinner";
+import LoadingScreen from "@/components/Spinner";
 
 const HomeCampaignPage = () => {
   const router = useRouter();
@@ -18,13 +18,7 @@ const HomeCampaignPage = () => {
     productIDs.includes(product.id)
   );
 
-  if (productsLoading) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  if (productsLoading) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col items-center justify-center">

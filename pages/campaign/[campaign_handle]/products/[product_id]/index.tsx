@@ -3,7 +3,7 @@ import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
 import NavBar from "../../../../../components/Navbar";
 import ProductPage from "../../../../../components/ProductPage";
-import Spinner from "../../../../../components/Spinner";
+import LoadingScreen from "../../../../../components/LoadingScreen";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
@@ -17,13 +17,7 @@ const ProductCampaignPage = () => {
     product_id,
   });
 
-  if (campaignLoading || productLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen w-screen">
-        <Spinner />
-      </div>
-    );
-  }
+  if (campaignLoading || productLoading) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col items-center justify-center">
