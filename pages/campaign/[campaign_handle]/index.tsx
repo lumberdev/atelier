@@ -3,7 +3,7 @@ import ProductGrid from "../../../components/ProductGrid";
 import { useRouter } from "next/router";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
-import LoadingScreen from "@/components/Spinner";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const HomeCampaignPage = () => {
   const router = useRouter();
