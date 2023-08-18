@@ -17,7 +17,7 @@ const ProductCard = ({ product, campaign_handle }) => {
           src={product.featuredImage?.url}
         />
       </Link>
-      <div className="flex flex-col w-48 py-2 text-base">
+      <div className="flex flex-col w-full py-2 text-3xl sm:text-2xl md:text-xl">
         <Link
           href={`/campaign/${campaign_handle}/products/${
             product.id.split("gid://shopify/Product/")[1]
