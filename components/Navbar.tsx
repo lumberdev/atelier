@@ -1,11 +1,11 @@
 import Section from "./Section";
 import Link from "next/link";
 
-const NavBar = ({ campaign, campaign_handle }) => {
+const NavBar = ({ campaign, handle }) => {
   return (
     <Section>
       <div className="flex flex-col items-center justify-center">
-        <Link href={`/campaign/${campaign_handle}`} className="no-underline ">
+        <Link href={`/campaign/${handle}`} className="no-underline ">
           <h1 className="text-4xl text-black mx-1 my-8">{campaign?.title}</h1>
         </Link>
         <nav className="flex flex-row my-8">

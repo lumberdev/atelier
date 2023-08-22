@@ -7,10 +7,10 @@ import LoadingScreen from "../../../../../components/LoadingScreen";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
-  const { campaign_handle, product_id } = router.query;
+  const { handle, product_id } = router.query;
 
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
-    campaign_handle,
+    handle,
   });
   const { isLoading: productLoading, product } = useProductOnStore({
     store_id: campaign?.storeId,
@@ -21,7 +21,7 @@ const ProductCampaignPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <NavBar {...{ campaign, campaign_handle }} />
+      <NavBar {...{ campaign, handle }} />
       <ProductPage {...{ product }} />
     </div>
   );

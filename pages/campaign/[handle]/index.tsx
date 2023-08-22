@@ -3,6 +3,11 @@ import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
+import NavBar from "../../../components/Navbar";
+import ProductGrid from "../../../components/ProductGrid";
+import { useRouter } from "next/router";
+import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -54,9 +59,23 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
+  const router = useRouter();
+  const { handle } = router.query;
+  const productIDs = campaign?.resourceIds;
+  const { products: allProducts, isLoading: productsLoading } =
+    useProductsOnStore({
+      store_id: campaign.storeId,
+    });
+  const products = allProducts.filter((product) =>
+    productIDs.includes(product.id)
+  );
+
+  if (productsLoading) return <LoadingScreen />;
+
   return (
-    <div>
-      <h1>{campaign.title}</h1>
+    <div className="flex flex-col items-center justify-center">
+      <NavBar {...{ campaign, handle }} />
+      <ProductGrid {...{ products, handle }} />
     </div>
   );
 };

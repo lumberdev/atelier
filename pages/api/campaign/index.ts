@@ -9,7 +9,7 @@ const router = createRouter<
 >();
 
 router.get(async (req, res) => {
-  const campaignHandle = req.query.campaign_handle as string;
+  const campaignHandle = req.query.handle as string;
   const subdomain = "river";
 
   const store = await prisma.stores.findUnique({

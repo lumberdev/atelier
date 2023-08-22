@@ -1,13 +1,13 @@
 import { currencyFormatter } from "@/lib/helper/currency";
 import Link from "next/link";
 
-const ProductCard = ({ product, campaign_handle }) => {
+const ProductCard = ({ product, handle }) => {
   const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
 
   return (
     <div className="overflow-hidden w-fit mx-auto bg-white max-w-full w-full">
       <Link
-        href={`/campaign/${campaign_handle}/products/${
+        href={`/campaign/${handle}/products/${
           product.id.split("gid://shopify/Product/")[1]
         }`}
         className="flex h-fit w-full aspect-square	"
@@ -19,7 +19,7 @@ const ProductCard = ({ product, campaign_handle }) => {
       </Link>
       <div className="flex flex-col w-full py-2 text-3xl sm:text-2xl md:text-xl">
         <Link
-          href={`/campaign/${campaign_handle}/products/${
+          href={`/campaign/${handle}/products/${
             product.id.split("gid://shopify/Product/")[1]
           }`}
           className="no-underline"

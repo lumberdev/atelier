@@ -1,12 +1,10 @@
 import { useQuery } from "react-query";
 
-export const useCampaignOnStore = ({ campaign_handle }) => {
+export const useCampaignOnStore = ({ handle }) => {
   const { data = { campaign: {} }, isLoading } = useQuery<{
     campaign: any;
-  }>(["campaign", campaign_handle], () =>
-    fetch(`/api/campaign?campaign_handle=${campaign_handle}`).then((response) =>
-      response.json()
-    )
+  }>(["campaign", handle], () =>
+    fetch(`/api/campaign?handle=${handle}`).then((response) => response.json())
   );
 
   return {
