@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
-import NavBar from "../../../../../components/Navbar";
-import ProductPage from "../../../../../components/ProductPage";
-import LoadingScreen from "../../../../../components/LoadingScreen";
+import NavBar from "@/components/Navbar";
+import ProductPage from "@/components/ProductPage";
+import LoadingScreen from "@/components/LoadingScreen";
+import Page from "@/components/Page";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
@@ -20,10 +21,10 @@ const ProductCampaignPage = () => {
   if (campaignLoading || productLoading) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <Page>
       <NavBar {...{ campaign, handle }} />
       <ProductPage {...{ product }} />
-    </div>
+    </Page>
   );
 };
 

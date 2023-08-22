@@ -3,11 +3,12 @@ import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
-import NavBar from "../../../components/Navbar";
-import ProductGrid from "../../../components/ProductGrid";
+import NavBar from "@/components/Navbar";
+import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
 import LoadingScreen from "@/components/LoadingScreen";
+import Page from "@/components/Page";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -73,10 +74,10 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   if (productsLoading) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <Page>
       <NavBar {...{ campaign, handle }} />
       <ProductGrid {...{ products, handle }} />
-    </div>
+    </Page>
   );
 };
 
