@@ -1,12 +1,15 @@
 import { useQuery } from "react-query";
 
-export const useProductsOnStore = ({ store_id }) => {
+// Takes an array of product_ids as an argument.
+// If no product_ids passed, it will return all products for the store.
+
+export const useProductsOnStore = ({ store_id, product_ids = [] }) => {
   const { data = { products: [] }, isLoading } = useQuery<{
     products: any[];
   }>(
-    ["products", store_id],
+    ["products", store_id, product_ids],
     () =>
-      fetch(`/api/products?store_id=${store_id}`)
+      fetch(`/api/products?store_id=${store_id}&product_id=${product_ids}`)
         .then((response) => response.json())
         .then((data) => {
           return {
