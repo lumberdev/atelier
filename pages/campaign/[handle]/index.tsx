@@ -63,13 +63,14 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   const router = useRouter();
   const { handle } = router.query;
   const productIDs = campaign?.resourceIds;
-  const { products: allProducts, isLoading: productsLoading } =
-    useProductsOnStore({
-      store_id: campaign.storeId,
-    });
-  const products = allProducts.filter((product) =>
-    productIDs.includes(product.id)
-  );
+
+  // ^ This is not always product ids, it can be of product ids OR collection ids
+  console.log(productIDs);
+
+  const { products, isLoading: productsLoading } = useProductsOnStore({
+    store_id: campaign.storeId,
+    product_ids: productIDs,
+  });
 
   if (productsLoading) return <LoadingScreen />;
 

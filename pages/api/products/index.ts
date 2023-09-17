@@ -9,36 +9,7 @@ const router = createRouter<
   NextApiResponse
 >();
 
-const PRODUCTS_QUERY_BY_IDS = gql`
-  query Products($ids: [ID!]!) {
-    products(ids: $ids) {
-      edges {
-        node {
-          id
-          title
-          updatedAt
-          handle
-          priceRangeV2 {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-            maxVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          featuredImage {
-            url
-            altText
-          }
-        }
-      }
-    }
-  }
-`;
-
-const PRODUCTS_QUERY_ALL = gql`
+const PRODUCTS_QUERY = gql`
   query Products {
     products(first: 100) {
       edges {
@@ -69,7 +40,8 @@ const PRODUCTS_QUERY_ALL = gql`
 
 router.get(async (req, res) => {
   const storeId = req.query.store_id as string;
-  const productIds = req.query.product_ids as string[];
+  const productIdsString = req.query.product_ids as string;
+  const productIds = productIdsString.split(",");
 
   const shopifyStore = "river-theme";
   const shopifyStoreUrl = `https://${shopifyStore}.myshopify.com/admin/api/2023-04/graphql.json`;
@@ -84,10 +56,7 @@ router.get(async (req, res) => {
       "X-Shopify-Access-Token": accessToken,
     },
     body: JSON.stringify({
-      query:
-        Array.isArray(productIds) && productIds.length > 0
-          ? PRODUCTS_QUERY_BY_IDS
-          : PRODUCTS_QUERY_ALL,
+      query: PRODUCTS_QUERY,
       variables: { ids: productIds },
     }),
   };
@@ -96,7 +65,10 @@ router.get(async (req, res) => {
     const raw = await fetch(shopifyStoreUrl, options).then((response) =>
       response.json()
     );
-    res.status(200).json({ products: raw.data.products.edges });
+    const products = raw.data.products.edges.filter((product) =>
+      productIds.includes(product.node.id.replace("//", "/"))
+    );
+    res.status(200).json({ products });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error });
