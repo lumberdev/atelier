@@ -34,30 +34,26 @@ import { Controller } from "react-hook-form";
 
 const CampaignForm: FC<{
   campaign?: campaigns;
-  resources?: CollectionResourceItem[] | ProductResourceItem[];
-}> = ({ campaign, resources }) => {
+  collections?: CollectionResourceItem[];
+  products?: ProductResourceItem[];
+}> = ({ campaign, collections, products }) => {
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState<number>(() => {
-    if (!campaign) return 0;
-
-    return campaign.resourceType === "COLLECTIONS" ? 0 : 1;
-  });
+  const [selectedTab, setSelectedTab] = useState<number>(0);
   const [isResourcePickerOpen, setIsResourcePickerOpen] =
     useState<boolean>(false);
   const [selectedCollections, setSelectedCollections] = useState<
     CollectionResourceItem[]
   >(() => {
-    if (!campaign || campaign.resourceType === "PRODUCTS" || !resources)
-      return [];
+    if (!campaign || !collections) return [];
 
-    return resources as CollectionResourceItem[];
+    return collections as CollectionResourceItem[];
   });
   const [selectedProducts, setSelectedProducts] = useState<
     ProductResourceItem[]
   >(() => {
-    if (!campaign || campaign.resourceType === "COLLECTIONS") return [];
+    if (!campaign || !products) return [];
 
-    return resources as ProductResourceItem[];
+    return products as ProductResourceItem[];
   });
   const [selectedItems, setSelectedItems] = useState<
     ResourceListProps["selectedItems"]
@@ -80,24 +76,19 @@ const CampaignForm: FC<{
   const isActiveSelectValue = isActive ? "true" : "false";
 
   useEffect(() => {
-    setValue("resourceType", selectedTab === 0 ? "COLLECTIONS" : "PRODUCTS");
-  }, [selectedTab]);
-
-  useEffect(() => {
     if (selectedTab !== 0) return;
 
     setValue(
-      "resourceIds",
+      "collectionIds",
       selectedCollections.map((resource) => resource.id)
     );
-    setValue("variantIds", []);
   }, [selectedTab, selectedCollections]);
 
   useEffect(() => {
     if (selectedTab !== 1) return;
 
     setValue(
-      "resourceIds",
+      "productIds",
       selectedProducts.map((resource) => resource.id)
     );
 

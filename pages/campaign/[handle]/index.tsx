@@ -57,6 +57,9 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   return (
     <div>
       <h1>{campaign.title}</h1>
+      <p>{`collectionIds: ${campaign.collectionIds}`}</p>
+      <p>{`productIds: ${campaign.productIds}`}</p>
+      <p>{`variantIds: ${campaign.variantIds}`}</p>
     </div>
   );
 };

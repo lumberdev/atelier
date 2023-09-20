@@ -3,8 +3,8 @@ export interface CampaignInput {
   title: string;
   handle: string;
   description?: string;
-  resourceType: "COLLECTIONS" | "PRODUCTS";
-  resourceIds: string[];
+  collectionIds: string[];
+  productIds: string[];
   variantIds: string[];
   password?: string;
   image?: string;

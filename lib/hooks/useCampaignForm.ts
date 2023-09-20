@@ -16,8 +16,8 @@ const schema = yup
     title: yup.string().required("Please provide a title."),
     handle: yup.string().required("Please provide a handle."),
     description: yup.string().optional(),
-    resourceType: yup.string().oneOf(["COLLECTIONS", "PRODUCTS"]).required(),
-    resourceIds: yup.array().of(yup.string()),
+    collectionIds: yup.array().of(yup.string()),
+    productIds: yup.array().of(yup.string()),
     variantIds: yup.array().of(yup.string()),
     image: yup.string().optional(),
     password: yup.string().optional(),
@@ -44,7 +44,8 @@ export const useCampaignForm = (campaign?: campaigns) => {
   const { handleSubmit, ...form } = useForm({
     resolver: yupResolver(schema),
     defaultValues: (campaign as any) || {
-      resourceIds: [],
+      collectionIds: [],
+      productIds: [],
       variantIds: [],
       isActive: false,
     },
@@ -120,10 +121,10 @@ export const useCampaignForm = (campaign?: campaigns) => {
     imageFile,
     setImageFile,
     onSubmit,
-    setResourceType: (type: CampaignInput["resourceType"]) =>
-      form.setValue("resourceType", type),
-    setResourceIds: (ids: CampaignInput["resourceIds"]) =>
-      form.setValue("resourceIds", ids),
+    setCollectionIds: (type: CampaignInput["collectionIds"]) =>
+      form.setValue("collectionIds", type),
+    setProductIds: (ids: CampaignInput["productIds"]) =>
+      form.setValue("productIds", ids),
     setVariantIds: (ids: CampaignInput["variantIds"]) =>
       form.setValue("variantIds", ids),
   };

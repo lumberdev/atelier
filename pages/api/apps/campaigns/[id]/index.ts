@@ -19,53 +19,50 @@ router.get(async (req, res) => {
     where: { id },
   });
 
-  const resourceType = campaign.resourceType;
-
-  if (resourceType === "COLLECTIONS") {
-    const { client } = await clientProvider.offline.graphqlClient({
-      shop: req.user_session.shop,
-    });
-
-    const queryPromises = campaign.resourceIds.map((id) =>
-      client.query<{ data: { collection: any | null } }>({
-        data: `{
-        collection(id: "${id}") {
-          id
-          handle
-          title
-          image {
-            src: url
-          }
-          productsCount
-        }
-      }`,
-      })
-    );
-
-    const response = await Promise.all(queryPromises);
-    const resources = response
-      .map((response) => response.body.data?.collection)
-      .filter(Boolean);
-
-    return res.status(200).json({ campaign, resources });
-  }
-
-  const { client } = await clientProvider.offline.restClient({
+  // GET COLLECTIONS
+  const { client: graphqlClient } = await clientProvider.offline.graphqlClient({
     shop: req.user_session.shop,
   });
 
-  const ids = campaign.resourceIds
+  const queryPromises = campaign.collectionIds.map((id) =>
+    graphqlClient.query<{ data: { collection: any | null } }>({
+      data: `{
+      collection(id: "${id}") {
+        id
+        handle
+        title
+        image {
+          src: url
+        }
+        productsCount
+      }
+    }`,
+    })
+  );
+
+  const collectionsResponse = await Promise.all(queryPromises);
+  const collections = collectionsResponse
+    .map((response) => response.body.data?.collection)
+    .filter(Boolean);
+
+  // GET PRODUCTS
+
+  const ids = campaign.productIds
     .map((gid) => {
       const [id] = gid.split("/").reverse();
       return id;
     })
     .join(",");
 
-  const response = await client.get<{
+  const { client: restClient } = await clientProvider.offline.restClient({
+    shop: req.user_session.shop,
+  });
+
+  const productsResponse = await restClient.get<{
     products: any[];
   }>({ path: `/products.json?ids=${ids}` });
 
-  const resources = response.body.products.map((product) => ({
+  const products = productsResponse.body.products.map((product) => ({
     ...product,
     id: `gid://shopify/Product/${product.id}`,
     variants: [
@@ -78,7 +75,7 @@ router.get(async (req, res) => {
     ],
   }));
 
-  return res.status(200).json({ campaign, resources });
+  return res.status(200).json({ campaign, products, collections });
 });
 
 export default router.handler();
