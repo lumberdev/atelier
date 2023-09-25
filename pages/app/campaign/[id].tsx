@@ -30,7 +30,8 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
 
   const { data } = useQuery<{
     campaign: campaigns;
-    resources: CollectionResourceItem[] | ProductResourceItem[];
+    collections: CollectionResourceItem[];
+    products: ProductResourceItem[];
   }>({
     queryKey: ["campaign", campaign.id],
     queryFn: () =>
@@ -45,7 +46,11 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
       backAction={{ content: "Campaigns", onAction: () => router.push("/app") }}
     >
       {data && (
-        <CampaignForm campaign={data.campaign} resources={data.resources} />
+        <CampaignForm
+          campaign={data.campaign}
+          collections={data.collections}
+          products={data.products}
+        />
       )}
     </Page>
   );

@@ -62,10 +62,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   const router = useRouter();
   const { handle } = router.query;
-  const productIDs = campaign?.resourceIds;
-
-  // ^ This is not always product ids, it can be of product ids OR collection ids
-  console.log(productIDs);
+  const productIDs = campaign?.productIds;
 
   const { products, isLoading: productsLoading } = useProductsOnStore({
     store_id: campaign.storeId,
