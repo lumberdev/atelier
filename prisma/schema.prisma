@@ -11,13 +11,14 @@ datasource db {
 }
 
 model stores {
-  shop       String      @id
-  isActive   Boolean?    @default(false)
-  identifier String?     @unique
-  secret     String?     @default(uuid())
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  shop       String       @id
+  isActive   Boolean?     @default(false)
+  identifier String?      @unique
+  secret     String?      @default(uuid())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   campaigns  campaigns[]
+  theme      storeThemes?
 }
 
 model session {
@@ -27,18 +28,31 @@ model session {
 }
 
 model campaigns {
-  id            String       @id @default(cuid())
+  id            String   @id @default(cuid())
   storeId       String
-  store         stores       @relation(fields: [storeId], references: [shop])
+  store         stores   @relation(fields: [storeId], references: [shop])
   title         String
   handle        String
-  description   String       @db.Text
+  description   String   @db.Text
   collectionIds String[]
   productIds    String[]
   variantIds    String[]
   image         String?
-  isActive      Boolean      @default(false)
+  isActive      Boolean  @default(false)
   password      String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model storeThemes {
+  id              String   @id @default(cuid())
+  storeId         String   @unique
+  store           stores   @relation(fields: [storeId], references: [shop])
+  logo            String?
+  primaryColor    String?
+  secondaryColor  String?
+  backgroundColor String?
+  borderRadius    Int?     @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
