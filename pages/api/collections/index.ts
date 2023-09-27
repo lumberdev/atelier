@@ -9,58 +9,6 @@ const router = createRouter<
   NextApiResponse
 >();
 
-// const PRODUCTS_QUERY = gql`
-//   query Products {
-//     products(first: 100) {
-//       edges {
-//         node {
-//           id
-//           title
-//           updatedAt
-//           handle
-//           priceRangeV2 {
-//             minVariantPrice {
-//               amount
-//               currencyCode
-//             }
-//             maxVariantPrice {
-//               amount
-//               currencyCode
-//             }
-//           }
-//           featuredImage {
-//             url
-//             altText
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
-
-// const COLLECTIONS_QUERY = gql`
-//   query Collections {
-//     collections(first: 10) {
-//       edges {
-//         node {
-//           id
-//           title
-//           products(first: 50) {
-//             edges {
-//               node {
-//                 id
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
-
-// "gid://shopify/Collection/399790375158"
-// "gid://shopify/Collection/399744532726"
-
 const getCollectionsQuery = (collectionIds) => gql`
   query {
     ${[
