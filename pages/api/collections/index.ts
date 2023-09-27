@@ -11,13 +11,10 @@ const router = createRouter<
 
 const getCollectionsQuery = (collectionIds) => gql`
   query {
-    ${[
-      "gid://shopify/Collection/399790375158",
-      "gid://shopify/Collection/399744532726",
-    ]
+    ${collectionIds
       .map(
         (id, index) => `
-      collection${index + 1}: node(id: "${id}") {
+      collection${index + 1}: node(id: "${id.replace("gid:/", "gid://")}") {
         ... on Collection {          
           id
           title
