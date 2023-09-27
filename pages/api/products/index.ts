@@ -9,32 +9,35 @@ const router = createRouter<
   NextApiResponse
 >();
 
-const PRODUCTS_QUERY = gql`
+const getProductsQuery = (productIds) => gql`
   query Products {
-    products(first: 100) {
-      edges {
-        node {
-          id
-          title
-          updatedAt
-          handle
-          priceRangeV2 {
-            minVariantPrice {
-              amount
-              currencyCode
+    ${productIds
+      .map(
+        (id, index) => `
+        product${index + 1}: node(id: "${id.replace("gid:/", "gid://")}") {
+          ... on Product {
+            id
+            title
+            updatedAt
+            handle
+            priceRangeV2 {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
             }
-            maxVariantPrice {
-              amount
-              currencyCode
+            featuredImage {
+              url
+              altText
             }
           }
-          featuredImage {
-            url
-            altText
-          }
-        }
-      }
-    }
+        }`
+      )
+      .join("\n")}
   }
 `;
 
@@ -56,8 +59,7 @@ router.get(async (req, res) => {
       "X-Shopify-Access-Token": accessToken,
     },
     body: JSON.stringify({
-      query: PRODUCTS_QUERY,
-      variables: { ids: productIds },
+      query: getProductsQuery(productIds),
     }),
   };
 
@@ -65,9 +67,7 @@ router.get(async (req, res) => {
     const raw = await fetch(shopifyStoreUrl, options).then((response) =>
       response.json()
     );
-    const products = raw.data.products.edges.filter((product) =>
-      productIds.includes(product.node.id.replace("//", "/"))
-    );
+    const products = Object.values(raw.data);
     res.status(200).json({ products });
   } catch (error) {
     console.error("Error:", error);
