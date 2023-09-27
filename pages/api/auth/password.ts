@@ -18,9 +18,18 @@ router.post(async (req, res) => {
     password: string;
   };
 
-  const url = new URL(req.url, `http://${req.headers.host}`);
-  // TODO: Replace this with the subdomain
-  const subdomain = "river";
+  const url = new URL(
+    req.url,
+    `${process.env.NODE_ENV === "production" ? "https" : "http"}://${
+      req.headers.host
+    }`
+  );
+  const [subdomain] = url.hostname.split(".");
+
+  if (["localhost", "atelier"].includes(subdomain))
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "Store not found." } });
 
   const store = await prisma.stores.findUnique({
     where: { identifier: subdomain },
