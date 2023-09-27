@@ -73,6 +73,7 @@ const getCollectionsQuery = (collectionIds) => gql`
         ... on Collection {          
           id
           title
+          handle
           products(first: 50) {
             edges {
               node {
@@ -146,6 +147,7 @@ interface ProductNode {
 interface Collection {
   id: string;
   title: string;
+  handle: string;
   products: {
     edges: ProductNode[];
   };
@@ -195,6 +197,7 @@ router.get(async (req, res) => {
       return {
         id: collection.id,
         title: collection.title,
+        handle: collection.handle,
         products: collection.products.edges.map((product) => {
           return productsMap.get(product.node.id);
         }),

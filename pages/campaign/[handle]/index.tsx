@@ -88,12 +88,9 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
     products,
     collections
   );
-  console.log(homepageProducts);
-  console.log(collections);
-  console.log(products);
   return (
     <Page>
-      <NavBar {...{ campaign, handle }} />
+      <NavBar {...{ campaign, campaignHandle: handle, collections }} />
       <ProductGrid {...{ products: homepageProducts, handle }} />
     </Page>
   );
