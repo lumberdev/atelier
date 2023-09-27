@@ -11,7 +11,7 @@ const NavBar = ({ campaign, campaignHandle, collections }) => {
         <nav className="flex flex-row my-8">
           {collections.map(({ title, handle }) => (
             <Link
-              href={`/campaign/${campaignHandle}/collections/${handle}`}
+              href={`/campaign/${campaignHandle}/`}
               className="mx-8 no-underline text-xl text-black"
               key={handle}
             >
