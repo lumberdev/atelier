@@ -85,54 +85,6 @@ const AppHomePage = () => {
               </CalloutCard>
             )}
 
-            <Grid>
-              {campaigns.map((campaign) => {
-                const image = campaign.image
-                  ? supabaseStorage.getPublicUrl(campaign.image)
-                  : "";
-
-                return (
-                  <Grid.Cell columnSpan={{ xs: 6, md: 4 }} key={campaign.id}>
-                    <MediaCard
-                      portrait
-                      title={campaign.title}
-                      description=""
-                      primaryAction={{
-                        content: "Manage",
-                        onAction: () => {},
-                      }}
-                      secondaryAction={{
-                        content: "Preview",
-                        onAction: () =>
-                          window.open(
-                            `https://${subdomain}.atelier.sale/campaign/${campaign.handle}`
-                          ),
-                      }}
-                    >
-                      <div className="relative w-full h-[16rem] bg-gray-200 shadow-inner">
-                        {image && (
-                          <img
-                            src={image.data.publicUrl}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-
-                        <div className="absolute top-4 right-4">
-                          {campaign.isActive ? (
-                            <Badge status="success" progress="complete">
-                              Active
-                            </Badge>
-                          ) : (
-                            <Badge progress="incomplete">Draft</Badge>
-                          )}
-                        </div>
-                      </div>
-                    </MediaCard>
-                  </Grid.Cell>
-                );
-              })}
-            </Grid>
-
             <Card padding="0">
               <ResourceList
                 emptyState={

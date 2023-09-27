@@ -32,3 +32,12 @@ export interface CollectionResourceItem {
   };
   productsCount: number;
 }
+
+export interface StoreThemeInput {
+  id?: string;
+  logo?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  backgroundColor?: string;
+  borderRadius?: number;
+}

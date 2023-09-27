@@ -500,6 +500,10 @@ const CampaignForm: FC<{
                   Access Control
                 </Text>
 
+                <Text as="p" variant="bodyMd">
+                  Set a password for accessing your campaign page
+                </Text>
+
                 <Controller
                   control={control}
                   name="password"
