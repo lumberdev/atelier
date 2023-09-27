@@ -1,19 +1,37 @@
 import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
+import { useStoreThemeForm } from "@/lib/hooks/useStoreThemeForm";
 import {
   Button,
   Card,
+  DropZone,
   Form,
   FormLayout,
+  HorizontalGrid,
+  HorizontalStack,
   Layout,
   Page,
+  Text,
   TextField,
+  Toast,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 const SettingsPage = () => {
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
+
+  const {
+    logoUrl,
+    imageFile,
+    setImageFile,
+    onSubmit: onSubmitTheme,
+    control,
+    isLoading,
+    didUpsert,
+    dismissSuccessToast,
+  } = useStoreThemeForm({});
+
   const { handleSubmit, setValue, watch } = useForm<{
     domain: string;
   }>({ defaultValues: { domain: "" } });
@@ -62,7 +80,127 @@ const SettingsPage = () => {
             </Form>
           </Card>
         </Layout.AnnotatedSection>
+
+        <Layout.AnnotatedSection
+          id="storeSettings"
+          title="Store Branding"
+          description="Add global theme settings"
+        >
+          <Card>
+            <Form onSubmit={onSubmitTheme}>
+              <FormLayout>
+                <HorizontalStack align="space-between">
+                  <Text variant="headingSm" as="h3">
+                    Logo
+                  </Text>
+
+                  {imageFile && (
+                    <Button
+                      destructive
+                      plain
+                      onClick={() => setImageFile(null)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </HorizontalStack>
+
+                <DropZone
+                  accept="image/*"
+                  type="image"
+                  allowMultiple={false}
+                  onDrop={(
+                    _dropFiles: File[],
+                    acceptedFiles: File[],
+                    _rejectedFiles: File[]
+                  ) => setImageFile(acceptedFiles[0])}
+                >
+                  {logoUrl && (
+                    <HorizontalStack>
+                      <img
+                        src={logoUrl}
+                        alt=""
+                        loading="eager"
+                        className="w-full aspect-auto h-auto rounded-lg"
+                      />
+                    </HorizontalStack>
+                  )}
+
+                  {!imageFile && <DropZone.FileUpload />}
+                </DropZone>
+
+                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                  <Controller
+                    control={control}
+                    name="primaryColor"
+                    render={({ field }) => (
+                      <TextField
+                        label="Primary Color"
+                        autoComplete="false"
+                        helpText="Enter a valid hex/rgb code"
+                        {...field}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="secondaryColor"
+                    render={({ field }) => (
+                      <TextField
+                        label="Secondary Color"
+                        autoComplete="false"
+                        helpText="Enter a valid hex/rgb code"
+                        {...field}
+                      />
+                    )}
+                  />
+                </HorizontalGrid>
+
+                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                  <Controller
+                    control={control}
+                    name="backgroundColor"
+                    render={({ field }) => (
+                      <TextField
+                        label="Background Color"
+                        autoComplete="false"
+                        helpText="Enter a valid hex/rgb code"
+                        {...field}
+                      />
+                    )}
+                  />
+                </HorizontalGrid>
+
+                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                  <Controller
+                    control={control}
+                    name="borderRadius"
+                    render={({ field }) => (
+                      <TextField
+                        type="number"
+                        label="Border Radius"
+                        autoComplete="false"
+                        {...field}
+                      />
+                    )}
+                  />
+                </HorizontalGrid>
+
+                <HorizontalGrid alignItems="center">
+                  <Button primary submit loading={isLoading}>
+                    Save
+                  </Button>
+                </HorizontalGrid>
+              </FormLayout>
+            </Form>
+          </Card>
+        </Layout.AnnotatedSection>
       </Layout>
+
+      {didUpsert && (
+        <Toast content="Updated store theme" onDismiss={dismissSuccessToast} />
+      )}
     </Page>
   );
 };
