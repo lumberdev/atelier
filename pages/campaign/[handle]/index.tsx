@@ -7,6 +7,7 @@ import NavBar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
+import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
 
@@ -59,22 +60,41 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 };
 
+function getUniqueProductsFromCollections(products, collections) {
+  const allProducts = [...products];
+  for (const collection of collections) {
+    allProducts.push(...collection.products);
+  }
+  const uniqueProducts = allProducts.filter(
+    (product, index, self) =>
+      index === self.findIndex((p) => p.id === product.id)
+  );
+  return uniqueProducts;
+}
+
 const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   const router = useRouter();
   const { handle } = router.query;
-  const productIDs = campaign?.productIds;
-
+  const { collections, isLoading: collectionsLoading } = useCollectionsOnStore({
+    store_id: campaign.storeId,
+    collection_ids: campaign?.collectionIds,
+  });
   const { products, isLoading: productsLoading } = useProductsOnStore({
     store_id: campaign.storeId,
-    product_ids: productIDs,
+    product_ids: campaign?.productIds,
   });
-
-  if (productsLoading) return <LoadingScreen />;
-
+  if (productsLoading || collectionsLoading) return <LoadingScreen />;
+  const homepageProducts = getUniqueProductsFromCollections(
+    products,
+    collections
+  );
+  console.log(homepageProducts);
+  console.log(collections);
+  console.log(products);
   return (
     <Page>
       <NavBar {...{ campaign, handle }} />
-      <ProductGrid {...{ products, handle }} />
+      <ProductGrid {...{ products: homepageProducts, handle }} />
     </Page>
   );
 };
