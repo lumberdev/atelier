@@ -2,7 +2,6 @@ import Section from "./Section";
 import Link from "next/link";
 
 const NavBar = ({ campaign, campaignHandle, collections }) => {
-  console.log(collections);
   return (
     <Section>
       <div className="flex flex-col items-center justify-center">
