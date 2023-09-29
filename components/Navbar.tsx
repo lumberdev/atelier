@@ -11,7 +11,7 @@ const NavBar = ({ campaign, campaignHandle, collections }) => {
         />
       </HamburgerMenu>
       <Section className={"hidden xs:flex"}>
-        <div className=" flex-row items-center justify-center max-w-full">
+        <div className="flex flex-wrap flex-row items-center justify-center max-w-full">
           <NavLinks
             {...{ campaign, campaignHandle, collections, color: "black" }}
           />
