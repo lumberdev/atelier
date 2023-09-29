@@ -56,7 +56,7 @@ const HamburgerMenu = ({ children, className }) => {
         onClick={toggleMenu}
       >
         <div
-          className="w-3/5 bg-gray-900 transform -translate-x-full transition-transform duration-300 ease-in-out absolute top-0 left-0 h-full"
+          className="w-3/5 bg-gray-900/80 transform -translate-x-full transition-transform duration-300 ease-in-out absolute top-0 left-0 h-full"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mt-8 text-white flex flex-col">{children}</div>
