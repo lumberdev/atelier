@@ -20,14 +20,14 @@ const HamburgerMenu = ({ children, className }) => {
       window.addEventListener("click", closeMenu);
     } else {
       // Re-enable scrolling on the background
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "scroll";
       hamburgerMenu.style.left = "-100%";
       window.removeEventListener("click", closeMenu);
     }
 
     return () => {
       // Re-enable scrolling on unmount
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "scroll";
       window.removeEventListener("click", closeMenu);
     };
   }, [isOpen]);
