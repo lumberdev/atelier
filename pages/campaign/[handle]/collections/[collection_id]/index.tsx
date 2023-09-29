@@ -28,7 +28,7 @@ const CollectionCampaignPage = () => {
   return (
     <Page>
       <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <h1 className="text-xl sm:text-3xl text-black mx-1 my-4 sm:my-8 mx-16 mr-auto ">
+      <h1 className="text-xl xs:text-3xl text-black mx-1 mt-4 xs:my-8 mx-4 xs:mx-16 mr-auto xs:mr-auto ">
         {selectedCollection?.title}
       </h1>
       <ProductGrid {...{ products: collectionProducts, handle }} />
