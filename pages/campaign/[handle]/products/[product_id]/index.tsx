@@ -6,6 +6,7 @@ import NavBar from "@/components/Navbar";
 import ProductPage from "@/components/ProductPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import LogoTitle from "@/components/LogoTitle";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
@@ -28,6 +29,7 @@ const ProductCampaignPage = () => {
 
   return (
     <Page>
+      <LogoTitle {...{ campaign, campaignHandle: handle }} />
       <NavBar {...{ campaign, campaignHandle: handle, collections }} />
       <ProductPage {...{ product }} />
     </Page>

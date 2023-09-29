@@ -5,6 +5,7 @@ import NavBar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import LogoTitle from "@/components/LogoTitle";
 
 const CollectionCampaignPage = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const CollectionCampaignPage = () => {
 
   return (
     <Page>
+      <LogoTitle {...{ campaign, campaignHandle: handle }} />
       <NavBar {...{ campaign, campaignHandle: handle, collections }} />
       <h1 className="text-2xl sm:text-4xl text-black mx-1 my-4 sm:my-8 mx-16 mr-auto ">
         {selectedCollection?.title}
