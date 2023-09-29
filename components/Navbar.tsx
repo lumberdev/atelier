@@ -2,16 +2,18 @@ import Section from "./Section";
 import Link from "next/link";
 
 const NavBar = ({ campaign, campaignHandle, collections }) => {
+  const linkStyle =
+    "mx-4 sm:mx-8 no-underline hover:underline text-m sm:text-xl text-black";
   return (
     <Section>
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center max-w-full">
         <Link href={`/campaign/${campaignHandle}`} className="no-underline ">
           <h1 className="text-4xl text-black mx-1 my-8">{campaign?.title}</h1>
         </Link>
-        <nav className="flex flex-row my-8">
+        <nav className="flex flex-row items-center justify-around my-8 max-w-full flex-wrap">
           <Link
             href={`/campaign/${campaignHandle}/`}
-            className="mx-8 no-underline text-xl text-black"
+            className={linkStyle}
             key={"all"}
           >
             Shop All
@@ -21,7 +23,7 @@ const NavBar = ({ campaign, campaignHandle, collections }) => {
               href={`/campaign/${campaignHandle}/collections/${
                 id.match(/\d+/)[0] || id
               }`}
-              className="mx-8 no-underline text-xl text-black"
+              className={linkStyle}
               key={handle}
             >
               {title}
