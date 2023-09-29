@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const HamburgerMenu = ({ children, className }) => {
+const HamburgerMenu = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -42,10 +42,24 @@ const HamburgerMenu = ({ children, className }) => {
     setIsOpen(false);
   }, [router]);
 
+  // On scroll away from the top, add a background to the header
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>(".header");
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        header.classList.add("bg-gray-300/80");
+      } else {
+        header.classList.remove("bg-gray-300/80");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative`}>
       <button
-        className="fixed top-4 left-4 z-10 p-2 bg-gray-800 text-white rounded"
+        className="w-8 h-8 z-10 p-2 bg-gray-800 text-white rounded"
         onClick={toggleMenu}
       >
         ☰

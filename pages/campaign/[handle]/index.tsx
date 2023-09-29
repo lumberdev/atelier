@@ -3,7 +3,7 @@ import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
-import NavBar from "@/components/Navbar";
+import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
 import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
@@ -107,8 +107,7 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   );
   return (
     <Page>
-      <LogoTitle {...{ campaign, campaignHandle: handle }} />
-      <NavBar {...{ campaign, campaignHandle: handle, collections }} />
+      <Header {...{ campaign, campaignHandle: handle, collections }} />
       <ProductGrid {...{ products: homepageProducts, handle }} />
     </Page>
   );

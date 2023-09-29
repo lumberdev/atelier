@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
 import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
-import NavBar from "@/components/Navbar";
+import Header from "@/components/Header";
 import ProductPage from "@/components/ProductPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
@@ -29,8 +29,7 @@ const ProductCampaignPage = () => {
 
   return (
     <Page>
-      <LogoTitle {...{ campaign, campaignHandle: handle }} />
-      <NavBar {...{ campaign, campaignHandle: handle, collections }} />
+      <Header {...{ campaign, campaignHandle: handle, collections }} />
       <ProductPage {...{ product }} />
     </Page>
   );
