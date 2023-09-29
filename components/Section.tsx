@@ -8,7 +8,7 @@ interface ParentComponentProps {
 const Section: React.FC<ParentComponentProps> = ({ children, className }) => {
   return (
     <div
-      className={`flex flex-row items-center justify-center w-full m-8 ${className}`}
+      className={`flex flex-row items-center justify-center w-full m-4 ${className}`}
     >
       {children}
     </div>
