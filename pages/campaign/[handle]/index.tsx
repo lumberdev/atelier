@@ -15,9 +15,25 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   query: { handle },
 }) => {
+  const url = new URL(
+    req.url,
+    `${process.env.NODE_ENV === "production" ? "https" : "http"}://${
+      req.headers.host
+    }`
+  );
+  const [subdomain] = url.hostname.split(".");
+
+  if (["localhost", "atelier"].includes(subdomain))
+    return {
+      redirect: {
+        destination: "",
+        permanent: false,
+      },
+    };
+
   const merchant = await prisma.stores.findUnique({
     where: {
-      identifier: "river",
+      identifier: subdomain,
     },
     include: {
       campaigns: {
