@@ -18,6 +18,7 @@ export const useProductOnStore = ({ store_id, product_id }) => {
               options: data.product.options,
               handle: data.product.handle,
               images: data.product.images.edges.map((edge) => edge.node),
+              variants: data.product.variants.edges.map((edge) => edge.node),
             },
           };
         }),

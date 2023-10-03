@@ -39,6 +39,24 @@ const PRODUCT_QUERY_BY_ID = gql`
           }
         }
       }
+      variants(first: 10) {
+        edges {
+          node {
+            title
+            id
+            availableForSale
+            compareAtPrice
+            price
+            selectedOptions {
+              name
+              value
+            }
+            product {
+              id
+            }
+          }
+        }
+      }
     }
   }
 `;

@@ -10,6 +10,7 @@ import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
 import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import { CartProvider } from "@/context/CartContext";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -104,11 +105,14 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
     products,
     collections
   );
+
   return (
-    <Page>
-      <NavBar {...{ campaign, campaignHandle: handle, collections }} />
-      <ProductGrid {...{ products: homepageProducts, handle }} />
-    </Page>
+    <CartProvider>
+      <Page>
+        <NavBar {...{ campaign, campaignHandle: handle, collections }} />
+        <ProductGrid {...{ products: homepageProducts, handle }} />
+      </Page>
+    </CartProvider>
   );
 };
 
