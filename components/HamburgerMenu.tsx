@@ -59,7 +59,7 @@ const HamburgerMenu = ({ children }) => {
   return (
     <div className={`relative`}>
       <button
-        className="w-8 h-8 z-10 p-2 bg-gray-800 text-white rounded"
+        className="w-8 h-8 z-10 p-2 bg-white text-black border-none"
         onClick={toggleMenu}
       >
         ☰
