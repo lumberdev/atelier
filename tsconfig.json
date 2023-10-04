@@ -17,8 +17,10 @@
     "paths": {
       "@/*": ["./*"],
       "@/utils": ["./utils/*"],
+      "@/context": ["./context/*"],
       "@/components": ["./components/*"],
-      "@/hooks": ["./components/hooks/*"]
+      "@/hooks": ["./components/hooks/*"],
+      "@/assets": ["./public/assets/*"]
     }
   },
   "include": [
