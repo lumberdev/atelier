@@ -1,8 +1,16 @@
 import { useCart } from "@/context/CartContext";
+import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
-const CartTesting = () => {
+const CartTesting = ({ campaign }) => {
   const { cartItems, decreaseItem, increaseItem, clearItem, clearCart } =
     useCart();
+
+  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+    store_id: campaign.storeId,
+    variant_ids: "44380869361910",
+  });
+  console.log(checkout);
+
   return (
     <div className="relative border-solid p-4 bg-grey">
       <h3 className="absolute p-2 top-0 right-0">CART TESTING</h3>

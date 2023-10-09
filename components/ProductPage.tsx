@@ -3,7 +3,7 @@ import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
 import CartTesting from "@/components/CartTesting";
 
-const ProductPage = ({ product }) => {
+const ProductPage = ({ product, campaign }) => {
   const { addItem } = useCart();
 
   const formChange = (e) => {
@@ -99,7 +99,7 @@ const ProductPage = ({ product }) => {
           </form>
 
           {/* Remove on production */}
-          <CartTesting />
+          <CartTesting {...{ campaign }} />
         </div>
       </div>
     </div>

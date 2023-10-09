@@ -31,7 +31,7 @@ const ProductCampaignPage = () => {
     <CartProvider>
       <Page>
         <NavBar {...{ campaign, campaignHandle: handle, collections }} />
-        <ProductPage {...{ product }} />
+        <ProductPage {...{ campaign, product }} />
       </Page>
     </CartProvider>
   );
