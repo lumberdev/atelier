@@ -1,10 +1,31 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
 import CartTesting from "@/components/CartTesting";
+import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
 const ProductPage = ({ product, campaign }) => {
-  const { addItem } = useCart();
+  const { addItem, cartItems, lineItems } = useCart();
+
+  const setAddToCartButton = (buttonEnabled) => {
+    const form = document.getElementById("productForm");
+    const button = form.querySelector(
+      "button[type=submit]"
+    ) as HTMLButtonElement;
+    button.innerHTML = buttonEnabled ? "Add to Cart" : "Out of Stock";
+    button.style.opacity = buttonEnabled ? "1" : "0.5";
+    button.disabled = !buttonEnabled;
+  };
+
+  const checkQuantityIsInLimit = () => {
+    const form = document.getElementById("productForm");
+    const variant = product.variants.find(
+      (variant) => variant.id === form.getAttribute("value-variant-id")
+    );
+    const cartItem = cartItems.find((item) => item.id === variant.id);
+    const cartItemQuantity = cartItem ? cartItem.quantity : 0;
+    setAddToCartButton(variant.inventoryQuantity - cartItemQuantity > 0);
+  };
 
   const formChange = (e) => {
     const form = e.target.form;
@@ -20,6 +41,7 @@ const ProductPage = ({ product, campaign }) => {
       });
     });
     form.setAttribute("value-variant-id", variant.id);
+    checkQuantityIsInLimit();
   };
 
   const onSubmit = (e) => {
@@ -31,6 +53,21 @@ const ProductPage = ({ product, campaign }) => {
       (variant) => variant.id === variantId
     );
     addItem({ product: variant, formQuantity: quantity });
+    checkQuantityIsInLimit();
+  };
+
+  useEffect(() => {
+    checkQuantityIsInLimit();
+  }, [cartItems]);
+
+  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+    store_id: campaign.storeId,
+    line_items: lineItems,
+  });
+
+  const checkoutButtonClick = async () => {
+    const checkoutUrl = checkout.checkout.web_url;
+    window.open(checkoutUrl, "_blank");
   };
 
   return (
@@ -96,10 +133,17 @@ const ProductPage = ({ product, campaign }) => {
             >
               Add to Cart
             </button>
+            <button
+              type="button"
+              onClick={checkoutButtonClick}
+              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer"
+            >
+              Checkout
+            </button>
           </form>
 
           {/* Remove on production */}
-          <CartTesting {...{ campaign }} />
+          {/* <CartTesting {...{ campaign }} /> */}
         </div>
       </div>
     </div>

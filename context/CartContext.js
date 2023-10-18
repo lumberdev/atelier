@@ -1,3 +1,4 @@
+import { updateLineItem } from "@shopify/app-bridge/actions/Cart";
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 export const CartContext = createContext();
@@ -7,9 +8,28 @@ export function useCart() {
 }
 
 export function CartProvider({ children }) {
+  const [lineItems, setLineItems] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
+
+  const updateLineItems = (newCart) => {
+    // update line items to be a string in the form: [{"variant_id":39072856,"quantity":5}]
+    if (newCart.length === 0) {
+      setLineItems("");
+      return;
+    }
+    let lineItems = "[";
+    newCart.forEach((item) => {
+      lineItems += `{"variant_id":${item.id.replace(
+        "gid://shopify/ProductVariant/",
+        ""
+      )},"quantity":${item.quantity}},`;
+    });
+    lineItems = lineItems.slice(0, -1);
+    lineItems += "]";
+    setLineItems(lineItems);
+  };
 
   const updateCart = (newCart) => {
     setCartItems(newCart);
@@ -22,6 +42,7 @@ export function CartProvider({ children }) {
     setCartCount(totalCount);
     setCartTotal(totalAmount);
     localStorage.setItem("cart", JSON.stringify(newCart));
+    updateLineItems(newCart);
   };
 
   const addItem = (formData) => {
@@ -77,13 +98,10 @@ export function CartProvider({ children }) {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(cartItems);
-  }, [cartItems]);
-
   return (
     <CartContext.Provider
       value={{
+        lineItems,
         cartItems,
         cartCount,
         cartTotal,

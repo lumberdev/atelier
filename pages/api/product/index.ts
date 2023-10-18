@@ -44,6 +44,7 @@ const PRODUCT_QUERY_BY_ID = gql`
           node {
             title
             id
+            inventoryQuantity
             availableForSale
             compareAtPrice
             price

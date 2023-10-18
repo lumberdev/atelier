@@ -1,15 +1,14 @@
 import { useCart } from "@/context/CartContext";
-import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
 const CartTesting = ({ campaign }) => {
-  const { cartItems, decreaseItem, increaseItem, clearItem, clearCart } =
-    useCart();
-
-  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
-    store_id: campaign.storeId,
-    variant_ids: "44380869361910",
-  });
-  console.log(checkout);
+  const {
+    cartItems,
+    decreaseItem,
+    increaseItem,
+    clearItem,
+    clearCart,
+    lineItems,
+  } = useCart();
 
   return (
     <div className="relative border-solid p-4 bg-grey">
@@ -18,6 +17,7 @@ const CartTesting = ({ campaign }) => {
       <table className="w-full">
         <tr>
           <th>Item</th>
+          <th>ID</th>
           <th>Quantity</th>
           <th>Cart Controls</th>
         </tr>
@@ -25,6 +25,7 @@ const CartTesting = ({ campaign }) => {
           cartItems.map((item, index) => (
             <tr className="text-center">
               <td>{`${item.title}`}</td>
+              <td>{`${item.id}`}</td>
               <td className="text-center">{`${item.quantity}`}</td>
               <td>
                 <button
