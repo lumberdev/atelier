@@ -6,7 +6,6 @@ import NavBar from "@/components/Navbar";
 import ProductPage from "@/components/ProductPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
-import { CartProvider } from "@/context/CartContext";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
@@ -28,12 +27,10 @@ const ProductCampaignPage = () => {
   if (campaignLoading || productLoading) return <LoadingScreen />;
 
   return (
-    <CartProvider>
-      <Page>
-        <NavBar {...{ campaign, campaignHandle: handle, collections }} />
-        <ProductPage {...{ campaign, product }} />
-      </Page>
-    </CartProvider>
+    <Page>
+      <NavBar {...{ campaign, campaignHandle: handle, collections }} />
+      <ProductPage {...{ campaign, product }} />
+    </Page>
   );
 };
 
