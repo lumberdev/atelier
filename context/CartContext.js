@@ -46,9 +46,10 @@ export function CartProvider({ children }) {
   };
 
   const addItem = (formData) => {
-    const { product, formQuantity } = formData;
+    const { variant, formQuantity } = formData;
+    console.log(variant);
     const newCart = [...cartItems];
-    const existingItem = newCart.find((i) => i.id === product.id);
+    const existingItem = newCart.find((i) => i.id === variant.id);
 
     // Increase quantity of existing item
     if (existingItem) {
@@ -56,8 +57,8 @@ export function CartProvider({ children }) {
     }
     // Add a new item
     else {
-      product.quantity = parseInt(formQuantity);
-      newCart.push(product);
+      variant.quantity = parseInt(formQuantity);
+      newCart.push(variant);
     }
 
     updateCart(newCart);
