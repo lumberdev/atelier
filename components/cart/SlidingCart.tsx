@@ -8,6 +8,7 @@ import { CartItemType } from "@/lib/types";
 import CartItems from "./CartItems";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import router from "next/router";
+import { currencyFormatter } from "@/lib/helper/currency";
 
 const dummyCartItems: CartItemType[] = [
   {
@@ -32,25 +33,19 @@ const dummyCartItems: CartItemType[] = [
 ];
 
 const SlidingCart = () => {
-  const { isCartOpen, toggleCart } = useCart();
+  const {
+    isCartOpen,
+    toggleCart,
+    cartItems,
+    cartCount,
+    cartTotal,
+  } = useCart();
   const router = useRouter();
   const { handle } = router.query;
 
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
     handle,
   });
-  console.log(campaign.cartItemsImageStyle);
-
-  // useEffect(() => {
-  //   if (dummyCartItems.length) {
-  //     // fetch products
-  //     const productIds = dummyCartItems.map((item) => item.id);
-  //     const { products, isLoading: productsLoading } = useProductsOnStore({
-  //       store_id: campaign.storeId,
-  //       product_ids: productIds,
-  //     });
-  //   }
-  // }, [dummyCartItems]);
 
   const cartStyles = {
     transform: isCartOpen ? "translateX(0)" : "translateX(100%)",
@@ -70,7 +65,7 @@ const SlidingCart = () => {
           </div>
         </div>
         <CartItems
-          products={dummyCartItems}
+          products={cartItems}
           cartItemImageStyle={campaign.cartItemsImageStyle}
           cartBackgroundColor={campaign.cartBackgroundColor}
         />
@@ -78,9 +73,14 @@ const SlidingCart = () => {
       <div className="p-6">
         <div className="mb-4 flex items-center justify-between text-lg">
           <div className="font-bold">
-            Subtotal <span className="font-semibold">(2 item)</span>
+            Subtotal{" "}
+            <span className="font-semibold">{`(${cartCount} item${
+              cartCount > 1 ? "s" : ""
+            })`}</span>
           </div>
-          <div className="font-bold">$110</div>
+          <div className="font-bold">
+            {currencyFormatter({ amount: cartTotal, currencyCode: "USD" })}
+          </div>
         </div>
         <div>
           <button

@@ -1,17 +1,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import TrashIcon from "@/components/general/icons/TrashIcon";
+import { useCart } from "@/context/CartContext";
 
 const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
-  const [quantity, setQuantity] = useState(1);
-
-  const handleDecrease = () => {
-    setQuantity((prev) => Math.max(prev - 1, 1));
-  };
-
-  const handleIncrease = () => {
-    setQuantity((prev) => prev + 1);
-  };
+  const { decreaseItem, increaseItem, clearItem } = useCart();
 
   const quantityStyles = {
     backgroundColor: cartBackgroundColor,
@@ -23,7 +16,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
         className={`mr-6  object-cover ${
           cartItemImageStyle === "round" ? "rounded-full" : "rounded-md"
         }`}
-        src={product.imageUrl}
+        src="https://cdn.shopify.com/s/files/1/0663/2836/3254/products/black-bag-over-the-shoulder_925x_d27a91ab-1f68-4a72-b2ba-f214d51b471d.jpg?v=1662735698"
         width={100}
         height={100}
         alt={product.title}
@@ -32,13 +25,17 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
         <div>
           <div className="flex w-full justify-between">
             <div className="text-lg font-semibold">{product.title}</div>
-            <div className="flex items-center justify-center">
+            <button
+              className="flex cursor-pointer appearance-none items-center justify-center border-none bg-transparent"
+              onClick={() => clearItem(product)}
+            >
               <TrashIcon />
-            </div>
+            </button>
           </div>
           <div className="flex gap-1">
-            <div>Variant 1 |</div>
-            <div>Variant 2</div>
+            {product.selectedOptions.map((selectedOption) => (
+              <div key={selectedOption.name}>{selectedOption.name}</div>
+            ))}
           </div>
         </div>
         <div className="flex justify-between">
@@ -49,7 +46,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
           >
             <button
               className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={handleDecrease}
+              onClick={() => decreaseItem(product)}
             >
               -
             </button>
@@ -57,7 +54,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
               className="h-full w-[2.5rem] appearance-none border-none bg-transparent text-center"
               min={0} // Set the minimum value to 0
               type="number"
-              value={quantity}
+              value={product.quantity}
               onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
               style={{
                 "-webkit-appearance": "none", // Webkit (Chrome, Safari) styles
@@ -66,7 +63,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
             />
             <button
               className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={handleIncrease}
+              onClick={() => increaseItem(product)}
             >
               +
             </button>
