@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { use, useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
 import CartTesting from "@/components/CartTesting";
@@ -6,16 +6,7 @@ import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems, lineItems } = useCart();
-
-  const setAddToCartButton = (buttonEnabled) => {
-    const form = document.getElementById("productForm");
-    const button = form.querySelector(
-      "button[type=submit]"
-    ) as HTMLButtonElement;
-    button.innerHTML = buttonEnabled ? "Add to Cart" : "Out of Stock";
-    button.style.opacity = buttonEnabled ? "1" : "0.5";
-    button.disabled = !buttonEnabled;
-  };
+  const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
 
   const checkQuantityIsInLimit = () => {
     const form = document.getElementById("productForm");
@@ -24,7 +15,7 @@ const ProductPage = ({ product, campaign }) => {
     );
     const cartItem = cartItems.find((item) => item.id === variant.id);
     const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-    setAddToCartButton(variant.inventoryQuantity - cartItemQuantity > 0);
+    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
   };
 
   const formChange = (e) => {
@@ -128,22 +119,24 @@ const ProductPage = ({ product, campaign }) => {
             )}
             <button
               type="submit"
-              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer"
+              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50"
               onClick={onSubmit}
+              disabled={!addToCartBtnEnabled}
             >
-              Add to Cart
+              {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </button>
             <button
               type="button"
               onClick={checkoutButtonClick}
-              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer"
+              disabled={checkoutLoading}
+              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50"
             >
-              Checkout
+              {checkoutLoading ? "Loading..." : "Checkout"}
             </button>
           </form>
 
           {/* Remove on production */}
-          {/* <CartTesting {...{ campaign }} /> */}
+          <CartTesting {...{ campaign }} />
         </div>
       </div>
     </div>
