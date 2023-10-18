@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import "./global.css";
+import { CartProvider } from "@/context/CartContext";
+import SlidingCart from "@/components/cart/SlidingCart";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -41,7 +43,10 @@ export default function App({ Component, pageProps }) {
   // ATELIER WEBSITE
   return (
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      <CartProvider>
+        <Component {...pageProps} />
+        <SlidingCart />
+      </CartProvider>
     </QueryClientProvider>
   );
 }

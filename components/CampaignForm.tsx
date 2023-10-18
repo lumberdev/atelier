@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Card,
+  ChoiceList,
   Divider,
   DropZone,
   EmptyState,
@@ -29,7 +30,7 @@ import {
   VerticalStack,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
 const CampaignForm: FC<{
@@ -38,6 +39,15 @@ const CampaignForm: FC<{
   products?: ProductResourceItem[];
 }> = ({ campaign, collections, products }) => {
   const router = useRouter();
+  const [cartItemImageStyle, setCartItemImageStyle] = useState<string[]>([
+    "round",
+  ]);
+
+  const handleCartItemImageStyleChange = useCallback(
+    (value: string[]) => setCartItemImageStyle(value),
+    []
+  );
+
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [isResourcePickerOpen, setIsResourcePickerOpen] =
     useState<boolean>(false);
@@ -74,6 +84,10 @@ const CampaignForm: FC<{
 
   const isActive = watch("isActive");
   const isActiveSelectValue = isActive ? "true" : "false";
+
+  useEffect(() => {
+    setValue("cartItemsImageStyle", cartItemImageStyle[0]);
+  }, [cartItemImageStyle]);
 
   useEffect(() => {
     if (selectedTab !== 0) return;
@@ -156,6 +170,64 @@ const CampaignForm: FC<{
                   )}
                 />
               </FormLayout>
+            </Card>
+
+            <Card roundedAbove="sm">
+              <VerticalStack gap="4">
+                <HorizontalStack>
+                  <Text variant="headingSm" as="h3">
+                    Cart Customization
+                  </Text>
+                </HorizontalStack>
+                <FormLayout>
+                  <Controller
+                    control={control}
+                    name="cartTitle"
+                    render={({ field }) => (
+                      <TextField
+                        label="Cart Title"
+                        autoComplete="off"
+                        autoFocus
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="cartBackgroundColor"
+                    render={({ field }) => (
+                      <TextField
+                        label="Background Color"
+                        autoComplete="off"
+                        autoFocus
+                        {...field}
+                      />
+                    )}
+                  />
+                  <ChoiceList
+                    title="Image Style"
+                    choices={[
+                      { label: "Round", value: "round" },
+                      { label: "Square", value: "square" },
+                    ]}
+                    selected={cartItemImageStyle}
+                    onChange={handleCartItemImageStyleChange}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="cartDescription"
+                    render={({ field }) => (
+                      <TextField
+                        multiline={4}
+                        label="Cart Description"
+                        autoComplete="off"
+                        {...field}
+                      />
+                    )}
+                  />
+                </FormLayout>
+              </VerticalStack>
             </Card>
 
             <Card roundedAbove="sm">
@@ -249,10 +321,10 @@ const CampaignForm: FC<{
                               id={collection.id}
                               url={collection.handle}
                               media={
-                                <div className="w-12 h-12 bg-gray-200">
+                                <div className="h-12 w-12 bg-gray-200">
                                   {collection.image && (
                                     <img
-                                      className="block w-full h-full rounded-full object-cover"
+                                      className="block h-full w-full rounded-full object-cover"
                                       src={collection.image.src}
                                     />
                                   )}
@@ -348,10 +420,10 @@ const CampaignForm: FC<{
                               id={product.id}
                               url={product.handle}
                               media={
-                                <div className="w-12 h-12 bg-gray-200">
+                                <div className="h-12 w-12 bg-gray-200">
                                   {!!product.images?.length && (
                                     <img
-                                      className="block w-full h-full rounded-full object-cover"
+                                      className="block h-full w-full rounded-full object-cover"
                                       src={product.images[0].src}
                                     />
                                   )}
@@ -484,7 +556,7 @@ const CampaignForm: FC<{
                         src={imageUrl}
                         alt=""
                         loading="eager"
-                        className="w-full aspect-auto h-auto rounded-lg"
+                        className="aspect-auto h-auto w-full rounded-lg"
                       />
                     </HorizontalStack>
                   )}
