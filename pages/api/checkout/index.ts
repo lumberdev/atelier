@@ -37,8 +37,6 @@ router.get(async (req, res) => {
   try {
     const response = await fetch(shopifyStoreUrl, options);
     const raw = await response.json();
-    console.log(raw);
-
     res.status(200).json({ checkout: raw });
   } catch (error) {
     console.error("Error:", error);

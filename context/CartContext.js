@@ -47,7 +47,6 @@ export function CartProvider({ children }) {
 
   const addItem = (formData) => {
     const { product, formQuantity } = formData;
-    console.log(product);
     const newCart = [...cartItems];
     const existingItem = newCart.find((i) => i.id === product.id);
 
