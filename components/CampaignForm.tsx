@@ -204,6 +204,18 @@ const CampaignForm: FC<{
                       />
                     )}
                   />
+                  <Controller
+                    control={control}
+                    name="cartTextColor"
+                    render={({ field }) => (
+                      <TextField
+                        label="Text Color"
+                        autoComplete="off"
+                        autoFocus
+                        {...field}
+                      />
+                    )}
+                  />
                   <ChoiceList
                     title="Image Style"
                     choices={[

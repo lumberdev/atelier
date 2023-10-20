@@ -12,6 +12,7 @@ type CartValue = {
   addItem(formData: { product: any; formQuantity: number }): void; // Replace 'any' with the actual type product.
   decreaseItem(item: any): void; // Replace 'any' with the actual type product.
   increaseItem(item: any): void; // Replace 'any' with the actual type product.
+  updateItemQuantity(item: any, qty: number | ""): void; // Replace 'any' with the actual type product.
   clearItem(item: any): void; // Replace 'any' with the actual type product.
   clearCart(): void;
 };
@@ -28,6 +29,7 @@ const defaultCartValue: CartValue = {
   addItem: (formData: { product: any; formQuantity: number }) => {}, // Replace 'any' with the actual type product.
   decreaseItem: (item: any) => {}, // Replace 'any' with the actual type product.
   increaseItem: (item: any) => {}, // Replace 'any' with the actual type product.
+  updateItemQuantity: (item: any, qty: number | "") => {}, // Replace 'any' with the actual type product.
   clearItem: (item: any) => {}, // Replace 'any' with the actual type product.
   clearCart: () => {},
 };
@@ -93,6 +95,13 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     updateCart(newCart);
   };
 
+  const updateItemQuantity = (item, qty: number | "") => {
+    const newCart = [...cartItems];
+    const existingItem = newCart.find((i) => i.id === item.id);
+    if (existingItem) existingItem.quantity = qty ? qty : 1;
+    updateCart(newCart);
+  };
+
   const clearItem = (item) => {
     const newCart = [...cartItems];
     const existingItem = newCart.find((i) => i.id === item.id);
@@ -130,6 +139,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         addItem,
         decreaseItem,
         increaseItem,
+        updateItemQuantity,
         clearItem,
         clearCart,
       }}

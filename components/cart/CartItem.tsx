@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import TrashIcon from "@/components/general/icons/TrashIcon";
 import { useCart } from "@/context/CartContext";
+import { currencyFormatter } from "@/lib/helper/currency";
 
 const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
-  const { decreaseItem, increaseItem, clearItem } = useCart();
+  const { decreaseItem, increaseItem, clearItem, updateItemQuantity } =
+    useCart();
+  const [quantity, setQuantity] = useState<number | "">(product.quantity);
 
   const quantityStyles = {
     backgroundColor: cartBackgroundColor,
   };
 
+  useEffect(() => {
+    setQuantity(product.quantity);
+  }, [product.quantity]);
+
   return (
-    <div className="flex py-6">
+    <div className="flex border-x-0 py-6">
       <Image
         className={`mr-6  object-cover ${
           cartItemImageStyle === "round" ? "rounded-full" : "rounded-md"
@@ -23,10 +30,10 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
       />
       <div className="flex flex-1 flex-col justify-between">
         <div>
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-between gap-2">
             <div className="text-lg font-semibold">{product.title}</div>
             <button
-              className="flex cursor-pointer appearance-none items-center justify-center border-none bg-transparent"
+              className="flex cursor-pointer appearance-none items-center justify-center border-none bg-transparent text-inherit"
               onClick={() => clearItem(product)}
             >
               <TrashIcon />
@@ -39,31 +46,47 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
           </div>
         </div>
         <div className="flex justify-between">
-          <div className="text-md font-semibold">{product.price}</div>
+          <div className="text-md flex items-center font-semibold text-inherit">
+            {currencyFormatter({
+              amount: product.price,
+              currencyCode: "USD",
+            })}
+          </div>
           <div
             style={quantityStyles}
-            className="flex h-7 items-center justify-between rounded-md border-[1px] border-solid border-black/20  drop-shadow-md"
+            className="flex h-7 items-center justify-between rounded-md border-[1px] border-solid border-black/20 drop-shadow-md"
           >
             <button
-              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={() => decreaseItem(product)}
+              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit"
+              onClick={() => {
+                decreaseItem(product);
+                setQuantity(product.quantity);
+              }}
             >
               -
             </button>
             <input
-              className="h-full w-[2.5rem] appearance-none border-none bg-transparent text-center"
-              min={0} // Set the minimum value to 0
+              className="h-full w-[2.5rem] appearance-none border-none bg-transparent text-center text-inherit"
               type="number"
-              value={product.quantity}
-              onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
+              value={quantity}
+              onChange={(e) => {
+                const newValue = parseInt(e.target.value);
+                setQuantity(isNaN(newValue) ? "" : newValue); // Set to empty string if NaN
+              }}
+              onBlur={() => {
+                updateItemQuantity(product, quantity);
+              }}
               style={{
                 "-webkit-appearance": "none", // Webkit (Chrome, Safari) styles
                 "-moz-appearance": "textfield", // Firefox styles
               }}
             />
             <button
-              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={() => increaseItem(product)}
+              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit"
+              onClick={() => {
+                increaseItem(product);
+                setQuantity(product.quantity);
+              }}
             >
               +
             </button>
