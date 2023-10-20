@@ -43,7 +43,7 @@ const ProductPage = ({ product, campaign }) => {
     const variant = product.variants.find(
       (variant) => variant.id === variantId
     );
-    addItem({ variant: { ...variant, product }, formQuantity: quantity });
+    addItem({ item: { ...variant, product_title: product.title }, formQuantity: quantity });
     checkQuantityIsInLimit();
   };
 

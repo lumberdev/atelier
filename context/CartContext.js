@@ -1,4 +1,3 @@
-import { updateLineItem } from "@shopify/app-bridge/actions/Cart";
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 export const CartContext = createContext();
@@ -46,19 +45,18 @@ export function CartProvider({ children }) {
   };
 
   const addItem = (formData) => {
-    const { variant, formQuantity } = formData;
-    console.log(variant);
+    const { item, formQuantity } = formData;
     const newCart = [...cartItems];
-    const existingItem = newCart.find((i) => i.id === variant.id);
-
+    const existingItem = newCart.find((i) => i.id === item.id);
+    console.log(item);
     // Increase quantity of existing item
     if (existingItem) {
       existingItem.quantity += parseInt(formQuantity);
     }
     // Add a new item
     else {
-      variant.quantity = parseInt(formQuantity);
-      newCart.push(variant);
+      item.quantity = parseInt(formQuantity);
+      newCart.push(item);
     }
 
     updateCart(newCart);
