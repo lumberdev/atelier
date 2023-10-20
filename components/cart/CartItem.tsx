@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import TrashIcon from "@/components/general/icons/TrashIcon";
 import { useCart } from "@/context/CartContext";
 
 const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
-  const { decreaseItem, increaseItem, clearItem } = useCart();
+  const { decreaseItem, increaseItem, clearItem, updateItemQuantity } =
+    useCart();
+  const [quantity, setQuantity] = useState<number | "">(product.quantity);
 
   const quantityStyles = {
     backgroundColor: cartBackgroundColor,
   };
+
+  useEffect(() => {
+    setQuantity(product.quantity);
+  }, [product.quantity]);
 
   return (
     <div className="flex py-6">
@@ -46,16 +52,24 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
           >
             <button
               className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={() => decreaseItem(product)}
+              onClick={() => {
+                decreaseItem(product);
+                setQuantity(product.quantity);
+              }}
             >
               -
             </button>
             <input
               className="h-full w-[2.5rem] appearance-none border-none bg-transparent text-center"
-              min={0} // Set the minimum value to 0
               type="number"
-              value={product.quantity}
-              onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
+              value={quantity}
+              onChange={(e) => {
+                const newValue = parseInt(e.target.value);
+                setQuantity(isNaN(newValue) ? "" : newValue); // Set to empty string if NaN
+              }}
+              onBlur={() => {
+                updateItemQuantity(product, quantity);
+              }}
               style={{
                 "-webkit-appearance": "none", // Webkit (Chrome, Safari) styles
                 "-moz-appearance": "textfield", // Firefox styles
@@ -63,7 +77,10 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
             />
             <button
               className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent"
-              onClick={() => increaseItem(product)}
+              onClick={() => {
+                increaseItem(product);
+                setQuantity(product.quantity);
+              }}
             >
               +
             </button>
