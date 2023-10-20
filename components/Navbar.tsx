@@ -1,9 +1,11 @@
 import Section from "./Section";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import CartEmpty from "./general/icons/CartEmpty";
+import CartFilled from "./general/icons/CartFilled";
 
 const NavBar = ({ campaign, campaignHandle, collections }) => {
-  const { toggleCart } = useCart();
+  const { toggleCart, cartCount } = useCart();
   return (
     <Section>
       <div className="flex w-full flex-col items-center justify-center">
@@ -16,8 +18,20 @@ const NavBar = ({ campaign, campaignHandle, collections }) => {
             <h1 className="mx-1 my-8 text-4xl text-black">{campaign?.title}</h1>
           </Link>
           <div className="flex-1 text-right">
-            <button className="cursor-pointer" onClick={toggleCart}>
-              Cart
+            <button
+              className="cursor-pointer border-none bg-transparent"
+              onClick={toggleCart}
+            >
+              {cartCount >= 1 ? (
+                <div className="relative">
+                  <CartFilled />
+                  <div className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white">
+                    {cartCount}
+                  </div>
+                </div>
+              ) : (
+                <CartEmpty />
+              )}
             </button>
           </div>
         </div>

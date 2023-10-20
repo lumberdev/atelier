@@ -42,6 +42,13 @@ const SlidingCart = () => {
   const cartStyles = {
     transform: isCartOpen ? "translateX(0)" : "translateX(100%)",
     backgroundColor: campaign.cartBackgroundColor || "#fff",
+    color: campaign.cartTextColor || "#000",
+  };
+  const cartDescriptionStyles = {
+    backgroundColor: "rgba(178, 178, 178, 0.2)",
+  };
+  const checkoutContainerStyles = {
+    boxShadow: "0px -4px 32px 0px rgba(0, 0, 0, 0.25)",
   };
 
   return (
@@ -56,47 +63,68 @@ const SlidingCart = () => {
       {/* Cart */}
       <div
         style={cartStyles}
-        className={`fixed right-0 top-0 flex h-full min-w-[35rem] max-w-full flex-col p-6 shadow-lg transition-transform`}
+        className={
+          "fixed right-0 top-0 flex h-full min-w-full flex-col justify-between pt-6 shadow-lg transition-transform md:min-w-[30rem] md:max-w-[38rem]"
+        }
       >
-        <div className="mb-12 flex items-center justify-between">
+        <div className="flex items-center justify-between px-6">
           <h2 className="text-2xl font-semibold ">{campaign.cartTitle}</h2>{" "}
-          <div className="text-black">
+          <div className="text-inherit">
             <CloseIcon className="cursor-pointer" onClick={closeCart} />
           </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between">
-          <div>
-            <CartItems
-              products={cartItems}
-              cartItemImageStyle={campaign.cartItemsImageStyle}
-              cartBackgroundColor={campaign.cartBackgroundColor}
-            />
-          </div>
-          <div className="p-6">
-            <div className="mb-4 flex items-center justify-between text-lg">
-              <div className="font-bold">
-                Subtotal{" "}
-                <span className="font-semibold">{`(${cartCount} item${
-                  cartCount > 1 ? "s" : ""
-                })`}</span>
+        {cartItems.length ? (
+          <>
+            <div className="mt-12 flex-grow overflow-y-auto px-6 ">
+              <div className="divide-y divide-solid divide-black/10">
+                <CartItems
+                  products={cartItems}
+                  cartItemImageStyle={campaign.cartItemsImageStyle}
+                  cartBackgroundColor={campaign.cartBackgroundColor}
+                />
               </div>
-              <div className="font-bold">
-                {currencyFormatter({ amount: cartTotal, currencyCode: "USD" })}
+              {campaign.cartDescription && (
+                <div
+                  style={cartDescriptionStyles}
+                  className="mt-10 rounded-md px-4 py-5"
+                >
+                  {campaign.cartDescription}
+                </div>
+              )}
+            </div>
+            <div style={checkoutContainerStyles} className="p-10">
+              <div className="mb-4 flex items-center justify-between text-lg">
+                <div className="font-bold">
+                  Subtotal{" "}
+                  <span className="font-semibold">{`(${cartCount} item${
+                    cartCount > 1 ? "s" : ""
+                  })`}</span>
+                </div>
+                <div className="font-bold">
+                  {currencyFormatter({
+                    amount: cartTotal,
+                    currencyCode: "USD",
+                  })}
+                </div>
+              </div>
+              <div>
+                <button
+                  className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white ${
+                    campaign.cartItemsImageStyle === "round"
+                      ? "rounded-full"
+                      : "rounded-2xl"
+                  }`}
+                >
+                  Checkout
+                </button>
               </div>
             </div>
-            <div>
-              <button
-                className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white ${
-                  campaign.cartItemsImageStyle === "round"
-                    ? "rounded-full"
-                    : "rounded-2xl"
-                }`}
-              >
-                Checkout
-              </button>
-            </div>
+          </>
+        ) : (
+          <div className="flex flex-1 items-center justify-center">
+            <div className="text-lg">Your cart is empty</div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
