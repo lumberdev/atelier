@@ -1,13 +1,11 @@
 // SlidingCart.js
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { useCart } from "@/context/CartContext";
 import CloseIcon from "@/components/general/icons/CloseIcon";
-import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
 import { CartItemType } from "@/lib/types";
 import CartItems from "./CartItems";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
-import router from "next/router";
 import { currencyFormatter } from "@/lib/helper/currency";
 
 const dummyCartItems: CartItemType[] = [
@@ -33,13 +31,7 @@ const dummyCartItems: CartItemType[] = [
 ];
 
 const SlidingCart = () => {
-  const {
-    isCartOpen,
-    toggleCart,
-    cartItems,
-    cartCount,
-    cartTotal,
-  } = useCart();
+  const { isCartOpen, closeCart, cartItems, cartCount, cartTotal } = useCart();
   const router = useRouter();
   const { handle } = router.query;
 
@@ -49,52 +41,64 @@ const SlidingCart = () => {
 
   const cartStyles = {
     transform: isCartOpen ? "translateX(0)" : "translateX(100%)",
-    backgroundColor: campaign.cartBackgroundColor,
+    backgroundColor: campaign.cartBackgroundColor || "#fff",
   };
 
   return (
-    <div
-      style={cartStyles}
-      className={`fixed right-0 top-0 flex h-full min-w-[35rem] max-w-full flex-col justify-between p-6 shadow-lg transition-transform `}
-    >
-      <div>
+    <>
+      {/* Backdrop */}
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50"
+          onClick={closeCart}
+        ></div>
+      )}
+      {/* Cart */}
+      <div
+        style={cartStyles}
+        className={`fixed right-0 top-0 flex h-full min-w-[35rem] max-w-full flex-col p-6 shadow-lg transition-transform`}
+      >
         <div className="mb-12 flex items-center justify-between">
           <h2 className="text-2xl font-semibold ">{campaign.cartTitle}</h2>{" "}
           <div className="text-black">
-            <CloseIcon className="cursor-pointer" onClick={toggleCart} />
+            <CloseIcon className="cursor-pointer" onClick={closeCart} />
           </div>
         </div>
-        <CartItems
-          products={cartItems}
-          cartItemImageStyle={campaign.cartItemsImageStyle}
-          cartBackgroundColor={campaign.cartBackgroundColor}
-        />
+        <div className="flex flex-1 flex-col justify-between">
+          <div>
+            <CartItems
+              products={cartItems}
+              cartItemImageStyle={campaign.cartItemsImageStyle}
+              cartBackgroundColor={campaign.cartBackgroundColor}
+            />
+          </div>
+          <div className="p-6">
+            <div className="mb-4 flex items-center justify-between text-lg">
+              <div className="font-bold">
+                Subtotal{" "}
+                <span className="font-semibold">{`(${cartCount} item${
+                  cartCount > 1 ? "s" : ""
+                })`}</span>
+              </div>
+              <div className="font-bold">
+                {currencyFormatter({ amount: cartTotal, currencyCode: "USD" })}
+              </div>
+            </div>
+            <div>
+              <button
+                className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white ${
+                  campaign.cartItemsImageStyle === "round"
+                    ? "rounded-full"
+                    : "rounded-2xl"
+                }`}
+              >
+                Checkout
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="p-6">
-        <div className="mb-4 flex items-center justify-between text-lg">
-          <div className="font-bold">
-            Subtotal{" "}
-            <span className="font-semibold">{`(${cartCount} item${
-              cartCount > 1 ? "s" : ""
-            })`}</span>
-          </div>
-          <div className="font-bold">
-            {currencyFormatter({ amount: cartTotal, currencyCode: "USD" })}
-          </div>
-        </div>
-        <div>
-          <button
-            className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white ${
-              campaign.cartItemsImageStyle === "round"
-                ? "rounded-full"
-                : "rounded-2xl"
-            }`}
-          >
-            Checkout
-          </button>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
