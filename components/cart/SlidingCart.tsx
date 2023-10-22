@@ -6,6 +6,7 @@ import CloseIcon from "@/components/general/icons/CloseIcon";
 import { CartItemType } from "@/lib/types";
 import CartItems from "./CartItems";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
+import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 import { currencyFormatter } from "@/lib/helper/currency";
 
 const dummyCartItems: CartItemType[] = [
@@ -38,6 +39,17 @@ const SlidingCart = () => {
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
     handle,
   });
+
+  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+    store_id: campaign.storeId,
+    cart_items: cartItems,
+  });
+
+  const checkoutButtonClick = async () => {
+    const checkoutUrl = checkout.checkout.web_url;
+    window.open(checkoutUrl, "_self");
+  };
+
 
   const cartStyles = {
     transform: isCartOpen ? "translateX(0)" : "translateX(100%)",
@@ -109,13 +121,15 @@ const SlidingCart = () => {
               </div>
               <div>
                 <button
-                  className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white ${
+                  className={`h-[4rem] w-full cursor-pointer rounded-2xl border-none bg-black text-lg font-semibold text-white disabled:opacity-50 ${
                     campaign.cartItemsImageStyle === "round"
                       ? "rounded-full"
                       : "rounded-2xl"
                   }`}
+                  onClick={checkoutButtonClick}
+                  disabled={checkoutLoading}
                 >
-                  Checkout
+                  {checkoutLoading ? "Loading..." : "Checkout"}
                 </button>
               </div>
             </div>

@@ -58,7 +58,7 @@ const ProductPage = ({ product, campaign }) => {
 
   const checkoutButtonClick = async () => {
     const checkoutUrl = checkout.checkout.web_url;
-    window.open(checkoutUrl, "_blank");
+    window.open(checkoutUrl, "_self");
   };
 
   return (
