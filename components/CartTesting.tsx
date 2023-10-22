@@ -7,7 +7,6 @@ const CartTesting = ({ campaign }) => {
     increaseItem,
     clearItem,
     clearCart,
-    lineItems,
   } = useCart();
 
   return (

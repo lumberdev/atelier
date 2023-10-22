@@ -9,6 +9,12 @@ export interface CampaignInput {
   password?: string;
   image?: string;
   isActive: boolean;
+  cartTitle?: string;
+  cartItemsImageStyle?: string;
+  cartDescription?: string;
+  cartCheckoutButtonStyle?: string;
+  cartBackgroundColor?: string;
+  cartTextColor?: string;
 }
 
 export interface ProductResourceItem {
@@ -40,4 +46,13 @@ export interface StoreThemeInput {
   secondaryColor?: string;
   backgroundColor?: string;
   borderRadius?: number;
+}
+
+export interface CartItemType {
+  id: number;
+  title: string;
+  qty: number;
+  price: string;
+  description: string;
+  imageUrl: string;
 }

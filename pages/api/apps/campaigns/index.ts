@@ -49,6 +49,12 @@ router.post(async (req, res) => {
       image: body.image,
       isActive: body.isActive,
       password: body.password,
+      cartTitle: body.cartTitle,
+      cartDescription: body.cartDescription,
+      cartItemsImageStyle: body.cartItemsImageStyle,
+      cartCheckoutButtonStyle: body.cartCheckoutButtonStyle,
+      cartBackgroundColor: body.cartBackgroundColor,
+      cartTextColor: body.cartTextColor,
       store: {
         connect: {
           shop,
@@ -65,6 +71,12 @@ router.post(async (req, res) => {
       image: body.image,
       isActive: body.isActive,
       password: body.password,
+      cartTitle: body.cartTitle,
+      cartDescription: body.cartDescription,
+      cartItemsImageStyle: body.cartItemsImageStyle,
+      cartCheckoutButtonStyle: body.cartCheckoutButtonStyle,
+      cartBackgroundColor: body.cartBackgroundColor,
+      cartTextColor: body.cartTextColor,
     },
   });
 

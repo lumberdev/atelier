@@ -13,6 +13,16 @@ const nextConfig = {
     CONFIG_SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
     CONFIG_SHOPIFY_APP_URL: process.env.SHOPIFY_APP_URL,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+        port: '',
+        pathname: '/*/**',
+      },
+    ],
+  },
   experimental: {
     swcPlugins: [
       [

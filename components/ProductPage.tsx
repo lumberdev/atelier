@@ -5,7 +5,7 @@ import CartTesting from "@/components/CartTesting";
 import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
 const ProductPage = ({ product, campaign }) => {
-  const { addItem, cartItems, lineItems } = useCart();
+  const { addItem, cartItems } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
 
   const checkQuantityIsInLimit = () => {
@@ -39,7 +39,7 @@ const ProductPage = ({ product, campaign }) => {
     e.preventDefault();
     const form = document.getElementById("productForm");
     const variantId = form.getAttribute("value-variant-id");
-    const quantity = form.getAttribute("value-quantity");
+    const quantity = parseInt(form.getAttribute("value-quantity"));
     const variant = product.variants.find(
       (variant) => variant.id === variantId
     );
@@ -53,7 +53,7 @@ const ProductPage = ({ product, campaign }) => {
 
   const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
     store_id: campaign.storeId,
-    line_items: lineItems,
+    cart_items: cartItems,
   });
 
   const checkoutButtonClick = async () => {
@@ -63,22 +63,22 @@ const ProductPage = ({ product, campaign }) => {
 
   return (
     <div className="container mx-auto p-8">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div className="relative grid grid-cols-1 gap-16 md:grid-cols-2">
         <div className="">
           {product.images.map((image, index) => (
             <img
               src={image.url}
               alt="Product Image"
-              className="w-full mb-4"
+              className="mb-4 w-full"
               key={index}
             />
           ))}
         </div>
         <div className="sticky top-20 h-fit">
-          <h1 className="text-2xl font-semibold mb-4">{product.title}</h1>
+          <h1 className="mb-4 text-2xl font-semibold">{product.title}</h1>
           <p className="text-l mb-4">{product.description}</p>
-          <p className="text-lg mb-2">
-            <span className="line-through mr-1">
+          <p className="mb-2 text-lg">
+            <span className="mr-1 line-through">
               {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
             </span>
             <span className="font-semibold">
@@ -89,7 +89,7 @@ const ProductPage = ({ product, campaign }) => {
             id="productForm"
             value-variant-id={product.variants[0].id}
             value-quantity={1}
-            className="mb-4 flex flex-col w-48"
+            className="mb-4 flex w-48 flex-col"
             onChange={formChange}
           >
             {product.options.map((option, index) =>
@@ -97,7 +97,7 @@ const ProductPage = ({ product, campaign }) => {
                 <React.Fragment key={index}>
                   <label
                     htmlFor={option.name}
-                    className="block mb-2"
+                    className="mb-2 block"
                     key={`label${index}`}
                   >
                     {option.name}:
@@ -105,7 +105,7 @@ const ProductPage = ({ product, campaign }) => {
                   <select
                     name={option.name}
                     id={option.name}
-                    className="border rounded p-2 "
+                    className="rounded border p-2 "
                     key={`select${index}`}
                   >
                     {option.values.map((value, index) => (
@@ -119,7 +119,7 @@ const ProductPage = ({ product, campaign }) => {
             )}
             <button
               type="submit"
-              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50"
+              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
               onClick={onSubmit}
               disabled={!addToCartBtnEnabled}
             >
@@ -129,7 +129,7 @@ const ProductPage = ({ product, campaign }) => {
               type="button"
               onClick={checkoutButtonClick}
               disabled={checkoutLoading}
-              className="bg-[#555555] uppercase text-white py-2 px-4 rounded mt-4 cursor-pointer disabled:opacity-50"
+              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
             >
               {checkoutLoading ? "Loading..." : "Checkout"}
             </button>
