@@ -1,5 +1,5 @@
 // SlidingCart.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useCart } from "@/context/CartContext";
 import CloseIcon from "@/components/general/icons/CloseIcon";
@@ -35,6 +35,7 @@ const SlidingCart = () => {
   const { isCartOpen, closeCart, cartItems, cartCount, cartTotal } = useCart();
   const router = useRouter();
   const { handle } = router.query;
+  const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
 
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
     handle,
@@ -45,11 +46,16 @@ const SlidingCart = () => {
     cart_items: cartItems,
   });
 
+
   const checkoutButtonClick = async () => {
     const checkoutUrl = checkout.checkout.web_url;
     window.open(checkoutUrl, "_self");
   };
 
+  useEffect(() => {
+    const checkoutDisabled = checkoutLoading || cartItems.length === 0 || !checkout || Boolean(checkout.errors);
+    setCheckoutButtonDisabled(checkoutDisabled);
+  }, [checkoutLoading, cartItems, checkout]);
 
   const cartStyles = {
     transform: isCartOpen ? "translateX(0)" : "translateX(100%)",
@@ -127,7 +133,7 @@ const SlidingCart = () => {
                       : "rounded-2xl"
                   }`}
                   onClick={checkoutButtonClick}
-                  disabled={checkoutLoading}
+                  disabled={checkoutButtonDisabled}
                 >
                   {checkoutLoading ? "Loading..." : "Checkout"}
                 </button>

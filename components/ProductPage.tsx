@@ -7,6 +7,7 @@ import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
+  const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
 
   const checkQuantityIsInLimit = () => {
     const form = document.getElementById("productForm");
@@ -60,6 +61,11 @@ const ProductPage = ({ product, campaign }) => {
     const checkoutUrl = checkout.checkout.web_url;
     window.open(checkoutUrl, "_self");
   };
+
+  useEffect(() => {
+    const checkoutDisabled = checkoutLoading || cartItems.length === 0 || !checkout || Boolean(checkout.errors);
+    setCheckoutButtonDisabled(checkoutDisabled);
+  }, [checkoutLoading, cartItems, checkout]);
 
   return (
     <div className="container mx-auto p-8">
@@ -128,7 +134,7 @@ const ProductPage = ({ product, campaign }) => {
             <button
               type="button"
               onClick={checkoutButtonClick}
-              disabled={checkoutLoading}
+              disabled={checkoutButtonDisabled}
               className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
             >
               {checkoutLoading ? "Loading..." : "Checkout"}
