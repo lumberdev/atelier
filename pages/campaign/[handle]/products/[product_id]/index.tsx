@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import ProductPage from "@/components/ProductPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
-import LogoTitle from "@/components/LogoTitle";
 
 const ProductCampaignPage = () => {
   const router = useRouter();
