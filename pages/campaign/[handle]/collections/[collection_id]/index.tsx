@@ -1,37 +1,39 @@
 import { useRouter } from "next/router";
 import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
-import { useProductOnStore } from "@/lib/hooks/useProductOnStore";
 import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
 import Header from "@/components/Header";
-import ProductPage from "@/components/ProductPage";
+import ProductGrid from "@/components/ProductGrid";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
 
-const ProductCampaignPage = () => {
+const CollectionCampaignPage = () => {
   const router = useRouter();
-  const { handle, product_id } = router.query;
+  const { handle, collection_id } = router.query;
 
   const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
     handle,
   });
-  const { isLoading: productLoading, product } = useProductOnStore({
-    store_id: campaign?.storeId,
-    product_id,
-  });
-
   const { collections, isLoading: collectionsLoading } = useCollectionsOnStore({
     store_id: campaign.storeId,
     collection_ids: campaign?.collectionIds,
   });
 
-  if (campaignLoading || productLoading) return <LoadingScreen />;
+  if (campaignLoading || collectionsLoading) return <LoadingScreen />;
+
+  const selectedCollection = collections.find(
+    (collection) => collection.id.match(/\d+/)[0] === collection_id
+  );
+  const collectionProducts = selectedCollection?.products;
 
   return (
     <Page>
       <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <ProductPage {...{ product }} />
+      <h1 className="text-xl xs:text-3xl text-black mx-1 mt-4 xs:my-8 mx-4 xs:mx-16 mr-auto xs:mr-auto ">
+        {selectedCollection?.title}
+      </h1>
+      <ProductGrid {...{ products: collectionProducts, handle }} />
     </Page>
   );
 };
 
-export default ProductCampaignPage;
+export default CollectionCampaignPage;

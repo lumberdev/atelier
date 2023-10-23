@@ -4,7 +4,7 @@ import React from "react";
 const ProductPage = ({ product }) => {
   return (
     <div className="container mx-auto p-8">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0 xs:gap-16">
         <div className="">
           {product.images.map((image, index) => (
             <img
