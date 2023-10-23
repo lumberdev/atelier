@@ -19,6 +19,8 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
     setQuantity(product.quantity);
   }, [product.quantity]);
 
+  console.log(product);
+
   return (
     <div className="flex border-x-0 py-6">
       <Image
@@ -74,7 +76,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
               value={quantity}
               onChange={(e) => {
                 const newValue = parseInt(e.target.value);
-                setQuantity(isNaN(newValue) ? "" : newValue); // Set to empty string if NaN
+                if (newValue >= 1 && newValue <= product.inventoryQuantity) setQuantity(isNaN(newValue) ? "" : newValue); // Set to empty string if NaN
               }}
               onBlur={() => {
                 updateItemQuantity(product, quantity);
@@ -85,7 +87,8 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
               }}
             />
             <button
-              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit"
+              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit disabled:opacity-50"
+              disabled={product.quantity >= product.inventoryQuantity}
               onClick={() => {
                 increaseItem(product);
                 setQuantity(product.quantity);
