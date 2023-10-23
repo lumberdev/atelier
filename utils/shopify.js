@@ -1,6 +1,7 @@
 import { DeliveryMethod, LogSeverity, shopifyApi } from "@shopify/shopify-api";
 import "@shopify/shopify-api/adapters/node";
 import appUninstallHandler from "./webhooks/app_uninstalled";
+import orderFulfillmentHandler from "./webhooks/order_fulfillment";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -37,6 +38,11 @@ shopify.webhooks.addHandlers({
     deliveryMethod: DeliveryMethod.Http,
     callbackUrl: "/api/webhooks/app_uninstalled",
     callback: appUninstallHandler,
+  },
+  ORDERS_CREATE: {
+    deliveryMethod: DeliveryMethod.Http,
+    callbackUrl: "/api/webhooks/order_fulfillment",
+    callback: orderFulfillmentHandler,
   },
 });
 
