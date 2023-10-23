@@ -79,14 +79,14 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
               onBlur={() => {
                 updateItemQuantity(product, quantity);
               }}
-              style={{
-                "-webkit-appearance": "none", // Webkit (Chrome, Safari) styles
-                "-moz-appearance": "textfield", // Firefox styles
-              }}
-            />
-            <button
-              className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit disabled:opacity-50"
-              disabled={product.quantity >= product.inventoryQuantity}
+                style={{
+                  WebkitAppearance: "none", // Webkit (Chrome, Safari) styles
+                  MozAppearance: "textfield", // Firefox styles
+                }}
+              />
+              <button
+                className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit disabled:opacity-50"
+                disabled={product.quantity >= product.inventoryQuantity}
               onClick={() => {
                 increaseItem(product);
                 setQuantity(product.quantity);
