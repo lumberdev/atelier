@@ -27,7 +27,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/hooks/useFetch.js"
+    "components/hooks/useFetch.js",
+    "_developer/types/**/*.js"
   ],
   "exclude": ["node_modules"]
 }
