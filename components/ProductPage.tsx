@@ -44,7 +44,14 @@ const ProductPage = ({ product, campaign }) => {
     const variant = product.variants.find(
       (variant) => variant.id === variantId
     );
-    addItem({ item: { ...variant, product_title: product.title }, formQuantity: quantity });
+    
+    const onlyVariant = product.variants.length === 1;
+    const item = { 
+      ...variant,
+      product_title: product.title,
+      image: onlyVariant || !variant.image ? product.images[0] : variant.image,
+    };
+    addItem({ item, formQuantity: quantity });
     checkQuantityIsInLimit();
   };
 

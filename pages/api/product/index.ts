@@ -48,6 +48,10 @@ const PRODUCT_QUERY_BY_ID = gql`
             availableForSale
             compareAtPrice
             price
+            image {
+              url
+              altText
+            }
             selectedOptions {
               name
               value
