@@ -10,7 +10,6 @@ import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
 import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
-import LogoTitle from "@/components/LogoTitle";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
