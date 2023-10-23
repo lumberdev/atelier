@@ -9,7 +9,7 @@ import CartFilled from "./general/icons/CartFilled";
 const Header = ({ campaign, campaignHandle, collections }) => {
   const { toggleCart, cartCount } = useCart();
   return (
-    <div className="mt-16 lg:mt-0 lg:mb-4 w-full">
+    <div className="mt-16 lg:mt-0 lg:mb-4 w-full z-10">
       <div className="header fixed lg:relative w-full top-0 left-0 grid grid-cols-[3rem_1fr_3rem] lg:grid-cols-3	items-center justify-between transition-all lg:px-16 py-2 px-4 lg:pt-0">
         <HamburgerMenu className={"lg:hidden"}>
           <NavLinks
