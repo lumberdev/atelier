@@ -147,9 +147,6 @@ const ProductPage = ({ product, campaign }) => {
               {checkoutLoading ? "Loading..." : "Checkout"}
             </button>
           </form>
-
-          {/* Remove on production */}
-          <CartTesting {...{ campaign }} />
         </div>
       </div>
     </div>

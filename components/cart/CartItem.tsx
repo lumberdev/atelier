@@ -19,8 +19,6 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
     setQuantity(product.quantity);
   }, [product.quantity]);
 
-  console.log(product);
-
   return (
     <div className="flex border-x-0 py-6">
       <Image
