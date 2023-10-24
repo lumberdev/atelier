@@ -1,7 +1,6 @@
 import React, { use, useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
-import CartTesting from "@/components/CartTesting";
 import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 
 const ProductPage = ({ product, campaign }) => {

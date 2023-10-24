@@ -117,10 +117,6 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(cartItems);
-  }, [cartItems]);
-
   return (
     <CartContext.Provider
       value={{

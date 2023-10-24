@@ -118,7 +118,6 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
               <button
                 className="h-full w-5 cursor-pointer appearance-none border-none bg-transparent text-inherit disabled:opacity-50"
                 onClick={() => {
-                  console.log(product.quantity, product.inventoryQuantity);
                   if (product.quantity < product.inventoryQuantity) {
                     setErrorMessage(null);
                     increaseItem(product);
