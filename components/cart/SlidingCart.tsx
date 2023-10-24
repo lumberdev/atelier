@@ -9,28 +9,6 @@ import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
 import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 import { currencyFormatter } from "@/lib/helper/currency";
 
-const dummyCartItems: CartItemType[] = [
-  {
-    id: 7826283987190, //variant ID
-    title: "Black Leather Bag", //product title
-    qty: 1, // quantity
-    price: "$30", // price
-    description:
-      "Womens black leather bag, with ample space. Can be worn over the shoulder, or remove straps to carry in your hand.",
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0663/2836/3254/products/black-bag-over-the-shoulder_925x_d27a91ab-1f68-4a72-b2ba-f214d51b471d.jpg?v=1662735698",
-  },
-  {
-    id: 7825339154678,
-    title: "Classic Leather Jacket",
-    qty: 1,
-    price: "$80",
-    description: "Lorem Uipsum Lorem Uipsum Lorem Uipsum Lorem Uipsum",
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0663/2836/3254/products/leather-jacket-and-tea_925x_3544a686-04bc-4c02-afe2-f5ba3e193c47.jpg?v=1662735694",
-  },
-];
-
 const SlidingCart = () => {
   const { isCartOpen, closeCart, cartItems, cartCount, cartTotal } = useCart();
   const router = useRouter();
@@ -46,14 +24,17 @@ const SlidingCart = () => {
     cart_items: cartItems,
   });
 
-
   const checkoutButtonClick = async () => {
     const checkoutUrl = checkout.checkout.web_url;
     window.open(checkoutUrl, "_self");
   };
 
   useEffect(() => {
-    const checkoutDisabled = checkoutLoading || cartItems.length === 0 || !checkout || Boolean(checkout.errors);
+    const checkoutDisabled =
+      checkoutLoading ||
+      cartItems.length === 0 ||
+      !checkout ||
+      Boolean(checkout.errors);
     setCheckoutButtonDisabled(checkoutDisabled);
   }, [checkoutLoading, cartItems, checkout]);
 
@@ -82,7 +63,7 @@ const SlidingCart = () => {
       <div
         style={cartStyles}
         className={
-          "fixed right-0 top-0 flex h-full min-w-full flex-col justify-between pt-6 shadow-lg transition-transform md:min-w-[30rem] md:max-w-[38rem]"
+          "fixed right-0 top-0 z-20 flex h-full min-w-full flex-col justify-between pt-6 shadow-lg transition-transform md:min-w-[30rem] md:max-w-[38rem]"
         }
       >
         <div className="flex items-center justify-between px-6">
