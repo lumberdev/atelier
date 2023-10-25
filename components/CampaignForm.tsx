@@ -33,6 +33,7 @@ import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { areArraysTheSame } from "@/lib/helper/objects";
+import CampaignAccessControlFormSlice from "./campaign/AccessControlFormSlice";
 
 const CampaignForm: FC<{
   campaign?: campaigns;
@@ -594,6 +595,10 @@ const CampaignForm: FC<{
                 </Tabs>
               </VerticalStack>
             </Card>
+
+            <Card roundedAbove="sm">
+              <CampaignAccessControlFormSlice campaign={campaign} />
+            </Card>
           </VerticalStack>
 
           <VerticalStack gap={{ xs: "4", md: "2" }}>
@@ -664,31 +669,6 @@ const CampaignForm: FC<{
 
                   {!imageFile && <DropZone.FileUpload />}
                 </DropZone>
-              </VerticalStack>
-            </Card>
-
-            <Card roundedAbove="sm">
-              <VerticalStack gap="4">
-                <Text as="h3" variant="headingSm">
-                  Access Control
-                </Text>
-
-                <Text as="p" variant="bodyMd">
-                  Set a password for accessing your campaign page
-                </Text>
-
-                <Controller
-                  control={control}
-                  name="password"
-                  render={({ field }) => (
-                    <TextField
-                      label="Password"
-                      autoComplete="false"
-                      disabled={isLoading}
-                      {...field}
-                    />
-                  )}
-                />
               </VerticalStack>
             </Card>
           </VerticalStack>
