@@ -1,21 +1,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type SelectedOption = {
-  name: String;
-  value: String;
+  name: string;
+  value: string;
 }
 
 type CartItem = {
-  title: String;
-  id: Number;
-  price: Number;
+  title: string;
+  id: number;
+  price: number;
   selectedOptions: SelectedOption[];
   image: {
-    url: String;
-    altText: String;
+    url: string;
+    altText: string;
   },
-  inventoryQuantity: Number;
-  quantity: Number;
+  inventoryQuantity: number;
+  quantity: number;
 };
 
 type CartValue = {
@@ -27,7 +27,7 @@ type CartValue = {
   cartCount: number;
   cartTotal: number;
   updateCart(newCart: CartItem[]): void; 
-  addItem(formData: { item: CartItem; formQuantity: number }): void; 
+  addItem(item: CartItem): void; 
   decreaseItem(item: CartItem): void; 
   increaseItem(item: CartItem): void; 
   updateItemQuantity(item: CartItem, qty: number | ""): void; 
@@ -44,7 +44,7 @@ const defaultCartValue: CartValue = {
   cartCount: 0,
   cartTotal: 0,
   updateCart: (newCart: CartItem[]) => {}, 
-  addItem: (formData: { item: CartItem; formQuantity: number }) => {}, 
+  addItem: (item: CartItem) => {}, 
   decreaseItem: (item: CartItem) => {}, 
   increaseItem: (item: CartItem) => {}, 
   updateItemQuantity: (item: CartItem, qty: number | "") => {}, 
@@ -78,17 +78,15 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  const addItem = (formData) => {
-    const { item, formQuantity } = formData;
+  const addItem = (item) => {    
     const newCart = [...cartItems];
     const existingItem = newCart.find((i) => i.id === item.id);
     // Increase quantity of existing item
     if (existingItem) {
-      existingItem.quantity += parseInt(formQuantity);
+      existingItem.quantity += parseInt(item.quantity);
     }
     // Add a new item
     else {
-      item.quantity = parseInt(formQuantity);
       newCart.push(item);
     }
     updateCart(newCart);

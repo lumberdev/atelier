@@ -15,7 +15,7 @@ const ProductPage = ({ product, campaign }) => {
     );
     const cartItem = cartItems.find((item) => item.id === variant.id);
     const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
+    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);    
   };
 
   const formChange = (e) => {
@@ -52,8 +52,9 @@ const ProductPage = ({ product, campaign }) => {
       selectedOptions: variant.selectedOptions,
       image: onlyVariant || !variant.image ? product.images[0] : variant.image,
       inventoryQuantity: variant.inventoryQuantity,
+      quantity: quantity,
     };
-    addItem({ item, formQuantity: quantity });
+    addItem(item);
     checkQuantityIsInLimit();
   };
 
