@@ -63,7 +63,7 @@ const HamburgerMenu = ({ children, className = "" }) => {
         onClick={toggleMenu}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 10H15M1 4H19M1 16H19" stroke="#101828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 10H15M1 4H19M1 16H19" stroke="#101828" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
 
