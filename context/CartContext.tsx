@@ -1,19 +1,37 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+type SelectedOption = {
+  name: String;
+  value: String;
+}
+
+type CartItem = {
+  title: String;
+  id: Number;
+  price: Number;
+  selectedOptions: SelectedOption[];
+  image: {
+    url: String;
+    altText: String;
+  },
+  inventoryQuantity: Number;
+  quantity: Number;
+};
+
 type CartValue = {
   isCartOpen: boolean;
   openCart(): void;
   closeCart(): void;
   toggleCart(): void;
-  cartItems: any[]; // Replace 'any[]' with the actual type cart items.
+  cartItems: CartItem[]; 
   cartCount: number;
   cartTotal: number;
-  updateCart(newCart: any[]): void; // Replace 'any[]' with the actual type cart items.
-  addItem(formData: { item: any; formQuantity: number }): void; // Replace 'any' with the actual type product.
-  decreaseItem(item: any): void; // Replace 'any' with the actual type product.
-  increaseItem(item: any): void; // Replace 'any' with the actual type product.
-  updateItemQuantity(item: any, qty: number | ""): void; // Replace 'any' with the actual type product.
-  clearItem(item: any): void; // Replace 'any' with the actual type product.
+  updateCart(newCart: CartItem[]): void; 
+  addItem(formData: { item: CartItem; formQuantity: number }): void; 
+  decreaseItem(item: CartItem): void; 
+  increaseItem(item: CartItem): void; 
+  updateItemQuantity(item: CartItem, qty: number | ""): void; 
+  clearItem(item: CartItem): void; 
   clearCart(): void;
 };
 
@@ -22,15 +40,15 @@ const defaultCartValue: CartValue = {
   openCart: () => {},
   closeCart: () => {},
   toggleCart: () => {},
-  cartItems: [], // Replace 'any[]' with the actual type of your cart items.
+  cartItems: [],
   cartCount: 0,
   cartTotal: 0,
-  updateCart: (newCart: any[]) => {}, // Replace 'any[]' with the actual type cart items.
-  addItem: (formData: { item: any; formQuantity: number }) => {}, // Replace 'any' with the actual type product.
-  decreaseItem: (item: any) => {}, // Replace 'any' with the actual type product.
-  increaseItem: (item: any) => {}, // Replace 'any' with the actual type product.
-  updateItemQuantity: (item: any, qty: number | "") => {}, // Replace 'any' with the actual type product.
-  clearItem: (item: any) => {}, // Replace 'any' with the actual type product.
+  updateCart: (newCart: CartItem[]) => {}, 
+  addItem: (formData: { item: CartItem; formQuantity: number }) => {}, 
+  decreaseItem: (item: CartItem) => {}, 
+  increaseItem: (item: CartItem) => {}, 
+  updateItemQuantity: (item: CartItem, qty: number | "") => {}, 
+  clearItem: (item: CartItem) => {}, 
   clearCart: () => {},
 };
 

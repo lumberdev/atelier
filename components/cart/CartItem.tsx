@@ -48,7 +48,7 @@ const CartItem = ({ product, cartItemImageStyle, cartBackgroundColor }) => {
       <div className="flex flex-1 flex-col justify-between">
         <div>
           <div className="flex w-full justify-between gap-2">
-            <div className="text-lg font-semibold">{product.product_title}</div>
+            <div className="text-lg font-semibold">{product.title}</div>
             <button
               className="flex cursor-pointer appearance-none items-center justify-center border-none bg-transparent text-inherit"
               onClick={() => clearItem(product)}

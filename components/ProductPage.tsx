@@ -45,10 +45,13 @@ const ProductPage = ({ product, campaign }) => {
     );
     
     const onlyVariant = product.variants.length === 1;
-    const item = { 
-      ...variant,
-      product_title: product.title,
+    const item = {
+      title: product.title,
+      id: variant.id,
+      price: variant.price,
+      selectedOptions: variant.selectedOptions,
       image: onlyVariant || !variant.image ? product.images[0] : variant.image,
+      inventoryQuantity: variant.inventoryQuantity,
     };
     addItem({ item, formQuantity: quantity });
     checkQuantityIsInLimit();
