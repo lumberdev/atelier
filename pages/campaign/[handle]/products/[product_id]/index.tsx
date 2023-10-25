@@ -29,7 +29,7 @@ const ProductCampaignPage = () => {
   return (
     <Page>
       <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <ProductPage {...{ product }} />
+      <ProductPage {...{ campaign, product }} />
     </Page>
   );
 };

@@ -22,6 +22,12 @@ const schema = yup
     image: yup.string().optional(),
     password: yup.string().optional(),
     isActive: yup.boolean().default(false),
+    cartTitle: yup.string().optional(),
+    cartDescription: yup.string().optional(),
+    cartItemsImageStyle: yup.string().optional(),
+    cartCheckoutButtonStyle: yup.string().optional(),
+    cartBackgroundColor: yup.string().optional(),
+    cartTextColor: yup.string().optional(),
   })
   .required();
 
@@ -127,5 +133,7 @@ export const useCampaignForm = (campaign?: campaigns) => {
       form.setValue("productIds", ids),
     setVariantIds: (ids: CampaignInput["variantIds"]) =>
       form.setValue("variantIds", ids),
+    setCartItemImageStyleValue: (style: CampaignInput["cartItemsImageStyle"]) =>
+      form.setValue("cartItemImageStyle", style),
   };
 };

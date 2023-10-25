@@ -28,20 +28,26 @@ model session {
 }
 
 model campaigns {
-  id            String   @id @default(cuid())
-  storeId       String
-  store         stores   @relation(fields: [storeId], references: [shop])
-  title         String
-  handle        String
-  description   String   @db.Text
-  collectionIds String[]
-  productIds    String[]
-  variantIds    String[]
-  image         String?
-  isActive      Boolean  @default(false)
-  password      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  storeId                 String
+  store                   stores   @relation(fields: [storeId], references: [shop])
+  title                   String
+  handle                  String
+  description             String   @db.Text
+  collectionIds           String[]
+  productIds              String[]
+  variantIds              String[]
+  image                   String?
+  isActive                Boolean  @default(false)
+  password                String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  cartTitle               String?
+  cartItemsImageStyle     String?
+  cartDescription         String?
+  cartCheckoutButtonStyle String?
+  cartBackgroundColor     String?
+  cartTextColor           String?
 }
 
 model storeThemes {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const HamburgerMenu = ({ children }) => {
+const HamburgerMenu = ({ children, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -57,12 +57,14 @@ const HamburgerMenu = ({ children }) => {
   }, []);
 
   return (
-    <div className={`relative`}>
+    <div className={`relative ${className}`}>
       <button
-        className="w-8 h-8 z-10 p-2 bg-white text-black border-none"
+        className="z-10 p-2 bg-transparent border-none"
         onClick={toggleMenu}
       >
-        ☰
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 10H15M1 4H19M1 16H19" stroke="#101828" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </button>
 
       <div

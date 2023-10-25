@@ -17,15 +17,18 @@
     "paths": {
       "@/*": ["./*"],
       "@/utils": ["./utils/*"],
+      "@/context": ["./context/*"],
       "@/components": ["./components/*"],
-      "@/hooks": ["./components/hooks/*"]
+      "@/hooks": ["./components/hooks/*"],
+      "@/assets": ["./public/assets/*"]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/hooks/useFetch.js"
+    "components/hooks/useFetch.js",
+    "_developer/types/**/*.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -104,6 +104,7 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
     products,
     collections
   );
+
   return (
     <Page>
       <Header {...{ campaign, campaignHandle: handle, collections }} />
