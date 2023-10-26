@@ -13,7 +13,7 @@ const CampaignPasswordPage = () => {
     mutationFn: ({ password }) =>
       axios.post("/api/auth/password", { password, campaign: query.handle }),
     onSuccess: () => {
-      replace(`/campaign/${query.handle}`);
+      replace(`/${query.handle}`);
     },
     onError: (error) => {
       const data = error.response.data;

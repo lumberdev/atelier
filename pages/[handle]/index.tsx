@@ -64,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (!authorized)
     return {
       redirect: {
-        destination: `/campaign/${handle as string}/password`,
+        destination: `/${handle as string}/password`,
         permanent: false,
       },
     };
