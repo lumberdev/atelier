@@ -12,9 +12,9 @@ import { accessPageConfig, campaigns } from "@prisma/client";
 const schema = yup
   .object({
     id: yup.string().optional(),
-    layout: yup.string().optional().oneOf(["DEFAULT", "STACK"]),
+    layout: yup.string().optional().oneOf(["DEFAULT", "STACKED"]),
     password: yup.string().optional(),
-    headline: yup.string().required(),
+    headline: yup.string().optional().required(),
     body: yup.string().optional(),
     passwordPlaceholder: yup.string().optional(),
     ctaText: yup.string().optional(),
@@ -62,7 +62,7 @@ export const useCampaignAccessControlForm = ({ campaign }: { campaign: campaigns
     queryKey: ['access-control-config', campaign?.id],
     queryFn: () => fetch(`/api/apps/access-control/${campaign?.id}`).then(response => response.json()),
     onSuccess: (response) => {
-      if (!response?.config) return;
+      if (!response?.config || form.getValues('id')) return;
 
       const config = response?.config;
 

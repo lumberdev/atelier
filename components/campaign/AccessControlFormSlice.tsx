@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
 const CampaignAccessControlFormSlice = ({ campaign }: { campaign: campaigns }) => {
-  const { control, imageUrl, imageFile, onSubmit, watch, setValue, setImageFile } = useCampaignAccessControlForm({ campaign });
+  const { control, imageUrl, imageFile, onSubmit, watch, setValue, setImageFile, formState } = useCampaignAccessControlForm({ campaign });
   const [useCTA, setUseCTA] = useState<boolean>(false);
 
   const password = watch('password');
@@ -93,7 +93,7 @@ const CampaignAccessControlFormSlice = ({ campaign }: { campaign: campaigns }) =
                 </HorizontalStack>
               )}
 
-              {!imageFile && <DropZone.FileUpload />}
+              {!imageFile && !imageUrl && <DropZone.FileUpload />}
             </DropZone>
 
             {layout === 'DEFAULT' ? 'Setting an image will override the background color.' : ''}
@@ -102,15 +102,16 @@ const CampaignAccessControlFormSlice = ({ campaign }: { campaign: campaigns }) =
           <Checkbox label="Use Call to Action" helpText="Adds a link for taking further action" checked={useCTA} onChange={(checked) => setUseCTA(checked)}  />
 
           {useCTA && (
-            <Grid columns={{ xs: 2}}>
+            <Grid columns={{ xs: 2, sm: 2, md: 2, lg: 2 }}>
               <Controller control={control} name="ctaText" render={({ field }) => <TextField label="CTA Text" autoComplete="false" {...field} />} />
               <Controller control={control} name="ctaUrl" render={({ field }) => <TextField label="CTA URL" autoComplete="false" {...field} />} />
             </Grid>
           )}
+
         </>
       )}
 
-      <Button primary onClick={onSubmit}>Save</Button>
+      <Button primary disabled={!formState.isValid} onClick={() => onSubmit()}>Save</Button>
     </VerticalStack>
   );
 };
