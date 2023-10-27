@@ -40,13 +40,16 @@ export const getServerSideProps: GetServerSideProps = async ({
         where: {
           handle: handle as string,
         },
+        include: {
+          accessPageConfig: true,
+        },
       },
     },
   });
 
   const merchantSecret = merchant.secret;
-  const [campaign] = merchant.campaigns;
-  const campaignPassword = campaign.password;
+  const [{ accessPageConfig: config, ...campaign }] = merchant.campaigns;
+  const campaignPassword = config.password;
 
   if (!campaignPassword)
     return {

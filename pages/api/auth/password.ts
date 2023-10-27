@@ -38,11 +38,14 @@ router.post(async (req, res) => {
         where: {
           handle: campaignHandle,
         },
+        include: {
+          accessPageConfig: true,
+        },
       },
     },
   });
 
-  const [campaign] = store.campaigns ?? [];
+  const [{ accessPageConfig, ...campaign }] = store.campaigns ?? [];
   const token = getAuthorizationToken({
     merchantSecret: store.secret,
     campaignPassword: password,
@@ -51,7 +54,7 @@ router.post(async (req, res) => {
   const authorized = verifyAuthorizationToken({
     token,
     merchantSecret: store.secret,
-    campaignPassword: campaign.password,
+    campaignPassword: accessPageConfig.password,
   });
 
   if (!authorized)
