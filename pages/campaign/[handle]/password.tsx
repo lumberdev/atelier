@@ -110,7 +110,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
           </div>
         )}
 
-        <div className="px-4 pt-12 flex flex-col items-center md:p-8 md:justify-center md:items-start">
+        <div className="px-4 pt-12 flex flex-col items-center md:p-8 md:justify-center md:items-start md:px-24">
           {logo && (
             <div className="relative w-32 h-8 mb-8">
               <Image
