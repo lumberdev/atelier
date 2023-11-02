@@ -24,7 +24,11 @@ const schema = yup
   })
   .required();
 
-export const useCampaignAccessControlForm = ({ campaign }: { campaign: campaigns }) => {
+export const useCampaignAccessControlForm = ({
+  campaign,
+}: {
+  campaign: campaigns;
+}) => {
   const fetch = useFetch();
   const {
     settings: { shop },
@@ -52,46 +56,55 @@ export const useCampaignAccessControlForm = ({ campaign }: { campaign: campaigns
   const { handleSubmit, ...form } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      layout: 'DEFAULT'
-    }
+      layout: "DEFAULT",
+    },
   });
 
   // Mount-hook
   const { data: campaignACConfig } = useQuery<{ config: accessPageConfig }>({
     enabled: !!campaign?.id,
-    queryKey: ['access-control-config', campaign?.id],
-    queryFn: () => fetch(`/api/apps/access-control/${campaign?.id}`).then(response => response.json()),
+    queryKey: ["access-control-config", campaign?.id],
+    queryFn: () =>
+      fetch(`/api/apps/access-control/${campaign?.id}`).then((response) =>
+        response.json()
+      ),
     onSuccess: (response) => {
-      if (!response?.config || form.getValues('id')) return;
+      if (!response?.config || form.getValues("id")) return;
 
       const config = response?.config;
 
-      form.setValue('id', config.id);
-      form.setValue('layout', config.layout);
-      form.setValue('headline', config.headline);
-      form.setValue('body', config.body);
-      form.setValue('password', config.password);
-      form.setValue('passwordPlaceholder', config.passwordPlaceholder);
+      form.setValue("id", config.id);
+      form.setValue("layout", config.layout);
+      form.setValue("headline", config.headline);
+      form.setValue("body", config.body);
+      form.setValue("password", config.password);
+      form.setValue("passwordPlaceholder", config.passwordPlaceholder);
 
-      form.setValue('backgroundColor', config.backgroundColor);
+      form.setValue("backgroundColor", config.backgroundColor);
 
       if (config.backgroundImage) {
         const image = supabaseStorage.getPublicUrl(config.backgroundImage);
 
-        setImageUrl(image?.data.publicUrl ?? '');
-        form.setValue('backgroundImage', image?.data.publicUrl ?? '');
+        setImageUrl(image?.data.publicUrl ?? "");
+        form.setValue("backgroundImage", config.backgroundImage);
       }
 
-      form.setValue('ctaText', config.ctaText);
-      form.setValue('ctaUrl', config.ctaUrl);
+      form.setValue("ctaText", config.ctaText);
+      form.setValue("ctaUrl", config.ctaUrl);
     },
   });
 
   // Mutation
-  const { mutate: upsertAccessControlConfig } = useMutation<{}, any, { data: AccessPageConfigInput }>(variables => fetch(`/api/apps/access-control`, {
-    method: 'POST',
-    body: JSON.stringify(variables.data),
-  }))
+  const { mutate: upsertAccessControlConfig } = useMutation<
+    {},
+    any,
+    { data: AccessPageConfigInput }
+  >((variables) =>
+    fetch(`/api/apps/access-control`, {
+      method: "POST",
+      body: JSON.stringify(variables.data),
+    })
+  );
 
   const onSubmit = handleSubmit(async (fields: AccessPageConfigInput) => {
     setIsLoading(true);
@@ -110,13 +123,15 @@ export const useCampaignAccessControlForm = ({ campaign }: { campaign: campaigns
       const image = storageResponse.data?.path ?? "";
 
       // 2. Upload data
-      upsertAccessControlConfig({ data: {...fields, campaignId: campaign.id, backgroundImage: image } });
+      upsertAccessControlConfig({
+        data: { ...fields, campaignId: campaign.id, backgroundImage: image },
+      });
 
       return;
     }
 
-    upsertAccessControlConfig({ data: {...fields, campaignId: campaign.id } });
-  })
+    upsertAccessControlConfig({ data: { ...fields, campaignId: campaign.id } });
+  });
 
   return {
     ...form,
