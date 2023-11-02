@@ -5,7 +5,10 @@ import { Session } from "@shopify/shopify-api";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
 
-const router = createRouter<NextApiRequest & { user_session: Session }, NextApiResponse>();
+const router = createRouter<
+  NextApiRequest & { user_session: Session },
+  NextApiResponse
+>();
 
 router.use(verifyRequest);
 
@@ -16,18 +19,18 @@ router.post(async (req, res) => {
   const { id, campaignId, ...fields } = body;
 
   const config = await prisma.accessPageConfig.upsert({
-    where: { campaign: { store: { identifier: shop } }, id: id ?? ''},
+    where: { campaign: { store: { shop } }, id: id ?? "" },
     create: {
       campaign: {
         connect: {
           id: campaignId,
-        }
+        },
       },
       ...fields,
     },
     update: {
-      ...fields
-    }
+      ...fields,
+    },
   });
 
   return res.status(200).json({ config });
