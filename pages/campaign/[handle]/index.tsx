@@ -49,9 +49,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const merchantSecret = merchant.secret;
   const [{ accessPageConfig: config, ...campaign }] = merchant.campaigns;
-  const campaignPassword = config.password;
+  const campaignPassword = config?.password;
 
-  if (!campaignPassword)
+  if (!config || !campaignPassword)
     return {
       props: {
         campaign,
