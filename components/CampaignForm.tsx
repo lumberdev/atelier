@@ -32,6 +32,7 @@ import {
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+import { areArraysTheSame } from "@/lib/helper/objects";
 
 const CampaignForm: FC<{
   campaign?: campaigns;
@@ -39,8 +40,25 @@ const CampaignForm: FC<{
   products?: ProductResourceItem[];
 }> = ({ campaign, collections, products }) => {
   const router = useRouter();
+  const [nonControlledFormDirty, setNonControlledFormDirty] =
+    useState<boolean>(false);
+  const {
+    isLoading,
+    imageUrl,
+    imageFile,
+    formState,
+    onSubmit,
+    setValue,
+    setImageFile,
+    watch,
+    reset,
+    control,
+  } = useCampaignForm(campaign, (isDirty: boolean) =>
+    setNonControlledFormDirty(isDirty)
+  );
+
   const [cartItemImageStyle, setCartItemImageStyle] = useState<string[]>([
-    "round",
+    formState.defaultValues.cartItemsImageStyle,
   ]);
 
   const handleCartItemImageStyleChange = useCallback(
@@ -68,19 +86,6 @@ const CampaignForm: FC<{
   const [selectedItems, setSelectedItems] = useState<
     ResourceListProps["selectedItems"]
   >([]);
-
-  const {
-    isLoading,
-    imageUrl,
-    imageFile,
-    formState,
-    onSubmit,
-    setValue,
-    setImageFile,
-    watch,
-    reset,
-    control,
-  } = useCampaignForm(campaign);
 
   const isActive = watch("isActive");
   const isActiveSelectValue = isActive ? "true" : "false";
@@ -115,10 +120,72 @@ const CampaignForm: FC<{
     setValue("variantIds", variants);
   }, [selectedTab, selectedProducts]);
 
+  const hasNonControllerInputsChanged = () => {
+    const formProductIds = selectedProducts.map((resource) => resource.id);
+    const defaultProductIds = [...campaign.productIds];
+    const formCollectionIds = selectedCollections.map(
+      (resource) => resource.id
+    );
+    const defaultCollectionIds = [...campaign.collectionIds];
+    if (cartItemImageStyle[0] != campaign.cartItemsImageStyle) {
+      console.log("cartItemImageStyle changed");
+      return true;
+    } else if (campaign.isActive != isActive) {
+      console.log("isActive changed");
+      return true;
+    } else if (!areArraysTheSame(formProductIds, defaultProductIds)) {
+      console.log("productIds changed");
+      return true;
+    } else if (!areArraysTheSame(formCollectionIds, defaultCollectionIds)) {
+      console.log("collectionIds changed");
+      return true;
+    } else {
+      console.log("no changes");
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (campaign) {
+      const nonControlledInputsChanged = hasNonControllerInputsChanged();
+      setNonControlledFormDirty(nonControlledInputsChanged);
+    }
+  }, [
+    cartItemImageStyle,
+    selectedProducts,
+    selectedCollections,
+    isActive,
+    campaign,
+  ]);
+
+  const resetForm = () => {
+    if (campaign)
+      reset({
+        id: campaign.id,
+        title: campaign.title,
+        handle: campaign.handle,
+        description: campaign.description,
+        cartTitle: campaign.cartTitle,
+        cartBackgroundColor: campaign.cartBackgroundColor,
+        cartTextColor: campaign.cartTextColor,
+        cartItemsImageStyle: campaign.cartItemsImageStyle,
+        cartDescription: campaign.cartDescription,
+        isActive: campaign.isActive,
+        collectionIds: campaign.collectionIds,
+        productIds: campaign.productIds,
+        variantIds: campaign.variantIds,
+        password: campaign.password,
+      });
+  };
+
+  useEffect(() => {
+    if (campaign) resetForm();
+  }, [campaign]);
+
   return (
     <Frame>
       <ContextualSaveBar
-        visible={formState.isDirty}
+        visible={formState.isDirty || nonControlledFormDirty}
         saveAction={{
           disabled: !formState.isValid,
           onAction: onSubmit,
@@ -126,11 +193,12 @@ const CampaignForm: FC<{
         }}
         discardAction={{
           onAction: () => {
-            reset();
+            resetForm();
             router.back();
           },
         }}
       />
+
       <Form onSubmit={onSubmit}>
         <HorizontalGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="4">
           <VerticalStack gap="4">
@@ -144,6 +212,7 @@ const CampaignForm: FC<{
                       label="Title"
                       autoComplete="off"
                       autoFocus
+                      disabled={isLoading}
                       {...field}
                     />
                   )}
@@ -153,7 +222,12 @@ const CampaignForm: FC<{
                   control={control}
                   name="handle"
                   render={({ field }) => (
-                    <TextField label="Handle" autoComplete="off" {...field} />
+                    <TextField
+                      label="Handle"
+                      autoComplete="off"
+                      disabled={isLoading}
+                      {...field}
+                    />
                   )}
                 />
 
@@ -165,6 +239,7 @@ const CampaignForm: FC<{
                       multiline={4}
                       label="Description"
                       autoComplete="off"
+                      disabled={isLoading}
                       {...field}
                     />
                   )}
@@ -188,6 +263,7 @@ const CampaignForm: FC<{
                         label="Cart Title"
                         autoComplete="off"
                         autoFocus
+                        disabled={isLoading}
                         {...field}
                       />
                     )}
@@ -200,6 +276,7 @@ const CampaignForm: FC<{
                         label="Background Color"
                         autoComplete="off"
                         autoFocus
+                        disabled={isLoading}
                         {...field}
                       />
                     )}
@@ -212,6 +289,7 @@ const CampaignForm: FC<{
                         label="Text Color"
                         autoComplete="off"
                         autoFocus
+                        disabled={isLoading}
                         {...field}
                       />
                     )}
@@ -224,6 +302,7 @@ const CampaignForm: FC<{
                     ]}
                     selected={cartItemImageStyle}
                     onChange={handleCartItemImageStyleChange}
+                    disabled={isLoading}
                   />
 
                   <Controller
@@ -234,6 +313,7 @@ const CampaignForm: FC<{
                         multiline={4}
                         label="Cart Description"
                         autoComplete="off"
+                        disabled={isLoading}
                         {...field}
                       />
                     )}
@@ -530,6 +610,7 @@ const CampaignForm: FC<{
                   ]}
                   value={isActiveSelectValue}
                   onChange={(value) => setValue("isActive", value === "true")}
+                  disabled={isLoading}
                 />
               </VerticalStack>
             </Card>
@@ -556,6 +637,7 @@ const CampaignForm: FC<{
                   accept="image/*"
                   type="image"
                   allowMultiple={false}
+                  disabled={isLoading}
                   onDrop={(
                     _dropFiles: File[],
                     acceptedFiles: File[],
@@ -595,6 +677,7 @@ const CampaignForm: FC<{
                     <TextField
                       label="Password"
                       autoComplete="false"
+                      disabled={isLoading}
                       {...field}
                     />
                   )}
