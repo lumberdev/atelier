@@ -27,7 +27,7 @@ import { AddMajor } from "@shopify/polaris-icons";
 import { campaigns } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
@@ -159,23 +159,24 @@ const AppHomePage = () => {
 
                   return (
                     <ResourceItem
+                      key={`${campaign.id}-${campaign.updatedAt}`}
                       id={campaign.id}
                       onClick={() =>
                         router.push(`/app/campaign/${campaign.id}`)
                       }
                       media={
-                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-md bg-gray-200 overflow-hidden">
+                        <div className="h-14 w-14 overflow-hidden rounded-md bg-gray-200 md:h-20 md:w-20">
                           {image && (
                             <img
                               src={image.data.publicUrl}
-                              className="w-full h-full object-cover"
+                              className="h-full w-full object-cover"
                             />
                           )}
                         </div>
                       }
                     >
-                      <div className="flex flex-col justify-center items-start h-full">
-                        <div className="flex justify-between items-center w-full">
+                      <div className="flex h-full flex-col items-start justify-center">
+                        <div className="flex w-full items-center justify-between">
                           <Text as="h4" variant="headingMd" fontWeight="bold">
                             {campaign.title}
                           </Text>

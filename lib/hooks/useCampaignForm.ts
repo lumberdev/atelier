@@ -34,7 +34,8 @@ const schema = yup
 
 export const useCampaignForm = (
   campaign?: campaigns,
-  setNonControlledFormDirty?: (isDirty: Boolean) => void
+  setNonControlledFormDirty?: (isDirty: Boolean) => void,
+  setImageChanged?: (imageChanged: Boolean) => void
 ) => {
   const router = useRouter();
   const fetch = useFetch();
@@ -100,6 +101,7 @@ export const useCampaignForm = (
         router.push(`/app/campaign/${campaign.id}`);
         queryClient.refetchQueries(["campaign", campaign.id]);
         setNonControlledFormDirty(false);
+        setImageChanged(false);
       },
     }
   );
@@ -108,13 +110,17 @@ export const useCampaignForm = (
     setIsLoading(true);
 
     if (imageFile) {
-      // 1. Upload image
       const [shopId] = shop.split(".");
-      const fileName = fields.handle;
-      const [fileExt] = imageFile.name.split(".").reverse();
 
+      // delete campaign.image from supa storage
+      if (campaign?.image) {
+        const image = supabaseStorage.getPublicUrl(campaign.image);
+        const imageKey = image.data.publicUrl.split("/").reverse()[0];
+        await supabaseStorage.remove([`${shopId}/${imageKey}`]);
+      }
+      // upload image to supa storage
       const storageResponse = await supabaseStorage.upload(
-        `${shopId}/${fileName}.${fileExt}`,
+        `${shopId}/${imageFile.name.replaceAll(" ", "_")}`,
         imageFile,
         { upsert: true }
       );

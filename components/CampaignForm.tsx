@@ -42,6 +42,7 @@ const CampaignForm: FC<{
   const router = useRouter();
   const [nonControlledFormDirty, setNonControlledFormDirty] =
     useState<boolean>(false);
+  const [imageChanged, setImageChanged] = useState<boolean>(false);
   const {
     isLoading,
     imageUrl,
@@ -53,8 +54,10 @@ const CampaignForm: FC<{
     watch,
     reset,
     control,
-  } = useCampaignForm(campaign, (isDirty: boolean) =>
-    setNonControlledFormDirty(isDirty)
+  } = useCampaignForm(
+    campaign,
+    (isDirty: boolean) => setNonControlledFormDirty(isDirty),
+    (imageChanged: boolean) => setImageChanged(imageChanged)
   );
 
   const [cartItemImageStyle, setCartItemImageStyle] = useState<string[]>([
@@ -128,19 +131,16 @@ const CampaignForm: FC<{
     );
     const defaultCollectionIds = [...campaign.collectionIds];
     if (cartItemImageStyle[0] != campaign.cartItemsImageStyle) {
-      console.log("cartItemImageStyle changed");
       return true;
     } else if (campaign.isActive != isActive) {
-      console.log("isActive changed");
       return true;
     } else if (!areArraysTheSame(formProductIds, defaultProductIds)) {
-      console.log("productIds changed");
       return true;
     } else if (!areArraysTheSame(formCollectionIds, defaultCollectionIds)) {
-      console.log("collectionIds changed");
+      return true;
+    } else if (imageChanged) {
       return true;
     } else {
-      console.log("no changes");
       return false;
     }
   };
@@ -152,9 +152,10 @@ const CampaignForm: FC<{
     }
   }, [
     cartItemImageStyle,
+    isActive,
     selectedProducts,
     selectedCollections,
-    isActive,
+    imageChanged,
     campaign,
   ]);
 
@@ -626,7 +627,10 @@ const CampaignForm: FC<{
                     <Button
                       destructive
                       plain
-                      onClick={() => setImageFile(null)}
+                      onClick={() => {
+                        setImageChanged(true);
+                        setImageFile(null);
+                      }}
                     >
                       Remove
                     </Button>
@@ -642,7 +646,10 @@ const CampaignForm: FC<{
                     _dropFiles: File[],
                     acceptedFiles: File[],
                     _rejectedFiles: File[]
-                  ) => setImageFile(acceptedFiles[0])}
+                  ) => {
+                    setImageChanged(true);
+                    setImageFile(acceptedFiles[0]);
+                  }}
                 >
                   {imageUrl && (
                     <HorizontalStack>
