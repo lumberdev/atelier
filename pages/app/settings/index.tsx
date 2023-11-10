@@ -1,5 +1,6 @@
 import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/useStoreThemeForm";
+import { useToast } from "@/lib/hooks/useToast";
 import {
   Button,
   Card,
@@ -18,6 +19,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 const SettingsPage = () => {
+  const { toasts, triggerToast, dismissToast } = useToast();
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
 
@@ -28,9 +30,9 @@ const SettingsPage = () => {
     onSubmit: onSubmitTheme,
     control,
     isLoading,
-    didUpsert,
-    dismissSuccessToast,
-  } = useStoreThemeForm({});
+  } = useStoreThemeForm({
+    onUpsert: () => triggerToast("Store theme updated"),
+  });
 
   const { handleSubmit, setValue, watch } = useForm<{
     domain: string;
@@ -39,7 +41,15 @@ const SettingsPage = () => {
   const domain = watch("domain");
 
   const onSubmit = handleSubmit((fields: { domain: string }) => {
-    updateStoreDomain({ domain: fields.domain });
+    updateStoreDomain(
+      { domain: fields.domain },
+      {
+        onSuccess: (response) => {
+          if (response.error) return;
+          triggerToast("Domain updated");
+        },
+      }
+    );
   });
 
   useEffect(() => {
@@ -70,7 +80,12 @@ const SettingsPage = () => {
                       : null
                   }
                   connectedRight={
-                    <Button primary submit loading={isUpdatingStoreDomain}>
+                    <Button
+                      primary
+                      submit
+                      loading={isUpdatingStoreDomain}
+                      disabled={!domain || domain == settings.domain}
+                    >
                       Save
                     </Button>
                   }
@@ -121,7 +136,7 @@ const SettingsPage = () => {
                         src={logoUrl}
                         alt=""
                         loading="eager"
-                        className="w-full aspect-auto h-auto rounded-lg"
+                        className="aspect-auto h-auto w-full rounded-lg"
                       />
                     </HorizontalStack>
                   )}
@@ -198,9 +213,13 @@ const SettingsPage = () => {
         </Layout.AnnotatedSection>
       </Layout>
 
-      {didUpsert && (
-        <Toast content="Updated store theme" onDismiss={dismissSuccessToast} />
-      )}
+      {toasts.map((toast, index) => (
+        <Toast
+          content={toast}
+          onDismiss={() => dismissToast(index)}
+          key={index}
+        />
+      ))}
     </Page>
   );
 };
