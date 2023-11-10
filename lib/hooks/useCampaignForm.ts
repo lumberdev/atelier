@@ -128,9 +128,9 @@ export const useCampaignForm = (
 
       // 2. Upload data
       upsertCampaign({ data: { ...fields, image } });
+    } else {
+      upsertCampaign({ data: { ...fields } });
     }
-
-    upsertCampaign({ data: { ...fields } });
   });
 
   useEffect(() => {
