@@ -20,7 +20,13 @@ const schema = yup
   })
   .required();
 
-export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
+export const useStoreThemeForm = ({
+  logo,
+  onUpsert = () => {},
+}: {
+  logo?: string;
+  onUpsert?: () => void;
+}) => {
   const router = useRouter();
   const fetch = useFetch();
   const {
@@ -37,8 +43,6 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
 
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<File>();
-
-  const [didUpsert, setDidUpsert] = useState<boolean>(false);
 
   const { mutate: upsertTheme } = useMutation<
     { theme?: storeThemes; error?: { code: string; message: string } },
@@ -59,7 +63,7 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
 
         const theme = response.theme;
         setIsLoading(false);
-        setDidUpsert(true);
+        onUpsert();
       },
     }
   );
@@ -142,8 +146,6 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
     imageFile,
     setImageFile,
     onSubmit,
-    didUpsert,
-    dismissSuccessToast: () => setDidUpsert(false),
     isLoading,
     ...form,
   };
