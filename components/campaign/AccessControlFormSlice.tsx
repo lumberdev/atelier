@@ -133,7 +133,7 @@ const CampaignAccessControlFormSlice = ({
                   {layout === "DEFAULT" ? "Background Image" : "Image"}
                 </Text>
 
-                <Button destructive plain>
+                <Button destructive plain onClick={() => setImageFile(null)}>
                   Remove
                 </Button>
               </HorizontalStack>
