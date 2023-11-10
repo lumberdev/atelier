@@ -81,7 +81,7 @@ export const useStoreThemeForm = ({
         form.setValue("secondaryColor", theme.secondaryColor);
       if (theme.backgroundColor)
         form.setValue("backgroundColor", theme.backgroundColor);
-      if (theme.borderRadius)
+      if (theme.borderRadius !== null)
         form.setValue("borderRadius", theme.borderRadius + "");
 
       if (theme.logo) {
