@@ -2,13 +2,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { QueryClient, useMutation } from "react-query";
 import useFetch from "@/components/hooks/useFetch";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "./useStoreSettings";
 import { CampaignInput } from "../types";
 import { useRouter } from "next/router";
 import { campaigns } from "@prisma/client";
+import { queryClient } from "@/utils/queryClient";
 
 const schema = yup
   .object({
@@ -31,7 +32,11 @@ const schema = yup
   })
   .required();
 
-export const useCampaignForm = (campaign?: campaigns) => {
+export const useCampaignForm = (
+  campaign?: campaigns,
+  setNonControlledFormDirty?: (isDirty: Boolean) => void,
+  setImageChanged?: (imageChanged: Boolean) => void
+) => {
   const router = useRouter();
   const fetch = useFetch();
   const {
@@ -76,9 +81,27 @@ export const useCampaignForm = (campaign?: campaigns) => {
 
         const campaign = response.campaign;
 
-        form.reset();
+        form.reset({
+          id: campaign.id,
+          title: campaign.title,
+          handle: campaign.handle,
+          description: campaign.description,
+          cartTitle: campaign.cartTitle,
+          cartBackgroundColor: campaign.cartBackgroundColor,
+          cartTextColor: campaign.cartTextColor,
+          cartItemsImageStyle: campaign.cartItemsImageStyle,
+          cartDescription: campaign.cartDescription,
+          isActive: campaign.isActive,
+          collectionIds: campaign.collectionIds,
+          productIds: campaign.productIds,
+          variantIds: campaign.variantIds,
+          password: campaign.password,
+        });
         setIsLoading(false);
         router.push(`/app/campaign/${campaign.id}`);
+        queryClient.refetchQueries(["campaign", campaign.id]);
+        setNonControlledFormDirty(false);
+        setImageChanged(false);
       },
     }
   );
@@ -87,13 +110,17 @@ export const useCampaignForm = (campaign?: campaigns) => {
     setIsLoading(true);
 
     if (imageFile) {
-      // 1. Upload image
       const [shopId] = shop.split(".");
-      const fileName = fields.handle;
-      const [fileExt] = imageFile.name.split(".").reverse();
 
+      // delete campaign.image from supa storage
+      if (campaign?.image) {
+        const image = supabaseStorage.getPublicUrl(campaign.image);
+        const imageKey = image.data.publicUrl.split("/").reverse()[0];
+        await supabaseStorage.remove([`${shopId}/${imageKey}`]);
+      }
+      // upload image to supa storage
       const storageResponse = await supabaseStorage.upload(
-        `${shopId}/${fileName}.${fileExt}`,
+        `${shopId}/${imageFile.name.replaceAll(" ", "_")}`,
         imageFile,
         { upsert: true }
       );
@@ -101,11 +128,9 @@ export const useCampaignForm = (campaign?: campaigns) => {
 
       // 2. Upload data
       upsertCampaign({ data: { ...fields, image } });
-
-      return;
+    } else {
+      upsertCampaign({ data: { ...fields } });
     }
-
-    upsertCampaign({ data: { ...fields } });
   });
 
   useEffect(() => {
