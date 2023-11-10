@@ -178,7 +178,6 @@ const CampaignForm: FC<{
         collectionIds: campaign.collectionIds,
         productIds: campaign.productIds,
         variantIds: campaign.variantIds,
-        password: campaign.password,
       });
   };
 
@@ -670,31 +669,6 @@ const CampaignForm: FC<{
 
                     {!imageFile && <DropZone.FileUpload />}
                   </DropZone>
-                </VerticalStack>
-              </Card>
-
-              <Card roundedAbove="sm">
-                <VerticalStack gap="4">
-                  <Text as="h3" variant="headingSm">
-                    Access Control
-                  </Text>
-
-                  <Text as="p" variant="bodyMd">
-                    Set a password for accessing your campaign page
-                  </Text>
-
-                  <Controller
-                    control={control}
-                    name="password"
-                    render={({ field }) => (
-                      <TextField
-                        label="Password"
-                        autoComplete="false"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    )}
-                  />
                 </VerticalStack>
               </Card>
             </VerticalStack>
