@@ -26,8 +26,10 @@ const schema = yup
 
 export const useCampaignAccessControlForm = ({
   campaign,
+  onSuccess = () => {},
 }: {
   campaign: campaigns;
+  onSuccess?: () => void;
 }) => {
   const fetch = useFetch();
   const {
@@ -99,11 +101,17 @@ export const useCampaignAccessControlForm = ({
     {},
     any,
     { data: AccessPageConfigInput }
-  >((variables) =>
-    fetch(`/api/apps/access-control`, {
-      method: "POST",
-      body: JSON.stringify(variables.data),
-    })
+  >(
+    (variables) =>
+      fetch(`/api/apps/access-control`, {
+        method: "POST",
+        body: JSON.stringify(variables.data),
+      }),
+    {
+      onSuccess: () => {
+        onSuccess();
+      },
+    }
   );
 
   const onSubmit = handleSubmit(async (fields: AccessPageConfigInput) => {
