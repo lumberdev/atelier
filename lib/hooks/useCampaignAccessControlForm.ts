@@ -45,6 +45,7 @@ export const useCampaignAccessControlForm = ({
   useEffect(() => {
     if (!imageFile && didSelectImageFile) {
       setImageUrl("");
+      form.setValue("backgroundImage", "");
       return;
     }
 
@@ -75,6 +76,8 @@ export const useCampaignAccessControlForm = ({
 
       const config = response?.config;
 
+      if (form.getValues("id")) return;
+
       form.setValue("id", config.id);
       form.setValue("layout", config.layout);
       form.setValue("headline", config.headline);
@@ -89,6 +92,7 @@ export const useCampaignAccessControlForm = ({
 
         setImageUrl(image?.data.publicUrl ?? "");
         form.setValue("backgroundImage", config.backgroundImage);
+        setDidSelectImageFile(true);
       }
 
       form.setValue("ctaText", config.ctaText);
