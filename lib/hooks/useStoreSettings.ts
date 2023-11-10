@@ -12,8 +12,14 @@ export const useStoreSettings = () => {
     refetch: refetchSettings,
   } = useQuery<{
     settings: { shop: string; domain?: string };
-  }>("settings", () =>
-    fetch("/api/apps/settings").then((response) => response.json())
+  }>(
+    "settings",
+    () => fetch("/api/apps/settings").then((response) => response.json()),
+    {
+      onSuccess: () => {
+        setErrors({});
+      },
+    }
   );
 
   const { mutate: updateStoreDomain, isLoading: isUpdatingStoreDomain } =
