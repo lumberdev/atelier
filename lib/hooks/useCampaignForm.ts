@@ -94,7 +94,6 @@ export const useCampaignForm = (
           collectionIds: campaign.collectionIds,
           productIds: campaign.productIds,
           variantIds: campaign.variantIds,
-          password: campaign.password,
         });
         setIsLoading(false);
         router.push(`/app/campaign/${campaign.id}`);
