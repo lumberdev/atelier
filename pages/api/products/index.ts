@@ -67,6 +67,7 @@ router.get(async (req, res) => {
     const raw = await fetch(shopifyStoreUrl, options).then((response) =>
       response.json()
     );
+    console.log(raw);
     const products = Object.values(raw.data);
     res.status(200).json({ products });
   } catch (error) {
