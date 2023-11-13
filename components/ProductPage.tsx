@@ -5,6 +5,8 @@ import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+import PrimaryButton from "@/components/PrimaryButton";
+import SecondaryButton from "./SecondaryButton";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
@@ -154,22 +156,19 @@ const ProductPage = ({ product, campaign }) => {
                 </React.Fragment>
               ) : null
             )}
-            <button
+            <PrimaryButton
               type="submit"
-              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
               onClick={onSubmit}
               disabled={!addToCartBtnEnabled}
             >
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
-            </button>
-            <button
-              type="button"
+            </PrimaryButton>
+            <SecondaryButton
               onClick={checkoutButtonClick}
               disabled={checkoutButtonDisabled}
-              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
             >
               {checkoutLoading ? "Loading..." : "Checkout"}
-            </button>
+            </SecondaryButton>
           </form>
         </div>
       </div>
