@@ -31,7 +31,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
       }
     >
       <div
-        className="header fixed left-0 top-0 grid w-full grid-cols-[3rem_1fr_3rem] items-center justify-between	px-4 py-2 transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:pt-0"
+        className="header fixed left-0 top-0 grid w-full grid-cols-[3rem_1fr_3rem] items-center justify-between	px-4 py-2 transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4"
         style={
           primaryColor && {
             backgroundColor: primaryColor,
