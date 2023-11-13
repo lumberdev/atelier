@@ -1,12 +1,22 @@
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
 import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
+import { storeThemes } from "@prisma/client";
+import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import { useTheme } from "@/lib/hooks/useTheme";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
   const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
+
+  const {
+    global: { backgroundColor },
+  } = useTheme() as { global: storeThemes };
+  const productTextColor = backgroundColor
+    ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
+    : "";
 
   const checkQuantityIsInLimit = () => {
     const form = document.getElementById("productForm");
@@ -15,7 +25,7 @@ const ProductPage = ({ product, campaign }) => {
     );
     const cartItem = cartItems.find((item) => item.id === variant.id);
     const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);    
+    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
   };
 
   const formChange = (e) => {
@@ -43,7 +53,7 @@ const ProductPage = ({ product, campaign }) => {
     const variant = product.variants.find(
       (variant) => variant.id === variantId
     );
-    
+
     const onlyVariant = product.variants.length === 1;
     const item = {
       title: product.title,
@@ -73,13 +83,17 @@ const ProductPage = ({ product, campaign }) => {
   };
 
   useEffect(() => {
-    const checkoutDisabled = checkoutLoading || cartItems.length === 0 || !checkout || Boolean(checkout.errors);
+    const checkoutDisabled =
+      checkoutLoading ||
+      cartItems.length === 0 ||
+      !checkout ||
+      Boolean(checkout.errors);
     setCheckoutButtonDisabled(checkoutDisabled);
   }, [checkoutLoading, cartItems, checkout]);
 
   return (
     <div className="container mx-auto p-6">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0 xs:gap-16">
+      <div className="relative grid grid-cols-1 gap-0 xs:gap-16 md:grid-cols-2">
         <div className="">
           {product.images.map((image, index) => (
             <img
@@ -91,9 +105,16 @@ const ProductPage = ({ product, campaign }) => {
           ))}
         </div>
         <div className="sticky top-20 h-fit">
-          <h1 className="mb-4 text-2xl font-semibold">{product.title}</h1>
-          <p className="text-l mb-4">{product.description}</p>
-          <p className="mb-2 text-lg">
+          <h1
+            className="mb-4 text-2xl font-semibold"
+            style={{ color: productTextColor }}
+          >
+            {product.title}
+          </h1>
+          <p className="text-l mb-4" style={{ color: productTextColor }}>
+            {product.description}
+          </p>
+          <p className="mb-2 text-lg" style={{ color: productTextColor }}>
             <span className="mr-1 line-through">
               {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
             </span>

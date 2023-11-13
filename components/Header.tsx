@@ -2,26 +2,67 @@ import HamburgerMenu from "./HamburgerMenu";
 import NavLinks from "./NavLinks";
 import LogoTitle from "./LogoTitle";
 import { useCart } from "@/context/CartContext";
+import { useTheme } from "@/lib/hooks/useTheme";
 import CartEmpty from "./general/icons/CartEmpty";
 import CartFilled from "./general/icons/CartFilled";
-
+import { storeThemes } from "@prisma/client";
+import {
+  pickTextColorBasedOnBgColorAdvanced,
+  getOppositeColor,
+} from "@/lib/helper/colors";
 
 const Header = ({ campaign, campaignHandle, collections }) => {
   const { toggleCart, cartCount } = useCart();
+  const {
+    global: { primaryColor },
+  } = useTheme() as { global: storeThemes };
+
+  const navTextIconColor = primaryColor
+    ? pickTextColorBasedOnBgColorAdvanced(primaryColor, "white", "black")
+    : "";
+
   return (
-    <div className="mt-16 lg:mt-0 lg:mb-4 w-full z-10">
-      <div className="header fixed lg:relative w-full top-0 left-0 grid grid-cols-[3rem_1fr_3rem] lg:grid-cols-3	items-center justify-between transition-all lg:px-16 py-2 px-4 lg:pt-0">
-        <HamburgerMenu className={"lg:hidden"}>
+    <div
+      className="z-10 mt-[5rem] w-full lg:mb-4 lg:mt-0"
+      style={
+        primaryColor && {
+          backgroundColor: primaryColor,
+        }
+      }
+    >
+      <div
+        className="header fixed left-0 top-0 grid w-full grid-cols-[3rem_1fr_3rem] items-center justify-between	px-4 py-2 transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:pt-0"
+        style={
+          primaryColor && {
+            backgroundColor: primaryColor,
+          }
+        }
+      >
+        <HamburgerMenu className={"lg:hidden"} color={navTextIconColor}>
           <NavLinks
-            {...{ campaign, campaignHandle, collections, color: "white" }}
+            {...{
+              campaign,
+              campaignHandle,
+              collections,
+              color: navTextIconColor,
+            }}
           />
         </HamburgerMenu>
-        <div className="flex flex-row items-center justify-start hidden lg:flex">
+        <div className="flex hidden flex-row items-center justify-start lg:flex">
           <NavLinks
-            {...{ campaign, campaignHandle, collections, color: "black" }}
+            {...{
+              campaign,
+              campaignHandle,
+              collections,
+              color: navTextIconColor,
+            }}
           />
         </div>
-        <LogoTitle {...{ campaign, campaignHandle }} className={'text-center'}/>
+        <LogoTitle
+          {...{ campaign, campaignHandle }}
+          className={"text-center"}
+          color={navTextIconColor}
+        />
         <div className="ml-auto">
           <button
             className="cursor-pointer border-none bg-transparent"
@@ -29,13 +70,19 @@ const Header = ({ campaign, campaignHandle, collections }) => {
           >
             {cartCount >= 1 ? (
               <div className="relative">
-                <CartFilled />
-                <div className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white">
+                <CartFilled color={navTextIconColor} />
+                <div
+                  className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white"
+                  style={{
+                    backgroundColor: navTextIconColor,
+                    color: getOppositeColor(navTextIconColor),
+                  }}
+                >
                   {cartCount}
                 </div>
               </div>
             ) : (
-              <CartEmpty />
+              <CartEmpty color={navTextIconColor} />
             )}
           </button>
         </div>
