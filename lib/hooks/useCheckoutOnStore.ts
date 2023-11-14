@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
 
-
 const getLineItemString = (cartItems) => {
   // get cart to be string in the form: [{"variant_id":39072856,"quantity":5}]
   if (cartItems.length === 0) return "";
@@ -22,10 +21,11 @@ export const useCheckoutOnStore = ({ store_id, cart_items }) => {
     checkout: any;
   }>(
     ["checkout", store_id, line_items],
-    () =>
-      fetch(`/api/checkout?store_id=${store_id}&line_items=${line_items}`).then(
-        (response) => response.json()
-      ),
+    async () => {
+      const params = new URLSearchParams({ store_id, line_items });
+      const response = await fetch(`/api/checkout?${params.toString()}`);
+      return await response.json();
+    },
     {
       enabled: !!store_id && !!line_items,
     }
