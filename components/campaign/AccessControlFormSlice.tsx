@@ -1,5 +1,5 @@
-import { useCampaignAccessControlForm } from "@/lib/hooks/useCampaignAccessControlForm";
-import { useToast } from "@/lib/hooks/useToast";
+import { useCampaignAccessControlForm } from "@/lib/hooks/app/useCampaignAccessControlForm";
+import { useToast } from "@/lib/hooks/app/useToast";
 import { campaigns } from "@prisma/client";
 import {
   Button,

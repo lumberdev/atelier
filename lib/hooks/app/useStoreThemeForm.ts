@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { StoreThemeInput } from "../types";
+import { StoreThemeInput } from "../../types";
 import { useStoreSettings } from "./useStoreSettings";
 
 const schema = yup
