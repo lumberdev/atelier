@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
 // Takes an array of collection_ids as an argument
-export const useCollectionsOnStore = ({ store_id, collection_ids }) => {
+export const useCollections = ({ store_id, collection_ids }) => {
   const { data = { collections: [] }, isLoading } = useQuery<{
     collections: any[];
   }>(

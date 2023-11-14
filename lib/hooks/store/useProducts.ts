@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
 // Takes an array of product_ids as an argument
-export const useProductsOnStore = ({ store_id, product_ids }) => {
+export const useProducts = ({ store_id, product_ids }) => {
   const { data = { products: [] }, isLoading } = useQuery<{
     products: any[];
   }>(

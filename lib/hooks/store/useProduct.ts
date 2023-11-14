@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-export const useProductOnStore = ({ store_id, product_id }) => {
+export const useProduct = ({ store_id, product_id }) => {
   const { data = { product: {} }, isLoading } = useQuery<{
     product: any;
   }>(

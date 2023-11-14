@@ -15,7 +15,7 @@ const getLineItemString = (cartItems) => {
   return lineItems;
 };
 
-export const useCheckoutOnStore = ({ store_id, cart_items }) => {
+export const useCheckout = ({ store_id, cart_items }) => {
   const line_items = getLineItemString(cart_items);
   const { data = { checkout: {} }, isLoading } = useQuery<{
     checkout: any;

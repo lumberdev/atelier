@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-export const useCampaignOnStore = ({ handle }) => {
+export const useCampaign = ({ handle }) => {
   const { data = { campaign: {} }, isLoading } = useQuery<{
     campaign: any;
   }>(["campaign", handle], async () => {
