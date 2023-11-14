@@ -6,7 +6,7 @@ export const useProductOnStore = ({ store_id, product_id }) => {
   }>(
     ["product", store_id, product_id],
     () =>
-      fetch(`/api/product?store_id=${store_id}&product_id=${product_id}`)
+      fetch(`/api/product?store_id=${store_id}&product_id=${product_id}/`)
         .then((response) => response.json())
         .then((data) => {
           return {
