@@ -6,10 +6,11 @@ export const useCollectionsOnStore = ({ store_id, collection_ids }) => {
     collections: any[];
   }>(
     ["collections", store_id, collection_ids],
-    () =>
-      fetch(
-        `/api/collections?store_id=${store_id}&collection_ids=${collection_ids}`
-      ).then((response) => response.json()),
+    async () => {
+      const params = new URLSearchParams({ store_id, collection_ids });
+      const response = await fetch(`/api/collections?${params.toString()}`);
+      return await response.json();
+    },
     {
       enabled: !!store_id && collection_ids.length > 0,
     }
