@@ -14,7 +14,7 @@ const getCollectionsQuery = (collectionIds) => gql`
     ${collectionIds
       .map(
         (id, index) => `
-      collection${index + 1}: node(id: "${id.replace(/gid:\/+/g, "gid://")}") {
+      collection${index + 1}: node(id: "${id}") {
         ... on Collection {          
           id
           title

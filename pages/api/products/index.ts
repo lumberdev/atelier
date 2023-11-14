@@ -14,7 +14,7 @@ const getProductsQuery = (productIds) => gql`
     ${productIds
       .map(
         (id, index) => `
-        product${index + 1}: node(id: "${id.replace(/gid:\/+/g, "gid://")}") {
+        product${index + 1}: node(id: "${id}") {
           ... on Product {
             id
             title
