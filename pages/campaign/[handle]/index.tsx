@@ -6,8 +6,8 @@ import { FC } from "react";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
-import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
-import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
+import { useProducts } from "@/lib/hooks/store/useProducts";
+import { useCollections } from "@/lib/hooks/store/useCollections";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
 
@@ -94,11 +94,11 @@ function getUniqueProductsFromCollections(products, collections) {
 const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   const router = useRouter();
   const { handle } = router.query;
-  const { collections, isLoading: collectionsLoading } = useCollectionsOnStore({
+  const { collections, isLoading: collectionsLoading } = useCollections({
     store_id: campaign.storeId,
     collection_ids: campaign?.collectionIds,
   });
-  const { products, isLoading: productsLoading } = useProductsOnStore({
+  const { products, isLoading: productsLoading } = useProducts({
     store_id: campaign.storeId,
     product_ids: campaign?.productIds,
   });

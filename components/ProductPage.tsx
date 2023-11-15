@@ -1,7 +1,7 @@
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
-import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
+import { useCheckout } from "@/lib/hooks/store/useCheckout";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
@@ -15,7 +15,7 @@ const ProductPage = ({ product, campaign }) => {
     );
     const cartItem = cartItems.find((item) => item.id === variant.id);
     const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);    
+    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
   };
 
   const formChange = (e) => {
@@ -43,7 +43,7 @@ const ProductPage = ({ product, campaign }) => {
     const variant = product.variants.find(
       (variant) => variant.id === variantId
     );
-    
+
     const onlyVariant = product.variants.length === 1;
     const item = {
       title: product.title,
@@ -62,7 +62,7 @@ const ProductPage = ({ product, campaign }) => {
     checkQuantityIsInLimit();
   }, [cartItems]);
 
-  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+  const { checkout, isLoading: checkoutLoading } = useCheckout({
     store_id: campaign.storeId,
     cart_items: cartItems,
   });
@@ -73,13 +73,17 @@ const ProductPage = ({ product, campaign }) => {
   };
 
   useEffect(() => {
-    const checkoutDisabled = checkoutLoading || cartItems.length === 0 || !checkout || Boolean(checkout.errors);
+    const checkoutDisabled =
+      checkoutLoading ||
+      cartItems.length === 0 ||
+      !checkout ||
+      Boolean(checkout.errors);
     setCheckoutButtonDisabled(checkoutDisabled);
   }, [checkoutLoading, cartItems, checkout]);
 
   return (
     <div className="container mx-auto p-6">
-      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0 xs:gap-16">
+      <div className="relative grid grid-cols-1 gap-0 xs:gap-16 md:grid-cols-2">
         <div className="">
           {product.images.map((image, index) => (
             <img

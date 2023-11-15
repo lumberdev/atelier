@@ -1,4 +1,4 @@
-import { useCampaignForm } from "@/lib/hooks/useCampaignForm";
+import { useCampaignForm } from "@/lib/hooks/app/useCampaignForm";
 import { CollectionResourceItem, ProductResourceItem } from "@/lib/types";
 import { campaigns } from "@prisma/client";
 import { ContextualSaveBar, ResourcePicker } from "@shopify/app-bridge-react";
