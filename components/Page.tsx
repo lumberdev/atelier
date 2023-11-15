@@ -8,7 +8,7 @@ const Page = ({ children }) => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center"
+      className="flex min-h-screen flex-col items-center justify-start"
       style={
         backgroundColor && {
           backgroundColor: backgroundColor,
