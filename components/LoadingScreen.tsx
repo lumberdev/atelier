@@ -1,9 +1,21 @@
 import Spinner from "./Spinner";
+import { useTheme } from "@/lib/hooks/useTheme";
+import { storeThemes } from "@prisma/client";
 
 const LoadingScreen = () => {
+  const {
+    global: { backgroundColor, secondaryColor },
+  } = useTheme() as { global: storeThemes };
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen ">
-      <Spinner />
+    <div
+      className="flex h-screen w-screen flex-col items-center justify-center"
+      style={
+        backgroundColor && {
+          backgroundColor: backgroundColor,
+        }
+      }
+    >
+      <Spinner color={secondaryColor} />
     </div>
   );
 };
