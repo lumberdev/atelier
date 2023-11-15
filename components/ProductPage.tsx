@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
-import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
 import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
-import { useTheme } from "@/lib/hooks/useTheme";
+import { useTheme } from "@/lib/hooks/store/useTheme";
 import PrimaryButton from "@/components/PrimaryButton";
 import SecondaryButton from "./SecondaryButton";
+import { useCheckout } from "@/lib/hooks/store/useCheckout";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
@@ -74,7 +74,7 @@ const ProductPage = ({ product, campaign }) => {
     checkQuantityIsInLimit();
   }, [cartItems]);
 
-  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+  const { checkout, isLoading: checkoutLoading } = useCheckout({
     store_id: campaign.storeId,
     cart_items: cartItems,
   });

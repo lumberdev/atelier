@@ -6,7 +6,7 @@ import { QueryClient, useMutation } from "react-query";
 import useFetch from "@/components/hooks/useFetch";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "./useStoreSettings";
-import { CampaignInput } from "../types";
+import { CampaignInput } from "../../types";
 import { useRouter } from "next/router";
 import { campaigns } from "@prisma/client";
 import { queryClient } from "@/utils/queryClient";

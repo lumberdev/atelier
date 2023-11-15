@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { AccessPageConfigInput } from "../types";
+import { AccessPageConfigInput } from "../../types";
 import { useEffect, useState } from "react";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "./useStoreSettings";

@@ -1,4 +1,4 @@
-import { useCampaigns } from "@/lib/hooks/useCampaigns";
+import { useCampaigns } from "@/lib/hooks/app/useCampaigns";
 import isShopAvailable from "@/utils/middleware/isShopAvailable";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
@@ -26,8 +26,8 @@ import { useRouter } from "next/router";
 import { AddMajor } from "@shopify/polaris-icons";
 import { campaigns } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
-import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
-import { useState, useEffect } from "react";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
+import { useState } from "react";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {

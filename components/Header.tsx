@@ -2,7 +2,7 @@ import HamburgerMenu from "./HamburgerMenu";
 import NavLinks from "./NavLinks";
 import LogoTitle from "./LogoTitle";
 import { useCart } from "@/context/CartContext";
-import { useTheme } from "@/lib/hooks/useTheme";
+import { useTheme } from "@/lib/hooks/store/useTheme";
 import CartEmpty from "./general/icons/CartEmpty";
 import CartFilled from "./general/icons/CartFilled";
 import { storeThemes } from "@prisma/client";

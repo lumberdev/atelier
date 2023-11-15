@@ -1,5 +1,5 @@
 import Spinner from "./Spinner";
-import { useTheme } from "@/lib/hooks/useTheme";
+import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 
 const LoadingScreen = () => {

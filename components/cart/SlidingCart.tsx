@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useCart } from "@/context/CartContext";
 import CloseIcon from "@/components/general/icons/CloseIcon";
-import { CartItemType } from "@/lib/types";
 import CartItems from "./CartItems";
-import { useCampaignOnStore } from "@/lib/hooks/useCampaignOnStore";
-import { useCheckoutOnStore } from "@/lib/hooks/useCheckoutOnStore";
+import { useCampaign } from "@/lib/hooks/store/useCampaign";
+import { useCheckout } from "@/lib/hooks/store/useCheckout";
 import { currencyFormatter } from "@/lib/helper/currency";
 
 const SlidingCart = () => {
@@ -15,11 +14,11 @@ const SlidingCart = () => {
   const { handle } = router.query;
   const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
 
-  const { isLoading: campaignLoading, campaign } = useCampaignOnStore({
+  const { isLoading: campaignLoading, campaign } = useCampaign({
     handle,
   });
 
-  const { checkout, isLoading: checkoutLoading } = useCheckoutOnStore({
+  const { checkout, isLoading: checkoutLoading } = useCheckout({
     store_id: campaign.storeId,
     cart_items: cartItems,
   });

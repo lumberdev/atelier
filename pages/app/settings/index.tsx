@@ -1,6 +1,6 @@
-import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
-import { useStoreThemeForm } from "@/lib/hooks/useStoreThemeForm";
-import { useToast } from "@/lib/hooks/useToast";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
+import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
+import { useToast } from "@/lib/hooks/app/useToast";
 import {
   Button,
   Card,
