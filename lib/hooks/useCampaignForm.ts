@@ -21,7 +21,6 @@ const schema = yup
     productIds: yup.array().of(yup.string()),
     variantIds: yup.array().of(yup.string()),
     image: yup.string().optional(),
-    password: yup.string().optional(),
     isActive: yup.boolean().default(false),
     cartTitle: yup.string().optional(),
     cartDescription: yup.string().optional(),
@@ -95,7 +94,6 @@ export const useCampaignForm = (
           collectionIds: campaign.collectionIds,
           productIds: campaign.productIds,
           variantIds: campaign.variantIds,
-          password: campaign.password,
         });
         setIsLoading(false);
         router.push(`/app/campaign/${campaign.id}`);

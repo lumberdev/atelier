@@ -6,7 +6,6 @@ export interface CampaignInput {
   collectionIds: string[];
   productIds: string[];
   variantIds: string[];
-  password?: string;
   image?: string;
   isActive: boolean;
   cartTitle?: string;
@@ -55,4 +54,17 @@ export interface CartItemType {
   price: string;
   description: string;
   imageUrl: string;
+}
+export interface AccessPageConfigInput {
+  id?: string;
+  campaignId: string;
+  layout: string;
+  headline: string;
+  body?: string;
+  password?: string;
+  passwordPlaceholder?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  backgroundColor?: string;
+  backgroundImage?: string;
 }

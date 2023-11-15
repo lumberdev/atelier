@@ -50,6 +50,7 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
           campaign={data.campaign}
           collections={data.collections}
           products={data.products}
+          isCreating={false}
         />
       )}
     </Page>
