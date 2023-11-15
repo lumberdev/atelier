@@ -23,7 +23,6 @@ const ProductCampaignPage = () => {
     store_id: campaign.storeId,
     collection_ids: campaign?.collectionIds,
   });
-  return <LoadingScreen />;
 
   if (campaignLoading || productLoading) return <LoadingScreen />;
 
