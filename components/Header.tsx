@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import NavLinks from "./NavLinks";
 import LogoTitle from "./LogoTitle";
@@ -12,6 +13,7 @@ import {
 } from "@/lib/helper/colors";
 
 const Header = ({ campaign, campaignHandle, collections }) => {
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
   const { toggleCart, cartCount } = useCart();
   const {
     global: { primaryColor },
@@ -20,6 +22,18 @@ const Header = ({ campaign, campaignHandle, collections }) => {
   const navTextIconColor = primaryColor
     ? pickTextColorBasedOnBgColorAdvanced(primaryColor, "white", "black")
     : "";
+
+  const navExpandBtnClick = () => {
+    setIsNavExpanded((prev) => !prev);
+  };
+
+  const collapsedNavStyle = {
+    flexWrap: "nowrap",
+  } as React.CSSProperties;
+
+  const expandedNavStyle = {
+    flexWrap: "wrap",
+  } as React.CSSProperties;
 
   return (
     <div
@@ -48,15 +62,53 @@ const Header = ({ campaign, campaignHandle, collections }) => {
             }}
           />
         </HamburgerMenu>
-        <div className="flex hidden flex-row items-center justify-start lg:flex">
-          <NavLinks
-            {...{
-              campaign,
-              campaignHandle,
-              collections,
-              color: navTextIconColor,
-            }}
-          />
+        <div className="flex hidden flex-row items-center justify-start overflow-hidden lg:flex">
+          <div
+            id="desktop-nav"
+            className="mr-4 flex overflow-hidden"
+            style={isNavExpanded ? expandedNavStyle : collapsedNavStyle}
+          >
+            <NavLinks
+              {...{
+                campaign,
+                campaignHandle,
+                collections,
+                color: navTextIconColor,
+              }}
+            />
+          </div>
+          <button onClick={navExpandBtnClick} className="text-white">
+            <svg
+              version="1.0"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 100.000000 100.000000"
+              preserveAspectRatio="xMidYMid meet"
+              className="duration-200"
+              style={isNavExpanded ? { transform: "rotate(180deg)" } : {}}
+            >
+              <metadata>
+                Created by potrace 1.16, written by Peter Selinger 2001-2019
+              </metadata>
+              <g
+                transform="translate(0.000000,100.000000) scale(0.100000,-0.100000)"
+                fill="#fff"
+                stroke="none"
+              >
+                <path
+                  d="M72 848 c-7 -7 -12 -19 -12 -28 0 -8 99 -114 220 -235 l220 -220 220
+220 c121 121 220 227 220 235 0 20 -20 40 -39 40 -9 0 -102 -87 -208 -192
+l-193 -193 -193 193 c-106 105 -199 192 -208 192 -8 0 -20 -5 -27 -12z"
+                />
+                <path
+                  d="M72 588 c-7 -7 -12 -19 -12 -28 0 -8 99 -114 220 -235 l220 -220 220
+220 c121 121 220 227 220 235 0 20 -20 40 -39 40 -9 0 -102 -87 -208 -192
+l-193 -193 -193 193 c-106 105 -199 192 -208 192 -8 0 -20 -5 -27 -12z"
+                />
+              </g>
+            </svg>
+          </button>
         </div>
         <LogoTitle
           {...{ campaign, campaignHandle }}
