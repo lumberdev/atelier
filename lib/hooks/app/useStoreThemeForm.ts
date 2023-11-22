@@ -12,6 +12,7 @@ import { useStoreSettings } from "./useStoreSettings";
 
 const schema = yup
   .object({
+    id: yup.string().optional(),
     logo: yup.string().optional(),
     primaryColor: yup.string().optional(),
     secondaryColor: yup.string().optional(),
@@ -73,9 +74,10 @@ export const useStoreThemeForm = ({
     queryFn: () =>
       fetch("/api/apps/store-themes").then((response) => response.json()),
     onSuccess: (response) => {
-      if (!response.theme?.id) return;
+      if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;
 
+      form.setValue("id", theme.id);
       if (theme.primaryColor) form.setValue("primaryColor", theme.primaryColor);
       if (theme.secondaryColor)
         form.setValue("secondaryColor", theme.secondaryColor);
