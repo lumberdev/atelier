@@ -16,7 +16,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const { toggleCart, cartCount } = useCart();
   const {
-    global: { primaryColor },
+    global: { primaryColor, logoPosition },
   } = useTheme() as { global: storeThemes };
 
   const navTextIconColor = primaryColor
@@ -62,7 +62,18 @@ const Header = ({ campaign, campaignHandle, collections }) => {
             }}
           />
         </HamburgerMenu>
-        <div className="flex hidden flex-row items-center justify-start overflow-hidden lg:flex">
+        {logoPosition === "left" && (
+          <LogoTitle
+            {...{ campaign, campaignHandle }}
+            className={"justify-start text-center"}
+            color={navTextIconColor}
+          />
+        )}
+        <div
+          className={`hidden flex-row items-center justify-start overflow-hidden lg:flex ${
+            logoPosition == "left" ? "justify-center" : ""
+          }`}
+        >
           <div
             id="desktop-nav"
             className="mr-4 flex overflow-hidden"
@@ -110,11 +121,13 @@ l-193 -193 -193 193 c-106 105 -199 192 -208 192 -8 0 -20 -5 -27 -12z"
             </svg>
           </button>
         </div>
-        <LogoTitle
-          {...{ campaign, campaignHandle }}
-          className={"text-center"}
-          color={navTextIconColor}
-        />
+        {logoPosition === "center" && (
+          <LogoTitle
+            {...{ campaign, campaignHandle }}
+            className={"justify-center text-center"}
+            color={navTextIconColor}
+          />
+        )}
         <div className="ml-auto">
           <button
             className="cursor-pointer border-none bg-transparent"

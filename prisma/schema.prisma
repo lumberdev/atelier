@@ -59,6 +59,7 @@ model storeThemes {
   secondaryColor  String?
   backgroundColor String?
   borderRadius    Int?     @default(0)
+  logoPosition    String?  @default("left")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

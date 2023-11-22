@@ -26,7 +26,7 @@ const LogoTitle = ({
   return (
     <Link
       href={`/campaign/${campaignHandle}`}
-      className={`flex items-center justify-center no-underline ${className}`}
+      className={`flex items-center no-underline ${className}`}
     >
       {imageUrl !== "" ? (
         <Image

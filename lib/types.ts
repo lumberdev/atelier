@@ -45,6 +45,7 @@ export interface StoreThemeInput {
   secondaryColor?: string;
   backgroundColor?: string;
   borderRadius?: number;
+  logoPosition?: string;
 }
 
 export interface CartItemType {
