@@ -21,7 +21,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
 
   const navTextIconColor = primaryColor
     ? pickTextColorBasedOnBgColorAdvanced(primaryColor, "white", "black")
-    : "";
+    : "black";
 
   const navExpandBtnClick = () => {
     setIsNavExpanded((prev) => !prev);
