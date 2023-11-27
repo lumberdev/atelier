@@ -35,6 +35,37 @@ const Header = ({ campaign, campaignHandle, collections }) => {
     flexWrap: "wrap",
   } as React.CSSProperties;
 
+  const checkIfNavHorizontalOverflow = () => {
+    const desktopNav = document.getElementById("desktop-nav");
+    const expandButton = document.querySelector(".expand-button");
+    return (
+      desktopNav.scrollWidth <=
+      desktopNav.clientWidth + expandButton.clientWidth
+    );
+  };
+
+  const changeExpandButtonVisibility = () => {
+    const desktopNav = document.getElementById("desktop-nav");
+    if (desktopNav.classList.contains("expanded")) return;
+    const expandButton = document.querySelector(".expand-button");
+    const navOverflowing = checkIfNavHorizontalOverflow();
+    if (navOverflowing) {
+      expandButton.classList.add("hidden");
+      setIsNavExpanded(false);
+    } else {
+      expandButton.classList.remove("hidden");
+    }
+  };
+
+  // if desktop-nav is small enough to put on 1 line when expanded, then hide the expand button. recheck on resize
+  useEffect(() => {
+    changeExpandButtonVisibility();
+    window.addEventListener("resize", changeExpandButtonVisibility);
+    return () => {
+      window.removeEventListener("resize", changeExpandButtonVisibility);
+    };
+  }, []);
+
   return (
     <div
       className="z-10 mt-[5rem] w-full lg:mb-4 lg:mt-0"
@@ -76,7 +107,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
         >
           <div
             id="desktop-nav"
-            className="mr-4 flex overflow-hidden"
+            className="flex overflow-hidden"
             style={isNavExpanded ? expandedNavStyle : collapsedNavStyle}
           >
             <NavLinks
@@ -88,7 +119,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
               }}
             />
           </div>
-          <button onClick={navExpandBtnClick} className="text-white">
+          <button className="expand-button ml-4" onClick={navExpandBtnClick}>
             <svg
               version="1.0"
               xmlns="http://www.w3.org/2000/svg"
@@ -99,12 +130,9 @@ const Header = ({ campaign, campaignHandle, collections }) => {
               className="duration-200"
               style={isNavExpanded ? { transform: "rotate(180deg)" } : {}}
             >
-              <metadata>
-                Created by potrace 1.16, written by Peter Selinger 2001-2019
-              </metadata>
               <g
                 transform="translate(0.000000,100.000000) scale(0.100000,-0.100000)"
-                fill="#fff"
+                fill={navTextIconColor}
                 stroke="none"
               >
                 <path
