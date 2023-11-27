@@ -33,9 +33,11 @@ export default function App({ Component, pageProps }) {
           />
 
           <QueryClientProvider client={queryClient}>
-            <Frame>
-              <Component {...pageProps} />
-            </Frame>
+            <BillingProvider>
+              <Frame>
+                <Component {...pageProps} />
+              </Frame>
+            </BillingProvider>
           </QueryClientProvider>
         </AppBridgeProvider>
       </PolarisProvider>

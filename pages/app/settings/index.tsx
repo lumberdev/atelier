@@ -1,3 +1,4 @@
+import { useBilling } from "@/context/BillingProvider";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
 import { useToast } from "@/lib/hooks/app/useToast";
@@ -11,10 +12,12 @@ import {
   HorizontalGrid,
   HorizontalStack,
   Layout,
+  Modal,
   Page,
   Text,
   TextField,
   Toast,
+  VerticalStack,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -26,6 +29,7 @@ const SettingsPage = () => {
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
   const router = useRouter();
+  const { subscription, cancel } = useBilling();
 
   const {
     logoUrl,
@@ -240,6 +244,32 @@ const SettingsPage = () => {
                 </HorizontalGrid>
               </FormLayout>
             </Form>
+          </Card>
+        </Layout.AnnotatedSection>
+
+        <Layout.AnnotatedSection
+          id="storeSettings"
+          title="Subscription"
+          description="Details about your subscription plan"
+        >
+          <Card>
+            <VerticalStack gap="4">
+              <Text as="p" variant="bodyLg">
+                You are currently subscribed to: <b>{subscription?.name}</b>
+              </Text>
+
+              <Text as="p">
+                Your next billing cycle is on {subscription?.currentPeriodEnd}.
+                You will be charged <b>${subscription?.price}</b>
+              </Text>
+
+              <HorizontalStack align="end" gap="4">
+                <Button destructive onClick={cancel}>
+                  Cancel
+                </Button>
+                {/* <Button>Upgrade</Button> */}
+              </HorizontalStack>
+            </VerticalStack>
           </Card>
         </Layout.AnnotatedSection>
       </Layout>

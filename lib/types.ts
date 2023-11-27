@@ -70,3 +70,44 @@ export interface AccessPageConfigInput {
   backgroundColor?: string;
   backgroundImage?: string;
 }
+
+export interface ShopifyRecurringAppSubscription {
+  id: string;
+  name: string;
+  test: boolean;
+  status:
+    | "ACTIVE"
+    | "CANCELLED"
+    | "DECLINED"
+    | "EXPIRED"
+    | "FROZEN"
+    | "PENDING"
+    | "ACCEPTED";
+  currentPeriodEnd?: string | null;
+  lineItems: {
+    plan: {
+      pricingDetails: {
+        interval: "ANNUAL" | "EVERY_30_DAYS";
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
+      };
+    };
+  }[];
+}
+
+export type CurrentSubscription = {
+  name: string;
+  status:
+    | "ACTIVE"
+    | "CANCELLED"
+    | "DECLINED"
+    | "EXPIRED"
+    | "FROZEN"
+    | "PENDING"
+    | "ACCEPTED";
+  currentPeriodEnd: string | null;
+  price: string;
+  currency: string;
+};
