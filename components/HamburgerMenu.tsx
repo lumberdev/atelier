@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useTheme } from "@/lib/hooks/store/useTheme";
+import { storeThemes } from "@prisma/client";
 
 const HamburgerMenu = ({ children, className = "", color = "black" }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const {
+    global: { primaryColor },
+  } = useTheme() as { global: storeThemes };
 
   useEffect(() => {
     const closeMenu = (e) => {
@@ -42,20 +47,6 @@ const HamburgerMenu = ({ children, className = "", color = "black" }) => {
     setIsOpen(false);
   }, [router]);
 
-  // On scroll away from the top, add a background to the header
-  useEffect(() => {
-    const header = document.querySelector<HTMLElement>(".header");
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        // header.classList.add("bg-gray-300/80");
-      } else {
-        // header.classList.remove("bg-gray-300/80");
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className={`relative ${className}`}>
       <button
@@ -78,17 +69,31 @@ const HamburgerMenu = ({ children, className = "", color = "black" }) => {
           />
         </svg>
       </button>
-
       <div
         className="hamburger-menu fixed left-[-100%] top-0 z-50 h-full w-full transition-all"
-        onClick={toggleMenu}
+        style={{ backgroundColor: primaryColor }}
       >
-        <div
-          className="absolute left-0 top-0 h-full w-3/5 -translate-x-full transform bg-gray-900/80 transition-transform duration-300 ease-in-out"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="mt-8 flex flex-col text-white">{children}</div>
+        <div className="flex items-center justify-between px-6 pt-[1.5rem]">
+          <h2 className="text-2xl font-semibold "></h2>{" "}
+          <button className="text-inherit" onClick={() => setIsOpen(false)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="none"
+              className="cursor-pointer"
+            >
+              <path
+                stroke={color}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 1 1 13M1 1l12 12"
+              ></path>
+            </svg>
+          </button>
         </div>
+        <div className="m-8 flex flex-col ">{children}</div>
       </div>
     </div>
   );
