@@ -7,6 +7,7 @@ import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
 import SlidingCart from "@/components/cart/SlidingCart";
+import BillingProvider from "@/context/BillingProvider";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
