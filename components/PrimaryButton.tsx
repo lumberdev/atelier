@@ -4,7 +4,7 @@ import { useTheme } from "@/lib/hooks/store/useTheme";
 
 const PrimaryButton = ({ children, ...props }) => {
   const {
-    global: { primaryColor },
+    global: { primaryColor, borderRadius },
   } = useTheme() as { global: storeThemes };
 
   const buttonTextColor = primaryColor
@@ -15,12 +15,11 @@ const PrimaryButton = ({ children, ...props }) => {
     <button
       type="button"
       className="mt-4 cursor-pointer rounded px-4 py-2 uppercase disabled:opacity-50"
-      style={
-        primaryColor && {
-          backgroundColor: primaryColor,
-          color: buttonTextColor,
-        }
-      }
+      style={{
+        backgroundColor: primaryColor,
+        color: buttonTextColor,
+        borderRadius: borderRadius,
+      }}
       {...props}
     >
       {children}
