@@ -30,11 +30,11 @@ const LogoTitle = ({
     >
       {imageUrl !== "" ? (
         <Image
-          width={64}
-          height={64}
+          width={100}
+          height={100}
           src={imageUrl}
           alt={campaign?.title}
-          className="mx-auto h-[3rem] w-auto lg:mx-0"
+          className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
         />
       ) : (
         <h1

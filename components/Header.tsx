@@ -161,13 +161,13 @@ l-193 -193 -193 193 c-106 105 -199 192 -208 192 -8 0 -20 -5 -27 -12z"
             color={navTextIconColor}
           />
         )}
-        <div className="ml-auto">
+        <div className="ml-auto h-[40px]">
           <button
             className="cursor-pointer border-none bg-transparent"
             onClick={toggleCart}
           >
             {cartCount >= 1 ? (
-              <div className="relative h-[40px]">
+              <div className="relative">
                 <CartFilled color={navTextIconColor} />
                 <div
                   className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white"
