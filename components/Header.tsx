@@ -101,7 +101,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
         {logoPosition === "left" && (
           <LogoTitle
             {...{ campaign, campaignHandle }}
-            className={"justify-center text-center"}
+            className={"justify-center text-center lg:justify-start"}
             color={navTextIconColor}
           />
         )}
