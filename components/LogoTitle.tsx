@@ -38,7 +38,7 @@ const LogoTitle = ({
         />
       ) : (
         <h1
-          className="mx-1 py-0 text-xl text-black lg:py-8 lg:text-3xl"
+          className="mx-1 py-0 text-xl text-black lg:py-4 lg:text-3xl"
           style={{ color: color }}
         >
           {campaign?.title}

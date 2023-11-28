@@ -70,7 +70,7 @@ const HamburgerMenu = ({ children, className = "", color = "black" }) => {
         </svg>
       </button>
       <div
-        className="hamburger-menu fixed left-[-100%] top-0 z-50 h-full w-full transition-all"
+        className="hamburger-menu fixed left-[-100%] top-0 z-50 h-full w-full bg-white transition-all"
         style={{ backgroundColor: primaryColor }}
       >
         <div className="flex items-center justify-between px-6 pt-[1.5rem]">

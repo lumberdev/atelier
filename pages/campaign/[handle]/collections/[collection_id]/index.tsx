@@ -8,6 +8,7 @@ import Page from "@/components/Page";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 const CollectionCampaignPage = () => {
   const router = useRouter();
@@ -37,6 +38,10 @@ const CollectionCampaignPage = () => {
 
   return (
     <Page>
+      <AnnouncementBar
+        announcement={campaign?.announcement}
+        className="hidden lg:block"
+      />
       <Header {...{ campaign, campaignHandle: handle, collections }} />
       <h1
         className="mx-1 mx-4 mr-auto mt-4 text-xl text-black xs:mx-16 xs:my-8 xs:mr-auto xs:text-3xl "

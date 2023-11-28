@@ -3,6 +3,7 @@ export interface CampaignInput {
   title: string;
   handle: string;
   description?: string;
+  announcement?: string;
   collectionIds: string[];
   productIds: string[];
   variantIds: string[];

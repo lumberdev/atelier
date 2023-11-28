@@ -34,6 +34,7 @@ model campaigns {
   title                   String
   handle                  String
   description             String            @db.Text
+  announcement            String
   collectionIds           String[]
   productIds              String[]
   variantIds              String[]

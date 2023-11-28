@@ -11,6 +11,7 @@ import {
   pickTextColorBasedOnBgColorAdvanced,
   getOppositeColor,
 } from "@/lib/helper/colors";
+import AnnouncementBar from "./AnnouncementBar";
 
 const Header = ({ campaign, campaignHandle, collections }) => {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
@@ -76,13 +77,17 @@ const Header = ({ campaign, campaignHandle, collections }) => {
       }
     >
       <div
-        className="header fixed left-0 top-0 grid w-full grid-cols-[3rem_1fr_3rem] items-center justify-between	px-4 py-2 transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4"
+        className="header fixed left-0 top-0 grid w-full grid-cols-[3rem_1fr_3rem] items-center justify-between	bg-white p-0 transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4"
         style={
           primaryColor && {
             backgroundColor: primaryColor,
           }
         }
       >
+        <AnnouncementBar
+          announcement={campaign?.announcement}
+          className="col-span-3 lg:hidden"
+        />
         <HamburgerMenu className={"lg:hidden"} color={navTextIconColor}>
           <NavLinks
             {...{
@@ -96,7 +101,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
         {logoPosition === "left" && (
           <LogoTitle
             {...{ campaign, campaignHandle }}
-            className={"justify-start text-center"}
+            className={"justify-center text-center"}
             color={navTextIconColor}
           />
         )}
@@ -162,7 +167,7 @@ l-193 -193 -193 193 c-106 105 -199 192 -208 192 -8 0 -20 -5 -27 -12z"
             onClick={toggleCart}
           >
             {cartCount >= 1 ? (
-              <div className="relative">
+              <div className="relative h-[40px]">
                 <CartFilled color={navTextIconColor} />
                 <div
                   className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white"
