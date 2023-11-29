@@ -98,7 +98,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
             }}
           />
         </HamburgerMenu>
-        {logoPosition === "left" && (
+        {logoPosition !== "center" && (
           <LogoTitle
             {...{ campaign, campaignHandle }}
             className={"justify-center text-center lg:justify-start"}
@@ -107,7 +107,7 @@ const Header = ({ campaign, campaignHandle, collections }) => {
         )}
         <div
           className={`hidden flex-row items-center justify-start overflow-hidden lg:flex ${
-            logoPosition == "left" ? "justify-center" : ""
+            logoPosition !== "center" ? "justify-center" : ""
           }`}
         >
           <div
