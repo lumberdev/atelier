@@ -15,6 +15,7 @@ const AnnouncementBar = ({ announcement, className = "" }) => {
     ? pickTextColorBasedOnBgColorAdvanced(secondaryColor, "white", "black")
     : "";
 
+  if (!announcement) return null;
   return (
     <h3
       id="announcement-bar"
