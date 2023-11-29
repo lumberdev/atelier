@@ -62,12 +62,12 @@ const AppHomePage = () => {
       </Page>
     );
 
-  return (
-    <Page title="Campaigns">
-      <Layout>
-        <Layout.Section fullWidth>
-          <VerticalStack gap="4">
-            {!identifier && (
+  if (!identifier) {
+    return (
+      <Page title="Campaigns">
+        <Layout>
+          <Layout.Section fullWidth>
+            <VerticalStack gap="4">
               <CalloutCard
                 title="Get your domain"
                 primaryAction={{
@@ -83,8 +83,18 @@ const AppHomePage = () => {
                   identify you.
                 </p>
               </CalloutCard>
-            )}
+            </VerticalStack>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    );
+  }
 
+  return (
+    <Page title="Campaigns">
+      <Layout>
+        <Layout.Section fullWidth>
+          <VerticalStack gap="4">
             <Card padding="0">
               <ResourceList
                 emptyState={
