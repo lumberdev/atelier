@@ -3,6 +3,7 @@ export interface CampaignInput {
   title: string;
   handle: string;
   description?: string;
+  announcement?: string;
   collectionIds: string[];
   productIds: string[];
   variantIds: string[];
@@ -45,6 +46,7 @@ export interface StoreThemeInput {
   secondaryColor?: string;
   backgroundColor?: string;
   borderRadius?: number;
+  logoPosition?: string;
 }
 
 export interface CartItemType {

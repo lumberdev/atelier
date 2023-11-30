@@ -8,6 +8,7 @@ CREATE TABLE "campaigns" (
     "title" TEXT NOT NULL,
     "handle" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "announcement" TEXT NOT NULL,
     "listType" "ProductListingType" NOT NULL,
     "resourceIds" TEXT[],
     "variantIds" TEXT[],

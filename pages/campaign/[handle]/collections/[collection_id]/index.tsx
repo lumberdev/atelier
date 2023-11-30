@@ -5,10 +5,21 @@ import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import { useTheme } from "@/lib/hooks/store/useTheme";
+import { storeThemes } from "@prisma/client";
+import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 const CollectionCampaignPage = () => {
   const router = useRouter();
   const { handle, collection_id } = router.query;
+
+  const {
+    global: { backgroundColor },
+  } = useTheme() as { global: storeThemes };
+  const collectionTextColor = backgroundColor
+    ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
+    : "";
 
   const { isLoading: campaignLoading, campaign } = useCampaign({
     handle,
@@ -27,8 +38,15 @@ const CollectionCampaignPage = () => {
 
   return (
     <Page>
+      <AnnouncementBar
+        announcement={campaign?.announcement}
+        className="hidden lg:block"
+      />
       <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <h1 className="mx-1 mx-4 mr-auto mt-4 text-xl text-black xs:mx-16 xs:my-8 xs:mr-auto xs:text-3xl ">
+      <h1
+        className="mx-1 mx-4 mr-auto mt-4 text-xl text-black xs:mx-16 xs:my-8 xs:mr-auto xs:text-3xl "
+        style={{ color: collectionTextColor }}
+      >
         {selectedCollection?.title}
       </h1>
       <ProductGrid {...{ products: collectionProducts, handle }} />

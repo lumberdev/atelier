@@ -18,6 +18,7 @@ const schema = yup
     secondaryColor: yup.string().optional(),
     backgroundColor: yup.string().optional(),
     borderRadius: yup.string().optional(),
+    logoPosition: yup.string().optional(),
   })
   .required();
 
@@ -76,6 +77,7 @@ export const useStoreThemeForm = ({
     onSuccess: (response) => {
       if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;
+      console.log(theme.logoPosition);
 
       form.setValue("id", theme.id);
       if (theme.primaryColor) form.setValue("primaryColor", theme.primaryColor);
@@ -85,6 +87,7 @@ export const useStoreThemeForm = ({
         form.setValue("backgroundColor", theme.backgroundColor);
       if (theme.borderRadius !== null)
         form.setValue("borderRadius", theme.borderRadius + "");
+      if (theme.logoPosition) form.setValue("logoPosition", theme.logoPosition);
 
       if (theme.logo) {
         const url = supabaseStorage.getPublicUrl(theme.logo);

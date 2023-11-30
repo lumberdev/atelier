@@ -3,6 +3,7 @@ import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
@@ -110,6 +111,10 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
 
   return (
     <Page>
+      <AnnouncementBar
+        announcement={campaign?.announcement}
+        className="hidden lg:block"
+      />
       <Header {...{ campaign, campaignHandle: handle, collections }} />
       <ProductGrid {...{ products: homepageProducts, handle }} />
     </Page>

@@ -4,6 +4,7 @@ import { useToast } from "@/lib/hooks/app/useToast";
 import {
   Button,
   Card,
+  ChoiceList,
   DropZone,
   Form,
   FormLayout,
@@ -206,6 +207,27 @@ const SettingsPage = () => {
                         label="Border Radius"
                         autoComplete="false"
                         {...field}
+                      />
+                    )}
+                  />
+                </HorizontalGrid>
+
+                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                  {" "}
+                  <Controller
+                    control={control}
+                    name="logoPosition"
+                    render={({ field: { onChange, value } }) => (
+                      <ChoiceList
+                        title="Logo Position"
+                        choices={[
+                          { label: "Left", value: "left" },
+                          { label: "Center", value: "center" },
+                        ]}
+                        selected={[value]}
+                        onChange={([newValue]) => {
+                          onChange(newValue);
+                        }}
                       />
                     )}
                   />

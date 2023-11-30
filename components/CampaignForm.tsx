@@ -169,6 +169,7 @@ const CampaignForm: FC<{
         title: campaign.title,
         handle: campaign.handle,
         description: campaign.description,
+        announcement: campaign.announcement,
         cartTitle: campaign.cartTitle,
         cartBackgroundColor: campaign.cartBackgroundColor,
         cartTextColor: campaign.cartTextColor,
@@ -249,6 +250,29 @@ const CampaignForm: FC<{
                     )}
                   />
                 </FormLayout>
+              </Card>
+
+              <Card roundedAbove="sm">
+                <VerticalStack gap="4">
+                  <HorizontalStack>
+                    <Text variant="headingSm" as="h3">
+                      Store Details
+                    </Text>
+                  </HorizontalStack>
+
+                  <Controller
+                    control={control}
+                    name="announcement"
+                    render={({ field }) => (
+                      <TextField
+                        label="Announcement Bar"
+                        autoComplete="off"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    )}
+                  />
+                </VerticalStack>
               </Card>
 
               <Card roundedAbove="sm">

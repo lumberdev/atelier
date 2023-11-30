@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { useCart } from "@/context/CartContext";
+import { storeThemes } from "@prisma/client";
+import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import { useTheme } from "@/lib/hooks/store/useTheme";
+import PrimaryButton from "@/components/PrimaryButton";
+import SecondaryButton from "./SecondaryButton";
 import { useCheckout } from "@/lib/hooks/store/useCheckout";
 
 const ProductPage = ({ product, campaign }) => {
   const { addItem, cartItems } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
   const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
+
+  const {
+    global: { backgroundColor },
+  } = useTheme() as { global: storeThemes };
+  const productTextColor = backgroundColor
+    ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
+    : "";
 
   const checkQuantityIsInLimit = () => {
     const form = document.getElementById("productForm");
@@ -95,9 +107,16 @@ const ProductPage = ({ product, campaign }) => {
           ))}
         </div>
         <div className="sticky top-20 h-fit">
-          <h1 className="mb-4 text-2xl font-semibold">{product.title}</h1>
-          <p className="text-l mb-4">{product.description}</p>
-          <p className="mb-2 text-lg">
+          <h1
+            className="mb-4 text-2xl font-semibold"
+            style={{ color: productTextColor }}
+          >
+            {product.title}
+          </h1>
+          <p className="text-l mb-4" style={{ color: productTextColor }}>
+            {product.description}
+          </p>
+          <p className="mb-2 text-lg" style={{ color: productTextColor }}>
             <span className="mr-1 line-through">
               {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
             </span>
@@ -137,22 +156,19 @@ const ProductPage = ({ product, campaign }) => {
                 </React.Fragment>
               ) : null
             )}
-            <button
+            <PrimaryButton
               type="submit"
-              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
               onClick={onSubmit}
               disabled={!addToCartBtnEnabled}
             >
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
-            </button>
-            <button
-              type="button"
+            </PrimaryButton>
+            <SecondaryButton
               onClick={checkoutButtonClick}
               disabled={checkoutButtonDisabled}
-              className="mt-4 cursor-pointer rounded bg-[#555555] px-4 py-2 uppercase text-white disabled:opacity-50"
             >
               {checkoutLoading ? "Loading..." : "Checkout"}
-            </button>
+            </SecondaryButton>
           </form>
         </div>
       </div>
