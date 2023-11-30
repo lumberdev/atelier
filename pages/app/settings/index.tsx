@@ -17,11 +17,14 @@ import {
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 const SettingsPage = () => {
   const { toasts, triggerToast, dismissToast } = useToast();
+  const [firstTimeSetup, setFirstTimeSetup] = useState(false);
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
+  const router = useRouter();
 
   const {
     logoUrl,
@@ -47,6 +50,7 @@ const SettingsPage = () => {
         onSuccess: (response) => {
           if (response.error) return;
           triggerToast("Domain updated");
+          if (firstTimeSetup) setTimeout(() => router.push("/app"), 1500);
         },
       }
     );
@@ -54,9 +58,14 @@ const SettingsPage = () => {
 
   useEffect(() => {
     if (!settings.domain) return;
-
     setValue("domain", settings.domain);
   }, [settings]);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const initial = url.searchParams.get("initial");
+    if (initial) setFirstTimeSetup(true);
+  }, []);
 
   return (
     <Page title="Settings">

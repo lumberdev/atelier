@@ -62,18 +62,18 @@ const AppHomePage = () => {
       </Page>
     );
 
-  return (
-    <Page title="Campaigns">
-      <Layout>
-        <Layout.Section fullWidth>
-          <VerticalStack gap="4">
-            {!identifier && (
+  if (!identifier) {
+    return (
+      <Page title="Campaigns">
+        <Layout>
+          <Layout.Section fullWidth>
+            <VerticalStack gap="4">
               <CalloutCard
                 title="Get your domain"
                 primaryAction={{
                   content: "Configure domain",
                   onAction: () => {
-                    router.push("/app/settings");
+                    router.push("/app/settings?initial=true");
                   },
                 }}
                 illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
@@ -83,8 +83,18 @@ const AppHomePage = () => {
                   identify you.
                 </p>
               </CalloutCard>
-            )}
+            </VerticalStack>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    );
+  }
 
+  return (
+    <Page title="Campaigns">
+      <Layout>
+        <Layout.Section fullWidth>
+          <VerticalStack gap="4">
             <Card padding="0">
               <ResourceList
                 emptyState={
@@ -194,6 +204,19 @@ const AppHomePage = () => {
                           https://{subdomain}.atelier.sale/campaign/
                           {campaign.handle}
                         </Text>
+                        <div className="flex w-full justify-end">
+                          <a
+                            href={`${
+                              process.env.NODE_ENV === "production"
+                                ? `https://${subdomain}.atelier.sale`
+                                : `http://${subdomain}.localhost:3000`
+                            }/campaign/${campaign.handle}`}
+                            target="_blank"
+                            className="text-gray-00  rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-[#444] no-underline hover:bg-gray-400"
+                          >
+                            {campaign.isActive ? "View" : "Preview"}
+                          </a>
+                        </div>
                       </div>
                     </ResourceItem>
                   );
