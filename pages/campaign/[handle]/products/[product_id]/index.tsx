@@ -28,7 +28,7 @@ const ProductCampaignPage = () => {
   if (campaignLoading || productLoading) return <LoadingScreen />;
 
   return (
-    <Page>
+    <Page {...{ campaign }}>
       <AnnouncementBar
         announcement={campaign?.announcement}
         className="hidden lg:block"
