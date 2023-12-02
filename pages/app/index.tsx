@@ -86,6 +86,7 @@ const AppHomePage = () => {
             </VerticalStack>
           </Layout.Section>
         </Layout>
+        <div className="h-16" />
       </Page>
     );
   }
@@ -226,6 +227,7 @@ const AppHomePage = () => {
           </VerticalStack>
         </Layout.Section>
       </Layout>
+      <div className="h-16" />
     </Page>
   );
 };

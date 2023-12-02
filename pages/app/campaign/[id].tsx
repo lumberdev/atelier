@@ -53,6 +53,7 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
           isCreating={false}
         />
       )}
+      <div className="h-16" />
     </Page>
   );
 };
