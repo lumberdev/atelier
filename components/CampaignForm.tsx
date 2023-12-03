@@ -190,6 +190,12 @@ const CampaignForm: FC<{
   const { settings } = useStoreSettings();
   const subdomain = settings.domain;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const activeElement = document.activeElement as HTMLElement;
+    activeElement && activeElement.blur();
+  }, []);
+
   return (
     <Frame>
       <ContextualSaveBar
