@@ -1,7 +1,38 @@
-export const areArraysTheSame = (arr1, arr2) => {
-  if (arr1.length != arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i].id != arr2[i].id) return false;
+export const areDeeplyEqual = (obj1, obj2) => {
+  if (obj1 === obj2) return true;
+
+  if (Array.isArray(obj1) && Array.isArray(obj2)) {
+    if (obj1.length !== obj2.length) return false;
+
+    return obj1.every((elem, index) => {
+      return areDeeplyEqual(elem, obj2[index]);
+    });
   }
-  return true;
+
+  if (
+    typeof obj1 === "object" &&
+    typeof obj2 === "object" &&
+    obj1 !== null &&
+    obj2 !== null
+  ) {
+    if (Array.isArray(obj1) || Array.isArray(obj2)) return false;
+
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    if (
+      keys1.length !== keys2.length ||
+      !keys1.every((key) => keys2.includes(key))
+    )
+      return false;
+
+    for (let key in obj1) {
+      let isEqual = areDeeplyEqual(obj1[key], obj2[key]);
+      if (!isEqual) return false;
+    }
+
+    return true;
+  }
+
+  return false;
 };

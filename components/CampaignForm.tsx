@@ -33,7 +33,7 @@ import {
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
-import { areArraysTheSame } from "@/lib/helper/objects";
+import { areDeeplyEqual } from "@/lib/helper/objects";
 import CampaignAccessControlFormSlice from "./campaign/AccessControlFormSlice";
 
 const CampaignForm: FC<{
@@ -137,9 +137,9 @@ const CampaignForm: FC<{
       return true;
     } else if (campaign.isActive != isActive) {
       return true;
-    } else if (!areArraysTheSame(formProductIds, defaultProductIds)) {
+    } else if (!areDeeplyEqual(formProductIds, defaultProductIds)) {
       return true;
-    } else if (!areArraysTheSame(formCollectionIds, defaultCollectionIds)) {
+    } else if (!areDeeplyEqual(formCollectionIds, defaultCollectionIds)) {
       return true;
     } else if (imageChanged) {
       return true;
