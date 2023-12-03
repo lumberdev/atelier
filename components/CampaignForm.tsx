@@ -35,6 +35,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { areDeeplyEqual } from "@/lib/helper/objects";
 import CampaignAccessControlFormSlice from "./campaign/AccessControlFormSlice";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 
 const CampaignForm: FC<{
   campaign?: campaigns;
@@ -185,6 +186,9 @@ const CampaignForm: FC<{
   useEffect(() => {
     if (campaign) resetForm();
   }, [campaign]);
+
+  const { settings } = useStoreSettings();
+  const subdomain = settings.domain;
 
   return (
     <Frame>
@@ -626,6 +630,32 @@ const CampaignForm: FC<{
             </VerticalStack>
 
             <VerticalStack gap={{ xs: "4", md: "2" }}>
+              <Card roundedAbove="sm">
+                <VerticalStack gap="4">
+                  <HorizontalStack>
+                    <Text variant="headingSm" as="h3">
+                      Preview
+                    </Text>
+                  </HorizontalStack>
+                  <Button
+                    primary
+                    fullWidth
+                    onClick={() => {
+                      window.open(
+                        `${
+                          process.env.NODE_ENV === "production"
+                            ? `https://${subdomain}.atelier.sale`
+                            : `http://${subdomain}.localhost:3000`
+                        }/campaign/${campaign.handle}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    {campaign?.isActive ? "View" : "Preview"}
+                  </Button>
+                </VerticalStack>
+              </Card>
+
               <Card roundedAbove="sm">
                 <VerticalStack gap="4">
                   <Text as="h3" variant="headingSm">
