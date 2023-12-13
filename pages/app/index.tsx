@@ -205,18 +205,25 @@ const AppHomePage = () => {
                           https://{subdomain}.atelier.sale/campaign/
                           {campaign.handle}
                         </Text>
-                        <div className="flex w-full justify-end">
-                          <a
-                            href={`${
-                              process.env.NODE_ENV === "production"
-                                ? `https://${subdomain}.atelier.sale`
-                                : `http://${subdomain}.localhost:3000`
-                            }/campaign/${campaign.handle}`}
-                            target="_blank"
-                            className="text-gray-00  rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-[#444] no-underline hover:bg-gray-400"
+                        <div
+                          className="flex w-full justify-end"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Button
+                            primary
+                            onClick={() => {
+                              window.open(
+                                `${
+                                  process.env.NODE_ENV === "production"
+                                    ? `https://${subdomain}.atelier.sale`
+                                    : `http://${subdomain}.localhost:3000`
+                                }/campaign/${campaign.handle}`,
+                                "_blank"
+                              );
+                            }}
                           >
                             {campaign.isActive ? "View" : "Preview"}
-                          </a>
+                          </Button>
                         </div>
                       </div>
                     </ResourceItem>
