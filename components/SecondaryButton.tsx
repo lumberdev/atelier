@@ -7,16 +7,19 @@ const SecondaryButton = ({ children, ...props }) => {
     global: { secondaryColor, borderRadius },
   } = useTheme() as { global: storeThemes };
 
-  const buttonTextColor = secondaryColor
-    ? pickTextColorBasedOnBgColorAdvanced(secondaryColor, "white", "black")
-    : "";
+  const backgroundColor = secondaryColor ? secondaryColor : "grey";
+  const buttonTextColor = pickTextColorBasedOnBgColorAdvanced(
+    backgroundColor,
+    "white",
+    "black"
+  );
 
   return (
     <button
       type="button"
       className="mt-4 cursor-pointer rounded px-4 py-2 uppercase disabled:opacity-50"
       style={{
-        backgroundColor: secondaryColor,
+        backgroundColor: backgroundColor,
         color: buttonTextColor,
         borderRadius: borderRadius,
       }}

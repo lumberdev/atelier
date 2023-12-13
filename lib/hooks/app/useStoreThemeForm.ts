@@ -77,7 +77,6 @@ export const useStoreThemeForm = ({
     onSuccess: (response) => {
       if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;
-      console.log(theme.logoPosition);
 
       form.setValue("id", theme.id);
       if (theme.primaryColor) form.setValue("primaryColor", theme.primaryColor);
@@ -91,7 +90,6 @@ export const useStoreThemeForm = ({
 
       if (theme.logo) {
         const url = supabaseStorage.getPublicUrl(theme.logo);
-
         setLogoUrl(url.data.publicUrl ?? "");
       }
     },

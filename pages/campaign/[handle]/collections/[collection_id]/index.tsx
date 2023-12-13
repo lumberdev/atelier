@@ -37,7 +37,7 @@ const CollectionCampaignPage = () => {
   const collectionProducts = selectedCollection?.products;
 
   return (
-    <Page>
+    <Page {...{ campaign }}>
       <AnnouncementBar
         announcement={campaign?.announcement}
         className="hidden lg:block"

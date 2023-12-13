@@ -110,7 +110,7 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   );
 
   return (
-    <Page>
+    <Page {...{ campaign }}>
       <AnnouncementBar
         announcement={campaign?.announcement}
         className="hidden lg:block"

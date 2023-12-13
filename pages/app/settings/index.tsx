@@ -281,6 +281,7 @@ const SettingsPage = () => {
           key={index}
         />
       ))}
+      <div className="h-16" />
     </Page>
   );
 };
