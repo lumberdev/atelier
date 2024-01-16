@@ -11,6 +11,8 @@ import { useProducts } from "@/lib/hooks/store/useProducts";
 import { useCollections } from "@/lib/hooks/store/useCollections";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import NotFoundPage from "@/components/NotFoundPage";
+import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -23,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }`
   );
   const [subdomain] = url.hostname.split(".");
+  const queryPreviewToken = url.searchParams.get("preview_token");
 
   if (["localhost", "atelier"].includes(subdomain))
     return {
@@ -68,7 +71,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (!authorized)
     return {
       redirect: {
-        destination: `/campaign/${handle as string}/password`,
+        destination: `/campaign/${handle as string}/password${
+          !campaign.isActive && queryPreviewToken
+            ? `?preview_token=${queryPreviewToken}`
+            : ""
+        }`,
         permanent: false,
       },
     };
@@ -103,6 +110,13 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
     store_id: campaign.storeId,
     product_ids: campaign?.productIds,
   });
+  const { showNotFoundPage } = useDraftCampaign({
+    isCampaignActive: campaign.isActive,
+    previewToken: campaign.previewToken,
+  });
+
+  if (showNotFoundPage) return <NotFoundPage />;
+
   if (productsLoading || collectionsLoading) return <LoadingScreen />;
   const homepageProducts = getUniqueProductsFromCollections(
     products,

@@ -49,6 +49,7 @@ model campaigns {
   cartCheckoutButtonStyle String?
   cartBackgroundColor     String?
   cartTextColor           String?
+  previewToken            String?           @default(uuid())
 }
 
 model storeThemes {
