@@ -5,9 +5,11 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import NotFoundPage from "@/components/NotFoundPage";
+import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 
 interface ServerSideProps {
   config: Pick<
@@ -22,6 +24,8 @@ interface ServerSideProps {
     | "passwordPlaceholder"
   >;
   theme: storeThemes;
+  isCampaignActive: boolean;
+  previewToken: string;
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
@@ -57,14 +61,28 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   });
 
   return {
-    props: { config, theme },
+    props: {
+      config,
+      theme,
+      isCampaignActive: campaign.isActive,
+      previewToken: campaign.previewToken,
+    },
   };
 }) satisfies GetServerSideProps<ServerSideProps>;
 
-const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
+const CampaignPasswordPage = ({
+  config,
+  theme,
+  isCampaignActive,
+  previewToken,
+}: ServerSideProps) => {
   const { query, replace } = useRouter();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
+  const { showNotFoundPage } = useDraftCampaign({
+    isCampaignActive,
+    previewToken,
+  });
 
   const { mutate: signIn } = useMutation<null, any, { password: string }>({
     mutationFn: ({ password }) =>
@@ -95,10 +113,10 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
     text: config.ctaText,
     url: config.ctaUrl,
   };
-
+  if (showNotFoundPage) return <NotFoundPage />;
   if (layout === "STACKED")
     return (
-      <div className="grid grid-rows-[25rem, 1fr] w-screen min-h-screen md:grid-rows-none md:grid-cols-2">
+      <div className="grid-rows-[25rem, 1fr] grid min-h-screen w-screen md:grid-cols-2 md:grid-rows-none">
         {backgroundImage && (
           <div className="relative">
             <Image
@@ -110,9 +128,9 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
           </div>
         )}
 
-        <div className="px-4 pt-12 flex flex-col items-center md:p-8 md:justify-center md:items-start md:px-24">
+        <div className="flex flex-col items-center px-4 pt-12 md:items-start md:justify-center md:p-8 md:px-24">
           {logo && (
-            <div className="relative w-32 h-8 mb-8">
+            <div className="relative mb-8 h-8 w-32">
               <Image
                 src={logo.data.publicUrl}
                 layout="fill"
@@ -122,11 +140,11 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
             </div>
           )}
 
-          <h1 className="text-2xl mb-2 font-medium">{headline}</h1>
+          <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
           <p className="mb-8">{body}</p>
 
           <form onSubmit={onSubmit} className="mb-8">
-            <div className="flex items-stretch border-solid border-2 border-black rounded-md overflow-hidden w-max">
+            <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
               <input
                 className="bg-white px-2 py-2 text-black"
                 placeholder={placeholder}
@@ -134,7 +152,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
                 {...register("password")}
                 required
               />
-              <button className="bg-black text-white px-2" type="submit">
+              <button className="bg-black px-2 text-white" type="submit">
                 Enter
               </button>
             </div>
@@ -143,7 +161,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
           </form>
 
           {cta.text && cta.url && (
-            <a className="underline text-sm" href={cta.url}>
+            <a className="text-sm underline" href={cta.url}>
               {cta.text}
             </a>
           )}
@@ -153,7 +171,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
 
   return (
     <div
-      className="relative h-screen w-screen flex flex-col items-center justify-center p-8"
+      className="relative flex h-screen w-screen flex-col items-center justify-center p-8"
       style={{ backgroundColor: backgroundColor, color: "#ffffff" }}
     >
       {backgroundImage && (
@@ -165,9 +183,9 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
         />
       )}
 
-      <div className="relative px-4 py-12 flex flex-col items-center bg-white text-black w-11/12 max-w-xl md:p-8 md:justify-center">
+      <div className="relative flex w-11/12 max-w-xl flex-col items-center bg-white px-4 py-12 text-black md:justify-center md:p-8">
         {logo && (
-          <div className="relative w-32 h-8 mb-8">
+          <div className="relative mb-8 h-8 w-32">
             <Image
               src={logo.data.publicUrl}
               layout="fill"
@@ -177,11 +195,11 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
           </div>
         )}
 
-        <h1 className="text-2xl mb-2 font-medium">{headline}</h1>
+        <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
         <p className="mb-8">{body}</p>
 
         <form onSubmit={onSubmit} className="mb-8">
-          <div className="flex items-stretch border-solid border-2 border-black rounded-md overflow-hidden w-max">
+          <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
             <input
               className="bg-white px-2 py-2 text-black"
               placeholder={placeholder}
@@ -189,7 +207,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
               {...register("password")}
               required
             />
-            <button className="bg-black text-white px-2" type="submit">
+            <button className="bg-black px-2 text-white" type="submit">
               Enter
             </button>
           </div>
@@ -198,7 +216,7 @@ const CampaignPasswordPage = ({ config, theme }: ServerSideProps) => {
         </form>
 
         {cta.text && cta.url && (
-          <a className="underline text-sm" href={cta.url}>
+          <a className="text-sm underline" href={cta.url}>
             {cta.text}
           </a>
         )}

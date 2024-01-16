@@ -647,12 +647,16 @@ const CampaignForm: FC<{
                     primary
                     fullWidth
                     onClick={() => {
+                      const previewTokenQuery =
+                        !campaign?.isActive && campaign.previewToken
+                          ? `?preview_token=${campaign.previewToken}`
+                          : "";
                       window.open(
                         `${
                           process.env.NODE_ENV === "production"
                             ? `https://${subdomain}.atelier.sale`
                             : `http://${subdomain}.localhost:3000`
-                        }/campaign/${campaign.handle}`,
+                        }/campaign/${campaign.handle}${previewTokenQuery}`,
                         "_blank"
                       );
                     }}
