@@ -1,4 +1,8 @@
-import { NavigationMenu } from "@shopify/app-bridge-react";
+import {
+  NavigationMenu,
+  RoutePropagator,
+  useAppBridge,
+} from "@shopify/app-bridge-react";
 import { Frame, AppProvider as PolarisProvider } from "@shopify/polaris";
 import translations from "@shopify/polaris/locales/en.json";
 import AppBridgeProvider from "../components/providers/AppBridgeProvider";
@@ -23,15 +27,18 @@ export default function App({ Component, pageProps }) {
     return (
       <PolarisProvider i18n={translations}>
         <AppBridgeProvider>
-          <NavigationMenu
+          {/* <NavigationMenu
             navigationLinks={[
               {
                 label: "Settings",
                 destination: "/app/settings",
               },
             ]}
-            matcher={(link) => router.pathname === link.destination}
-          />
+            matcher={(link, location) => {
+              console.log("[AT]", { link, location });
+              return location.search === link.destination;
+            }}
+          /> */}
 
           <QueryClientProvider client={queryClient}>
             <BillingProvider>

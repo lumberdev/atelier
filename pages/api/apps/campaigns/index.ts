@@ -28,9 +28,16 @@ router.get(async (req, res) => {
       },
     });
 
-  return res
-    .status(200)
-    .json({ identifier: store?.identifier, campaigns: store.campaigns });
+  const availableProductCount = store.campaigns.reduce(
+    (acc, campaign) => acc + campaign.productIds.length,
+    0
+  );
+
+  return res.status(200).json({
+    identifier: store?.identifier,
+    campaigns: store.campaigns,
+    availableProductCount,
+  });
 });
 
 router.post(async (req, res) => {

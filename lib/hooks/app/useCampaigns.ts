@@ -6,12 +6,13 @@ export const useCampaigns = () => {
   const fetch = useFetch();
 
   const {
-    data = { identifier: "", campaigns: [] },
+    data = { identifier: "", campaigns: [], availableProductCount: 0 },
     isLoading,
     refetch: refetchCampaigns,
   } = useQuery<{
     identifier?: string;
     campaigns: Campaigns[];
+    availableProductCount: number;
   }>("campaigns", () =>
     fetch("/api/apps/campaigns").then((response) => response.json())
   );
@@ -81,6 +82,7 @@ export const useCampaigns = () => {
     isLoading,
     identifier: data.identifier,
     campaigns: data.campaigns,
+    availableProductCount: data.availableProductCount,
     unpublishCampaigns,
     publishCampaigns,
     deleteCampaigns,

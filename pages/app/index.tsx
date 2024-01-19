@@ -10,9 +10,11 @@ import {
   Card,
   EmptyState,
   Grid,
+  HorizontalStack,
   Icon,
   Layout,
   LegacyCard,
+  Link,
   Loading,
   MediaCard,
   Page,
@@ -28,6 +30,7 @@ import { campaigns } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useState } from "react";
+import useShop from "@/lib/hooks/app/useShop";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
@@ -46,12 +49,16 @@ const AppHomePage = () => {
     identifier,
     campaigns,
     isLoading,
+    availableProductCount: assignedProductCount,
     unpublishCampaigns,
     deleteCampaigns,
     publishCampaigns,
   } = useCampaigns();
   const { settings } = useStoreSettings();
+  const { domain, availableProductCount, publicationId } = useShop();
   const subdomain = settings.domain;
+
+  const unassignedProductCount = availableProductCount - assignedProductCount;
 
   if (isLoading)
     return (
@@ -96,6 +103,65 @@ const AppHomePage = () => {
       <Layout>
         <Layout.Section fullWidth>
           <VerticalStack gap="4">
+            <CalloutCard
+              title="Start selling on Atelier"
+              illustration=""
+              primaryAction={{
+                content: "Publish products",
+                external: true,
+                url: `https://${domain}/admin/bulk?resource_name=Product&edit=publications.${
+                  publicationId.split("/").reverse()[0]
+                }.published_at`,
+              }}
+            >
+              <p>Setup your exclusive sales on Atelier.</p>
+            </CalloutCard>
+
+            <Card>
+              <VerticalStack gap="4">
+                <HorizontalStack align="space-between">
+                  <Text as="h2" variant="headingMd">
+                    {availableProductCount} product
+                    {availableProductCount === 1 ? "" : "s"} available to
+                    Atelier
+                  </Text>
+
+                  <Link
+                    target="_blank"
+                    url={`https://${domain}/admin/bulk?resource_name=Product&edit=publications.${
+                      publicationId.split("/").reverse()[0]
+                    }.published_at`}
+                  >
+                    Manage availability
+                  </Link>
+                </HorizontalStack>
+
+                {unassignedProductCount && (
+                  <HorizontalStack gap="4">
+                    <Badge status="warning">Unassigned</Badge>
+
+                    <Text as="p" variant="bodyMd">
+                      {unassignedProductCount} product
+                      {availableProductCount - assignedProductCount === 1
+                        ? ""
+                        : "s"}{" "}
+                      not assigned to a campaign
+                    </Text>
+                  </HorizontalStack>
+                )}
+
+                <HorizontalStack gap="4">
+                  <Badge status="success">Assigned</Badge>
+
+                  <Text as="p" variant="bodyMd">
+                    {assignedProductCount} product
+                    {assignedProductCount === 1 ? "" : "s"} correctly assigned
+                    to a campaign
+                  </Text>
+                </HorizontalStack>
+              </VerticalStack>
+            </Card>
+
             <Card padding="0">
               <ResourceList
                 emptyState={
