@@ -2,6 +2,7 @@ import { Provider } from "@shopify/app-bridge-react";
 import { Layout, Page, Spinner } from "@shopify/polaris";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
+import "@shopify/polaris/build/esm/styles.css";
 
 function AppBridgeProvider({ children }) {
   const router = useRouter();

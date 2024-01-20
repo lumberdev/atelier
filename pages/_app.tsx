@@ -18,7 +18,6 @@ export default function App({ Component, pageProps }) {
     router.pathname.indexOf("/exitframe") === 0
   ) {
     import("./global.css" as any);
-    import("@shopify/polaris/build/esm/styles.css" as any);
 
     return (
       <PolarisProvider i18n={translations}>

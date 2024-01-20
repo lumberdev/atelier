@@ -62,7 +62,7 @@ const AppHomePage = () => {
 
   if (isLoading)
     return (
-      <Page title="Campaigns">
+      <Page title="Overview">
         <Layout>
           <Loading />
         </Layout>
