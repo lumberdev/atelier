@@ -71,7 +71,7 @@ const AppHomePage = () => {
 
   if (!identifier) {
     return (
-      <Page title="Campaigns">
+      <Page title="Overview">
         <Layout>
           <Layout.Section fullWidth>
             <VerticalStack gap="4">
@@ -99,7 +99,7 @@ const AppHomePage = () => {
   }
 
   return (
-    <Page title="Campaigns">
+    <Page title="Overview">
       <Layout>
         <Layout.Section fullWidth>
           <VerticalStack gap="4">

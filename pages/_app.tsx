@@ -1,8 +1,3 @@
-import {
-  NavigationMenu,
-  RoutePropagator,
-  useAppBridge,
-} from "@shopify/app-bridge-react";
 import { Frame, AppProvider as PolarisProvider } from "@shopify/polaris";
 import translations from "@shopify/polaris/locales/en.json";
 import AppBridgeProvider from "../components/providers/AppBridgeProvider";
@@ -12,6 +7,7 @@ import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
 import SlidingCart from "@/components/cart/SlidingCart";
 import BillingProvider from "@/context/BillingProvider";
+import Navigation from "@/components/Navigation";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -27,18 +23,7 @@ export default function App({ Component, pageProps }) {
     return (
       <PolarisProvider i18n={translations}>
         <AppBridgeProvider>
-          {/* <NavigationMenu
-            navigationLinks={[
-              {
-                label: "Settings",
-                destination: "/app/settings",
-              },
-            ]}
-            matcher={(link, location) => {
-              console.log("[AT]", { link, location });
-              return location.search === link.destination;
-            }}
-          /> */}
+          <Navigation />
 
           <QueryClientProvider client={queryClient}>
             <BillingProvider>
