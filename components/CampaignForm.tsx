@@ -32,7 +32,7 @@ import {
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, set } from "react-hook-form";
 import { areDeeplyEqual } from "@/lib/helper/objects";
 import CampaignAccessControlFormSlice from "./campaign/AccessControlFormSlice";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
@@ -67,6 +67,7 @@ const CampaignForm: FC<{
   const [cartItemImageStyle, setCartItemImageStyle] = useState<string[]>([
     formState.defaultValues.cartItemsImageStyle,
   ]);
+  const [handleIsValid, setHandleIsValid] = useState<boolean>(false);
 
   const handleCartItemImageStyleChange = useCallback(
     (value: string[]) => setCartItemImageStyle(value),
@@ -201,7 +202,7 @@ const CampaignForm: FC<{
       <ContextualSaveBar
         visible={formState.isDirty || nonControlledFormDirty}
         saveAction={{
-          disabled: !formState.isValid,
+          disabled: !formState.isValid || !handleIsValid,
           onAction: onSubmit,
           loading: isLoading,
         }}
@@ -242,6 +243,12 @@ const CampaignForm: FC<{
                         autoComplete="off"
                         disabled={isLoading}
                         {...field}
+                        onChange={(value) => {
+                          field.onChange(value.toLowerCase().replaceAll(" ", "-"));
+                          const invalidHandles = ["app", "api", "exitframe"];
+                          const isValid = !invalidHandles.includes(value);
+                          setHandleIsValid(isValid);
+                        }}
                       />
                     )}
                   />
@@ -656,7 +663,7 @@ const CampaignForm: FC<{
                           process.env.NODE_ENV === "production"
                             ? `https://${subdomain}.atelier.sale`
                             : `http://${subdomain}.localhost:3000`
-                        }/campaign/${campaign.handle}${previewTokenQuery}`,
+                        }/${campaign.handle}${previewTokenQuery}`,
                         "_blank"
                       );
                     }}

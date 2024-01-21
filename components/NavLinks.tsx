@@ -5,7 +5,7 @@ const NavLinks = ({ campaignHandle, collections, color = "black" }) => {
   return (
     <>
       <Link
-        href={`/campaign/${campaignHandle}/`}
+        href={`/${campaignHandle}/`}
         className={linkStyle}
         key={"all"}
       >
@@ -13,7 +13,7 @@ const NavLinks = ({ campaignHandle, collections, color = "black" }) => {
       </Link>
       {collections.map(({ title, handle, id }) => (
         <Link
-          href={`/campaign/${campaignHandle}/collections/${
+          href={`/${campaignHandle}/collections/${
             id.match(/\d+/)[0] || id
           }`}
           className={linkStyle}

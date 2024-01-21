@@ -17,7 +17,7 @@ const ProductCard = ({ product, handle }) => {
   return (
     <div className="mx-auto w-fit w-full max-w-full overflow-hidden">
       <Link
-        href={`/campaign/${handle}/products/${
+        href={`/${handle}/products/${
           product.id.split("gid://shopify/Product/")[1]
         }`}
         className="flex aspect-square h-fit w-full	"
@@ -29,7 +29,7 @@ const ProductCard = ({ product, handle }) => {
       </Link>
       <div className="flex w-full flex-col pt-2 text-3xl sm:text-2xl md:text-xl">
         <Link
-          href={`/campaign/${handle}/products/${
+          href={`/${handle}/products/${
             product.id.split("gid://shopify/Product/")[1]
           }`}
           className="no-underline"
