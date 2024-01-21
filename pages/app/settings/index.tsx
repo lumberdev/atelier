@@ -1,25 +1,35 @@
-import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
-import { useStoreThemeForm } from "@/lib/hooks/useStoreThemeForm";
+import { useBilling } from "@/context/BillingProvider";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
+import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
+import { useToast } from "@/lib/hooks/app/useToast";
 import {
   Button,
   Card,
+  ChoiceList,
   DropZone,
   Form,
   FormLayout,
   HorizontalGrid,
   HorizontalStack,
   Layout,
+  Modal,
   Page,
   Text,
   TextField,
   Toast,
+  VerticalStack,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 const SettingsPage = () => {
+  const { toasts, triggerToast, dismissToast } = useToast();
+  const [firstTimeSetup, setFirstTimeSetup] = useState(false);
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
+  const router = useRouter();
+  const { subscription, cancel } = useBilling();
 
   const {
     logoUrl,
@@ -28,9 +38,9 @@ const SettingsPage = () => {
     onSubmit: onSubmitTheme,
     control,
     isLoading,
-    didUpsert,
-    dismissSuccessToast,
-  } = useStoreThemeForm({});
+  } = useStoreThemeForm({
+    onUpsert: () => triggerToast("Store theme updated"),
+  });
 
   const { handleSubmit, setValue, watch } = useForm<{
     domain: string;
@@ -39,14 +49,28 @@ const SettingsPage = () => {
   const domain = watch("domain");
 
   const onSubmit = handleSubmit((fields: { domain: string }) => {
-    updateStoreDomain({ domain: fields.domain });
+    updateStoreDomain(
+      { domain: fields.domain },
+      {
+        onSuccess: (response) => {
+          if (response.error) return;
+          triggerToast("Domain updated");
+          if (firstTimeSetup) setTimeout(() => router.push("/app"), 1500);
+        },
+      }
+    );
   });
 
   useEffect(() => {
     if (!settings.domain) return;
-
     setValue("domain", settings.domain);
   }, [settings]);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const initial = url.searchParams.get("initial");
+    if (initial) setFirstTimeSetup(true);
+  }, []);
 
   return (
     <Page title="Settings">
@@ -70,7 +94,12 @@ const SettingsPage = () => {
                       : null
                   }
                   connectedRight={
-                    <Button primary submit loading={isUpdatingStoreDomain}>
+                    <Button
+                      primary
+                      submit
+                      loading={isUpdatingStoreDomain}
+                      disabled={!domain || domain == settings.domain}
+                    >
                       Save
                     </Button>
                   }
@@ -121,7 +150,7 @@ const SettingsPage = () => {
                         src={logoUrl}
                         alt=""
                         loading="eager"
-                        className="w-full aspect-auto h-auto rounded-lg"
+                        className="aspect-auto h-auto w-full rounded-lg"
                       />
                     </HorizontalStack>
                   )}
@@ -187,6 +216,27 @@ const SettingsPage = () => {
                   />
                 </HorizontalGrid>
 
+                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                  {" "}
+                  <Controller
+                    control={control}
+                    name="logoPosition"
+                    render={({ field: { onChange, value } }) => (
+                      <ChoiceList
+                        title="Logo Position"
+                        choices={[
+                          { label: "Left", value: "left" },
+                          { label: "Center", value: "center" },
+                        ]}
+                        selected={[value]}
+                        onChange={([newValue]) => {
+                          onChange(newValue);
+                        }}
+                      />
+                    )}
+                  />
+                </HorizontalGrid>
+
                 <HorizontalGrid alignItems="center">
                   <Button primary submit loading={isLoading}>
                     Save
@@ -196,11 +246,42 @@ const SettingsPage = () => {
             </Form>
           </Card>
         </Layout.AnnotatedSection>
+
+        <Layout.AnnotatedSection
+          id="storeSettings"
+          title="Subscription"
+          description="Details about your subscription plan"
+        >
+          <Card>
+            <VerticalStack gap="4">
+              <Text as="p" variant="bodyLg">
+                You are currently subscribed to: <b>{subscription?.name}</b>
+              </Text>
+
+              <Text as="p">
+                Your next billing cycle is on {subscription?.currentPeriodEnd}.
+                You will be charged <b>${subscription?.price}</b>
+              </Text>
+
+              <HorizontalStack align="end" gap="4">
+                <Button destructive onClick={cancel}>
+                  Cancel
+                </Button>
+                {/* <Button>Upgrade</Button> */}
+              </HorizontalStack>
+            </VerticalStack>
+          </Card>
+        </Layout.AnnotatedSection>
       </Layout>
 
-      {didUpsert && (
-        <Toast content="Updated store theme" onDismiss={dismissSuccessToast} />
-      )}
+      {toasts.map((toast, index) => (
+        <Toast
+          content={toast}
+          onDismiss={() => dismissToast(index)}
+          key={index}
+        />
+      ))}
+      <div className="h-16" />
     </Page>
   );
 };

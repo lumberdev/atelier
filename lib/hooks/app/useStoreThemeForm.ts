@@ -7,20 +7,28 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
-import { StoreThemeInput } from "../types";
+import { StoreThemeInput } from "../../types";
 import { useStoreSettings } from "./useStoreSettings";
 
 const schema = yup
   .object({
+    id: yup.string().optional(),
     logo: yup.string().optional(),
     primaryColor: yup.string().optional(),
     secondaryColor: yup.string().optional(),
     backgroundColor: yup.string().optional(),
     borderRadius: yup.string().optional(),
+    logoPosition: yup.string().optional(),
   })
   .required();
 
-export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
+export const useStoreThemeForm = ({
+  logo,
+  onUpsert = () => {},
+}: {
+  logo?: string;
+  onUpsert?: () => void;
+}) => {
   const router = useRouter();
   const fetch = useFetch();
   const {
@@ -37,8 +45,6 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
 
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<File>();
-
-  const [didUpsert, setDidUpsert] = useState<boolean>(false);
 
   const { mutate: upsertTheme } = useMutation<
     { theme?: storeThemes; error?: { code: string; message: string } },
@@ -59,7 +65,7 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
 
         const theme = response.theme;
         setIsLoading(false);
-        setDidUpsert(true);
+        onUpsert();
       },
     }
   );
@@ -69,20 +75,21 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
     queryFn: () =>
       fetch("/api/apps/store-themes").then((response) => response.json()),
     onSuccess: (response) => {
-      if (!response.theme?.id) return;
+      if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;
 
+      form.setValue("id", theme.id);
       if (theme.primaryColor) form.setValue("primaryColor", theme.primaryColor);
       if (theme.secondaryColor)
         form.setValue("secondaryColor", theme.secondaryColor);
       if (theme.backgroundColor)
         form.setValue("backgroundColor", theme.backgroundColor);
-      if (theme.borderRadius)
+      if (theme.borderRadius !== null)
         form.setValue("borderRadius", theme.borderRadius + "");
+      if (theme.logoPosition) form.setValue("logoPosition", theme.logoPosition);
 
       if (theme.logo) {
         const url = supabaseStorage.getPublicUrl(theme.logo);
-
         setLogoUrl(url.data.publicUrl ?? "");
       }
     },
@@ -142,8 +149,6 @@ export const useStoreThemeForm = ({ logo }: { logo?: string }) => {
     imageFile,
     setImageFile,
     onSubmit,
-    didUpsert,
-    dismissSuccessToast: () => setDidUpsert(false),
     isLoading,
     ...form,
   };

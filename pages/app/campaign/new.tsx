@@ -16,6 +16,7 @@ const NewCampaignPage = () => {
       }}
     >
       <CampaignForm />
+      <div className="h-16" />
     </Page>
   );
 };

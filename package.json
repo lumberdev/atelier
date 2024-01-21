@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "5.1.0",
     "@shopify/app-bridge": "^3.7.8",
     "@shopify/app-bridge-react": "^3.7.8",
     "@shopify/polaris": "^11.7.0",
@@ -43,6 +43,7 @@
     "cookie": "^0.5.0",
     "crypto": "^1.0.1",
     "cryptr": "^6.2.0",
+    "date-fns": "^2.30.0",
     "graphql": "^16.7.1",
     "next": "13.4.10",
     "next-api-middleware": "^2.0.1",
@@ -66,8 +67,8 @@
     "ngrok": "^4.3.3",
     "npm-check-updates": "^16.10.16",
     "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.4",
-    "prisma": "^5.0.0",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "prisma": "5.1.0",
     "typescript": "5.1.6"
   },
   "overrides": {

@@ -28,26 +28,28 @@ model session {
 }
 
 model campaigns {
-  id                      String   @id @default(cuid())
+  id                      String            @id @default(cuid())
   storeId                 String
-  store                   stores   @relation(fields: [storeId], references: [shop])
+  store                   stores            @relation(fields: [storeId], references: [shop])
   title                   String
   handle                  String
-  description             String   @db.Text
+  description             String            @db.Text
+  announcement            String
   collectionIds           String[]
   productIds              String[]
   variantIds              String[]
   image                   String?
-  isActive                Boolean  @default(false)
-  password                String?
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  isActive                Boolean           @default(false)
+  accessPageConfig        accessPageConfig?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
   cartTitle               String?
   cartItemsImageStyle     String?
   cartDescription         String?
   cartCheckoutButtonStyle String?
   cartBackgroundColor     String?
   cartTextColor           String?
+  previewToken            String?           @default(uuid())
 }
 
 model storeThemes {
@@ -59,6 +61,24 @@ model storeThemes {
   secondaryColor  String?
   backgroundColor String?
   borderRadius    Int?     @default(0)
+  logoPosition    String?  @default("left")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model accessPageConfig {
+  id                  String    @id @default(cuid())
+  campaignId          String    @unique
+  campaign            campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  layout              String
+  headline            String
+  body                String?
+  password            String?
+  passwordPlaceholder String?
+  ctaText             String?
+  ctaUrl              String?
+  backgroundColor     String?
+  backgroundImage     String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }

@@ -23,7 +23,11 @@ const handler = async (req, res) => {
     await prisma.stores.upsert({
       where: { shop: shop },
       update: { isActive: true },
-      create: { shop: shop, isActive: true },
+      create: {
+        shop: shop,
+        isActive: true,
+        theme: { create: { borderRadius: 0 } },
+      },
     });
 
     // Redirect to app with shop parameter upon auth

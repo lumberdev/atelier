@@ -50,8 +50,10 @@ const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
           campaign={data.campaign}
           collections={data.collections}
           products={data.products}
+          isCreating={false}
         />
       )}
+      <div className="h-16" />
     </Page>
   );
 };

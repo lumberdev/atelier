@@ -3,10 +3,10 @@ export interface CampaignInput {
   title: string;
   handle: string;
   description?: string;
+  announcement?: string;
   collectionIds: string[];
   productIds: string[];
   variantIds: string[];
-  password?: string;
   image?: string;
   isActive: boolean;
   cartTitle?: string;
@@ -46,6 +46,7 @@ export interface StoreThemeInput {
   secondaryColor?: string;
   backgroundColor?: string;
   borderRadius?: number;
+  logoPosition?: string;
 }
 
 export interface CartItemType {
@@ -56,3 +57,57 @@ export interface CartItemType {
   description: string;
   imageUrl: string;
 }
+export interface AccessPageConfigInput {
+  id?: string;
+  campaignId: string;
+  layout: string;
+  headline: string;
+  body?: string;
+  password?: string;
+  passwordPlaceholder?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  backgroundColor?: string;
+  backgroundImage?: string;
+}
+
+export interface ShopifyRecurringAppSubscription {
+  id: string;
+  name: string;
+  test: boolean;
+  status:
+    | "ACTIVE"
+    | "CANCELLED"
+    | "DECLINED"
+    | "EXPIRED"
+    | "FROZEN"
+    | "PENDING"
+    | "ACCEPTED";
+  currentPeriodEnd?: string | null;
+  lineItems: {
+    plan: {
+      pricingDetails: {
+        interval: "ANNUAL" | "EVERY_30_DAYS";
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
+      };
+    };
+  }[];
+}
+
+export type CurrentSubscription = {
+  name: string;
+  status:
+    | "ACTIVE"
+    | "CANCELLED"
+    | "DECLINED"
+    | "EXPIRED"
+    | "FROZEN"
+    | "PENDING"
+    | "ACCEPTED";
+  currentPeriodEnd: string | null;
+  price: string;
+  currency: string;
+};

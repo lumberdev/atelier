@@ -1,4 +1,4 @@
-import { useCampaigns } from "@/lib/hooks/useCampaigns";
+import { useCampaigns } from "@/lib/hooks/app/useCampaigns";
 import isShopAvailable from "@/utils/middleware/isShopAvailable";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
@@ -26,7 +26,7 @@ import { useRouter } from "next/router";
 import { AddMajor } from "@shopify/polaris-icons";
 import { campaigns } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
-import { useStoreSettings } from "@/lib/hooks/useStoreSettings";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useState } from "react";
 
 //On first install, check if the store is installed and redirect accordingly
@@ -62,18 +62,18 @@ const AppHomePage = () => {
       </Page>
     );
 
-  return (
-    <Page title="Campaigns">
-      <Layout>
-        <Layout.Section fullWidth>
-          <VerticalStack gap="4">
-            {!identifier && (
+  if (!identifier) {
+    return (
+      <Page title="Campaigns">
+        <Layout>
+          <Layout.Section fullWidth>
+            <VerticalStack gap="4">
               <CalloutCard
                 title="Get your domain"
                 primaryAction={{
                   content: "Configure domain",
                   onAction: () => {
-                    router.push("/app/settings");
+                    router.push("/app/settings?initial=true");
                   },
                 }}
                 illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
@@ -83,8 +83,19 @@ const AppHomePage = () => {
                   identify you.
                 </p>
               </CalloutCard>
-            )}
+            </VerticalStack>
+          </Layout.Section>
+        </Layout>
+        <div className="h-16" />
+      </Page>
+    );
+  }
 
+  return (
+    <Page title="Campaigns">
+      <Layout>
+        <Layout.Section fullWidth>
+          <VerticalStack gap="4">
             <Card padding="0">
               <ResourceList
                 emptyState={
@@ -156,26 +167,31 @@ const AppHomePage = () => {
                   const image = campaign.image
                     ? supabaseStorage.getPublicUrl(campaign.image)
                     : "";
+                  const previewTokenQuery =
+                    !campaign?.isActive && campaign.previewToken
+                      ? `?preview_token=${campaign.previewToken}`
+                      : "";
 
                   return (
                     <ResourceItem
+                      key={`${campaign.id}-${campaign.updatedAt}`}
                       id={campaign.id}
                       onClick={() =>
                         router.push(`/app/campaign/${campaign.id}`)
                       }
                       media={
-                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-md bg-gray-200 overflow-hidden">
+                        <div className="h-14 w-14 overflow-hidden rounded-md bg-gray-200 md:h-20 md:w-20">
                           {image && (
                             <img
                               src={image.data.publicUrl}
-                              className="w-full h-full object-cover"
+                              className="h-full w-full object-cover"
                             />
                           )}
                         </div>
                       }
                     >
-                      <div className="flex flex-col justify-center items-start h-full">
-                        <div className="flex justify-between items-center w-full">
+                      <div className="flex h-full flex-col items-start justify-center">
+                        <div className="flex w-full items-center justify-between">
                           <Text as="h4" variant="headingMd" fontWeight="bold">
                             {campaign.title}
                           </Text>
@@ -193,6 +209,19 @@ const AppHomePage = () => {
                           https://{subdomain}.atelier.sale/campaign/
                           {campaign.handle}
                         </Text>
+                        <div className="flex w-full justify-end">
+                          <a
+                            href={`${
+                              process.env.NODE_ENV === "production"
+                                ? `https://${subdomain}.atelier.sale`
+                                : `http://${subdomain}.localhost:3000`
+                            }/${campaign.handle}${previewTokenQuery}`}
+                            target="_blank"
+                            className="text-gray-00  rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-[#444] no-underline hover:bg-gray-400"
+                          >
+                            {campaign.isActive ? "View" : "Preview"}
+                          </a>
+                        </div>
                       </div>
                     </ResourceItem>
                   );
@@ -202,6 +231,7 @@ const AppHomePage = () => {
           </VerticalStack>
         </Layout.Section>
       </Layout>
+      <div className="h-16" />
     </Page>
   );
 };

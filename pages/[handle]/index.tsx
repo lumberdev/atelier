@@ -3,13 +3,16 @@ import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import { useRouter } from "next/router";
-import { useProductsOnStore } from "@/lib/hooks/useProductsOnStore";
-import { useCollectionsOnStore } from "@/lib/hooks/useCollectionsOnStore";
+import { useProducts } from "@/lib/hooks/store/useProducts";
+import { useCollections } from "@/lib/hooks/store/useCollections";
 import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
+import NotFoundPage from "@/components/NotFoundPage";
+import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -22,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }`
   );
   const [subdomain] = url.hostname.split(".");
+  const queryPreviewToken = url.searchParams.get("preview_token");
 
   if (["localhost", "atelier"].includes(subdomain))
     return {
@@ -40,15 +44,18 @@ export const getServerSideProps: GetServerSideProps = async ({
         where: {
           handle: handle as string,
         },
+        include: {
+          accessPageConfig: true,
+        },
       },
     },
   });
 
   const merchantSecret = merchant.secret;
-  const [campaign] = merchant.campaigns;
-  const campaignPassword = campaign.password;
+  const [{ accessPageConfig: config, ...campaign }] = merchant.campaigns;
+  const campaignPassword = config?.password;
 
-  if (!campaignPassword)
+  if (!config || !campaignPassword)
     return {
       props: {
         campaign,
@@ -64,7 +71,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (!authorized)
     return {
       redirect: {
-        destination: `/${handle as string}/password`,
+        destination: `/${handle as string}/password${
+          !campaign.isActive && queryPreviewToken
+            ? `?preview_token=${queryPreviewToken}`
+            : ""
+        }`,
         permanent: false,
       },
     };
@@ -91,14 +102,21 @@ function getUniqueProductsFromCollections(products, collections) {
 const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   const router = useRouter();
   const { handle } = router.query;
-  const { collections, isLoading: collectionsLoading } = useCollectionsOnStore({
+  const { collections, isLoading: collectionsLoading } = useCollections({
     store_id: campaign.storeId,
     collection_ids: campaign?.collectionIds,
   });
-  const { products, isLoading: productsLoading } = useProductsOnStore({
+  const { products, isLoading: productsLoading } = useProducts({
     store_id: campaign.storeId,
     product_ids: campaign?.productIds,
   });
+  const { showNotFoundPage } = useDraftCampaign({
+    isCampaignActive: campaign.isActive,
+    previewToken: campaign.previewToken,
+  });
+
+  if (showNotFoundPage) return <NotFoundPage />;
+
   if (productsLoading || collectionsLoading) return <LoadingScreen />;
   const homepageProducts = getUniqueProductsFromCollections(
     products,
@@ -106,7 +124,11 @@ const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
   );
 
   return (
-    <Page>
+    <Page {...{ campaign }}>
+      <AnnouncementBar
+        announcement={campaign?.announcement}
+        className="hidden lg:block"
+      />
       <Header {...{ campaign, campaignHandle: handle, collections }} />
       <ProductGrid {...{ products: homepageProducts, handle }} />
     </Page>

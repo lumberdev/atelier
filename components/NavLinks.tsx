@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-const NavLinks = ({ campaignHandle, collections, color }) => {
-  const linkStyle = `mx-4 lg:mx-2 first:lg:ml-0 first:ml-4 mb-2 lg:mb-0 no-underline hover:underline text-base whitespace-nowrap	 text-${color}`;
+const NavLinks = ({ campaignHandle, collections, color = "black" }) => {
+  const linkStyle = `mr-[16px] mb-2 lg:mb-0 no-underline hover:underline text-base whitespace-nowrap	 text-${color}`;
   return (
     <>
       <Link

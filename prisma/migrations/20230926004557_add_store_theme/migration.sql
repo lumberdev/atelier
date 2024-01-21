@@ -7,6 +7,7 @@ CREATE TABLE "storeThemes" (
     "secondaryColor" TEXT,
     "backgroundColor" TEXT,
     "borderRadius" INTEGER DEFAULT 0,
+    "logoPosition" TEXT DEFAULT 'left',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
