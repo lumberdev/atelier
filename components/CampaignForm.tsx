@@ -67,7 +67,7 @@ const CampaignForm: FC<{
   const [cartItemImageStyle, setCartItemImageStyle] = useState<string[]>([
     formState.defaultValues.cartItemsImageStyle,
   ]);
-  const [handleIsValid, setHandleIsValid] = useState<boolean>(false);
+  const [handleIsValid, setHandleIsValid] = useState<boolean>(true);
 
   const handleCartItemImageStyleChange = useCallback(
     (value: string[]) => setCartItemImageStyle(value),
@@ -202,7 +202,7 @@ const CampaignForm: FC<{
       <ContextualSaveBar
         visible={formState.isDirty || nonControlledFormDirty}
         saveAction={{
-          disabled: !formState.isValid || !handleIsValid,
+          disabled: !formState.isValid,
           onAction: onSubmit,
           loading: isLoading,
         }}
@@ -242,6 +242,7 @@ const CampaignForm: FC<{
                         label="Handle"
                         autoComplete="off"
                         disabled={isLoading}
+                        error={handleIsValid ? null : "Handle name includes reserved word"}
                         {...field}
                         onChange={(value) => {
                           field.onChange(value.toLowerCase().replaceAll(" ", "-"));
