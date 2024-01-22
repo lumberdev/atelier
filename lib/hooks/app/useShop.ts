@@ -11,6 +11,7 @@ const useShop = () => {
       appHandle: "",
       publicationId: "",
       availableProductCount: 0,
+      availableCollectionCount: 0,
     },
     isLoading,
   } = useQuery<
@@ -22,6 +23,7 @@ const useShop = () => {
       appHandle: string;
       publicationId: string;
       availableProductCount: number;
+      availableCollectionCount: number;
     }
   >({
     queryKey: "shop",

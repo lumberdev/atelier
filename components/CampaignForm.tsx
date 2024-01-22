@@ -302,268 +302,125 @@ const CampaignForm: FC<{
                   </HorizontalStack>
 
                   <Text as="p">
-                    Select the products available for this campaign, choose from
-                    collections or individual products.
+                    Select the products available for this campaign
                   </Text>
 
-                  <Divider />
-
-                  <Tabs
-                    tabs={[
-                      {
-                        id: "collection-resource",
-                        content: "Collections",
-                        accessibilityLabel: "Collection",
-                        panelID: "collection-resource",
-                      },
-                      {
-                        id: "product-resource",
-                        content: "Products",
-                        accessibilityLabel: "Products",
-                        panelID: "product-resource",
-                      },
-                    ]}
-                    selected={selectedTab}
-                    onSelect={(tab) => setSelectedTab(tab)}
-                    fitted
-                  >
-                    {selectedTab === 0 && (
-                      <VerticalStack gap="4">
-                        <Box />
-
-                        <ResourceList
-                          emptyState={
-                            <EmptyState
-                              heading="Select product collections"
-                              image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-                              action={{
-                                content: "Select collections",
-                                onAction: () => {
-                                  setIsResourcePickerOpen(true);
-                                },
-                              }}
-                            >
-                              <p>
-                                We'll source the products to show on your
-                                campaign page from these collections.
-                              </p>
-                            </EmptyState>
-                          }
-                          alternateTool={
-                            <Button
-                              onClick={() => setIsResourcePickerOpen(true)}
-                              size="slim"
-                              plain
-                            >
-                              Add collection
-                            </Button>
-                          }
-                          selectable
-                          selectedItems={selectedItems}
-                          onSelectionChange={setSelectedItems}
-                          items={selectedCollections}
-                          promotedBulkActions={[
-                            {
-                              content: "Remove",
-                              onAction: () => {
-                                const filteredCollections =
-                                  selectedCollections.filter(
-                                    (c) => !selectedItems.includes(c.id)
-                                  );
-
-                                setSelectedCollections(filteredCollections);
-                                setSelectedItems([]);
-                              },
+                  <VerticalStack gap="4">
+                    <ResourceList
+                      emptyState={
+                        <EmptyState
+                          heading="Select products"
+                          image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+                          action={{
+                            content: "Select products",
+                            onAction: () => {
+                              setIsResourcePickerOpen(true);
                             },
-                          ]}
-                          renderItem={(resource) => {
-                            const collection =
-                              resource as CollectionResourceItem;
+                          }}
+                        >
+                          <p>
+                            These products will be available for purchase on
+                            your campaign page.
+                          </p>
+                        </EmptyState>
+                      }
+                      alternateTool={
+                        <Button
+                          onClick={() => setIsResourcePickerOpen(true)}
+                          size="slim"
+                          plain
+                        >
+                          Add products
+                        </Button>
+                      }
+                      selectable
+                      selectedItems={selectedItems}
+                      onSelectionChange={setSelectedItems}
+                      items={selectedProducts}
+                      renderItem={(resource) => {
+                        const product = resource as ProductResourceItem;
 
-                            return (
-                              <ResourceItem
-                                id={collection.id}
-                                url={collection.handle}
-                                media={
-                                  <div className="h-12 w-12 bg-gray-200">
-                                    {collection.image && (
-                                      <img
-                                        className="block h-full w-full rounded-full object-cover"
-                                        src={collection.image.src}
-                                      />
-                                    )}
-                                  </div>
-                                }
-                              >
-                                <Text
-                                  as="h4"
-                                  variant="headingSm"
-                                  fontWeight="bold"
-                                >
-                                  {collection.title}
-                                </Text>
+                        return (
+                          <ResourceItem
+                            id={product.id}
+                            url={product.handle}
+                            media={
+                              <div className="h-12 w-12 bg-gray-200">
+                                {!!product.images?.length && (
+                                  <img
+                                    className="block h-full w-full rounded-full object-cover"
+                                    src={product.images[0].src}
+                                  />
+                                )}
+                              </div>
+                            }
+                          >
+                            <Text as="h4" variant="headingSm" fontWeight="bold">
+                              {product.title}
+                            </Text>
 
-                                <Text as="p">
-                                  {collection.productsCount} products
-                                </Text>
-                              </ResourceItem>
+                            <Text as="p">
+                              {product.variants.length} variant
+                              {product.variants.length > 1 ? "s" : ""}
+                            </Text>
+                          </ResourceItem>
+                        );
+                      }}
+                      promotedBulkActions={[
+                        {
+                          content: "Remove",
+                          onAction: () => {
+                            const filteredProducts = selectedProducts.filter(
+                              (c) => !selectedItems.includes(c.id)
                             );
-                          }}
-                        />
 
-                        <ResourcePicker
-                          resourceType="Collection"
-                          open={isResourcePickerOpen}
-                          selectMultiple
-                          actionVerb={ActionVerb.Select}
-                          onCancel={() => setIsResourcePickerOpen(false)}
-                          initialSelectionIds={selectedCollections.map((r) => ({
-                            id: r.id,
-                          }))}
-                          onSelection={(selection) => {
-                            const collections: CollectionResourceItem[] =
-                              selection.selection.map((r) => {
-                                const resource = r as Collection;
+                            setSelectedProducts(filteredProducts);
+                            setSelectedItems([]);
+                          },
+                        },
+                      ]}
+                    />
 
-                                return {
-                                  id: resource.id,
-                                  handle: resource.handle,
-                                  title: resource.title,
-                                  image: resource.image
-                                    ? { src: resource.image.originalSrc }
-                                    : null,
-                                  productsCount: resource.productsCount,
-                                };
-                              });
+                    <ResourcePicker
+                      resourceType="Product"
+                      open={isResourcePickerOpen}
+                      selectMultiple
+                      actionVerb={ActionVerb.Select}
+                      onCancel={() => setIsResourcePickerOpen(false)}
+                      initialQuery={`
+                          publication:116673577206
+                        `}
+                      initialSelectionIds={selectedProducts.map((p) => ({
+                        id: p.id,
+                        variants: (p as ProductResourceItem).variants.map(
+                          (v) => ({
+                            id: v.id,
+                          })
+                        ),
+                      }))}
+                      onSelection={(selection) => {
+                        const products: ProductResourceItem[] =
+                          selection.selection.map((r) => {
+                            const resource = r as Product;
 
-                            setSelectedCollections(collections);
-                            setIsResourcePickerOpen(false);
-                          }}
-                        />
-                      </VerticalStack>
-                    )}
-
-                    {selectedTab === 1 && (
-                      <VerticalStack gap="4">
-                        <ResourceList
-                          emptyState={
-                            <EmptyState
-                              heading="Select products"
-                              image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-                              action={{
-                                content: "Select products",
-                                onAction: () => {
-                                  setIsResourcePickerOpen(true);
-                                },
-                              }}
-                            >
-                              <p>
-                                These products will be available for purchase on
-                                your campaign page.
-                              </p>
-                            </EmptyState>
-                          }
-                          alternateTool={
-                            <Button
-                              onClick={() => setIsResourcePickerOpen(true)}
-                              size="slim"
-                              plain
-                            >
-                              Add products
-                            </Button>
-                          }
-                          selectable
-                          selectedItems={selectedItems}
-                          onSelectionChange={setSelectedItems}
-                          items={selectedProducts}
-                          renderItem={(resource) => {
-                            const product = resource as ProductResourceItem;
-
-                            return (
-                              <ResourceItem
-                                id={product.id}
-                                url={product.handle}
-                                media={
-                                  <div className="h-12 w-12 bg-gray-200">
-                                    {!!product.images?.length && (
-                                      <img
-                                        className="block h-full w-full rounded-full object-cover"
-                                        src={product.images[0].src}
-                                      />
-                                    )}
-                                  </div>
-                                }
-                              >
-                                <Text
-                                  as="h4"
-                                  variant="headingSm"
-                                  fontWeight="bold"
-                                >
-                                  {product.title}
-                                </Text>
-
-                                <Text as="p">
-                                  {product.variants.length} variant
-                                  {product.variants.length > 1 ? "s" : ""}
-                                </Text>
-                              </ResourceItem>
-                            );
-                          }}
-                          promotedBulkActions={[
-                            {
-                              content: "Remove",
-                              onAction: () => {
-                                const filteredProducts =
-                                  selectedProducts.filter(
-                                    (c) => !selectedItems.includes(c.id)
-                                  );
-
-                                setSelectedProducts(filteredProducts);
-                                setSelectedItems([]);
-                              },
-                            },
-                          ]}
-                        />
-
-                        <ResourcePicker
-                          resourceType="Product"
-                          open={isResourcePickerOpen}
-                          selectMultiple
-                          actionVerb={ActionVerb.Select}
-                          onCancel={() => setIsResourcePickerOpen(false)}
-                          initialSelectionIds={selectedProducts.map((p) => ({
-                            id: p.id,
-                            variants: (p as ProductResourceItem).variants.map(
-                              (v) => ({
+                            return {
+                              id: resource.id,
+                              handle: resource.handle,
+                              title: resource.title,
+                              images: resource.images.map((i) => ({
+                                src: i.originalSrc,
+                              })),
+                              variants: resource.variants.map((v) => ({
                                 id: v.id,
-                              })
-                            ),
-                          }))}
-                          onSelection={(selection) => {
-                            const products: ProductResourceItem[] =
-                              selection.selection.map((r) => {
-                                const resource = r as Product;
+                              })),
+                            };
+                          });
 
-                                return {
-                                  id: resource.id,
-                                  handle: resource.handle,
-                                  title: resource.title,
-                                  images: resource.images.map((i) => ({
-                                    src: i.originalSrc,
-                                  })),
-                                  variants: resource.variants.map((v) => ({
-                                    id: v.id,
-                                  })),
-                                };
-                              });
-
-                            setSelectedProducts(products);
-                            setIsResourcePickerOpen(false);
-                          }}
-                        />
-                      </VerticalStack>
-                    )}
-                  </Tabs>
+                        setSelectedProducts(products);
+                        setIsResourcePickerOpen(false);
+                      }}
+                    />
+                  </VerticalStack>
                 </VerticalStack>
               </Card>
 
