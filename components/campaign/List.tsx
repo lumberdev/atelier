@@ -1,4 +1,5 @@
 import useShop from "@/lib/hooks/app/useShop";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { PublicationCollectionListing } from "@/lib/types";
 import {
   Badge,
@@ -17,7 +18,9 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
   listing,
 }) => {
   const router = useRouter();
-  const { domain } = useShop();
+  const {
+    settings: { domain },
+  } = useStoreSettings();
 
   return (
     <VerticalStack gap="4">

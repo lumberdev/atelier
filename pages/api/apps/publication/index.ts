@@ -20,7 +20,7 @@ router.get(async (req, res) => {
     shop,
   });
 
-  const shopResponse = await graphqlClient.query({
+  const response = await graphqlClient.query({
     data: `
       query ShopPublication {
         currentAppInstallation {
@@ -42,9 +42,9 @@ router.get(async (req, res) => {
     `,
   });
 
-  const collections =
-    (shopResponse.body as any).data?.currentAppInstallation?.publication
-      ?.collections.edges ?? [];
+  const publication = (response.body as any).data?.currentAppInstallation
+    .publication;
+  const collections = publication?.collections.edges ?? [];
 
   const collectionIds = collections.map(
     ({ node: collection }) => collection.id
@@ -75,7 +75,7 @@ router.get(async (req, res) => {
     })
   );
 
-  return res.status(200).json({ listing });
+  return res.status(200).json({ id: publication.id, listing });
 });
 
 export default router.handler();
