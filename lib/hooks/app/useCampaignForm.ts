@@ -15,7 +15,10 @@ const schema = yup
   .object({
     id: yup.string().optional(),
     title: yup.string().required("Please provide a title."),
-    handle: yup.string().required("Please provide a handle."),
+    handle: yup
+      .string()
+      .required("Please provide a handle.")
+      .notOneOf(["app", "api", "exitframe"], "Handle name includes reserved word"),
     description: yup.string().optional(),
     announcement: yup.string().optional(),
     collectionIds: yup.array().of(yup.string()),
