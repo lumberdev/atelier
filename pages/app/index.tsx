@@ -190,12 +190,13 @@ const AppHomePage = () => {
                         </div>
                       }
                     >
-                      <div className="flex h-full flex-col items-start justify-center">
-                        <div className="flex w-full items-center justify-between">
+                      <div className="min-h-14 min-w-14 md:min-h-20 md:min-w-20  flex h-full items-center justify-between gap-4">
+                        <div className="flex w-full items-center justify-start">
                           <Text as="h4" variant="headingMd" fontWeight="bold">
                             {campaign.title}
                           </Text>
-
+                        </div>
+                        <div className="flex flex-col items-end justify-between gap-4">
                           {campaign.isActive ? (
                             <Badge status="success" progress="complete">
                               Active
@@ -203,13 +204,6 @@ const AppHomePage = () => {
                           ) : (
                             <Badge progress="incomplete">Draft</Badge>
                           )}
-                        </div>
-
-                        <Text as="p">
-                          https://{subdomain}.atelier.sale/campaign/
-                          {campaign.handle}
-                        </Text>
-                        <div className="flex w-full justify-end">
                           <a
                             href={`${
                               process.env.NODE_ENV === "production"
