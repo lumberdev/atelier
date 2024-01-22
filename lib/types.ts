@@ -119,4 +119,5 @@ export type PublicationCollectionListing = {
   handle: string;
   title: string;
   productCount: number;
+  previewToken?: string;
 }[];
