@@ -58,6 +58,7 @@ router.get(async (req, res) => {
       id: true,
       collectionId: true,
       isActive: true,
+      previewToken: true,
     },
   });
   const campaignIds = campaigns.map((campaign) => campaign.id);
@@ -72,6 +73,9 @@ router.get(async (req, res) => {
       handle: collection.handle,
       title: collection.title,
       productCount: collection.productsCount,
+      previewToken:
+        campaigns.find((campaign) => campaign.collectionId === collection.id)
+          ?.previewToken ?? "",
     })
   );
 
