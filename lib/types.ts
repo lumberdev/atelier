@@ -111,3 +111,12 @@ export type CurrentSubscription = {
   price: string;
   currency: string;
 };
+
+export type PublicationCollectionListing = {
+  id: string;
+  isCampaign: boolean;
+  isActive: boolean;
+  handle: string;
+  title: string;
+  productCount: number;
+}[];

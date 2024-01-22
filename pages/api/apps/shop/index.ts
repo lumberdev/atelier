@@ -56,14 +56,26 @@ router.get(async (req, res) => {
   const appHandle = data.currentAppInstallation.app.handle;
   const publicationId = data.currentAppInstallation.publication?.id ?? "";
 
-  const listingResponse = await restClient.get({
+  const productListingResponse = await restClient.get({
     path: "product_listings/count",
   });
-  const availableProductCount = (listingResponse.body as any)?.count ?? 0;
+  const availableProductCount =
+    (productListingResponse.body as any)?.count ?? 0;
 
-  return res
-    .status(200)
-    .json({ id, domain, appHandle, publicationId, availableProductCount });
+  const collectionListingResponse = await restClient.get({
+    path: "collection_listings",
+  });
+  const availableCollectionCount =
+    (collectionListingResponse.body as any)?.collection_listings.length ?? 0;
+
+  return res.status(200).json({
+    id,
+    domain,
+    appHandle,
+    publicationId,
+    availableProductCount,
+    availableCollectionCount,
+  });
 });
 
 export default router.handler();
