@@ -31,14 +31,8 @@ model campaigns {
   id                      String            @id @default(cuid())
   storeId                 String
   store                   stores            @relation(fields: [storeId], references: [shop])
-  title                   String
-  handle                  String
-  description             String            @db.Text
+  collectionId            String
   announcement            String
-  collectionIds           String[]
-  productIds              String[]
-  variantIds              String[]
-  image                   String?
   isActive                Boolean           @default(false)
   accessPageConfig        accessPageConfig?
   createdAt               DateTime          @default(now())
