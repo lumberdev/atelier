@@ -7,17 +7,20 @@ const usePublication = () => {
 
   const {
     data = {
+      id: "",
       listing: [],
     },
     isLoading,
-  } = useQuery<any, any, { listing: PublicationCollectionListing }>({
-    queryKey: "publication",
-    queryFn: () =>
-      fetch("/api/apps/publication").then((response) => response.json()),
-    onSuccess: (response) => {
-      console.log("[AT] usePublication ::", { response });
-    },
-  });
+  } = useQuery<any, any, { id: string; listing: PublicationCollectionListing }>(
+    {
+      queryKey: "publication",
+      queryFn: () =>
+        fetch("/api/apps/publication").then((response) => response.json()),
+      onSuccess: (response) => {
+        console.log("[AT] usePublication ::", { response });
+      },
+    }
+  );
 
   return { ...data, isLoading };
 };

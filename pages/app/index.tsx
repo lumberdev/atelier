@@ -1,4 +1,3 @@
-import { useCampaigns } from "@/lib/hooks/app/useCampaigns";
 import isShopAvailable from "@/utils/middleware/isShopAvailable";
 import {
   Badge,
@@ -15,9 +14,9 @@ import {
   VerticalStack,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
-import useShop from "@/lib/hooks/app/useShop";
 import usePublication from "@/lib/hooks/app/usePublication";
 import CampaignListing from "@/components/campaign/List";
+import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
@@ -26,9 +25,10 @@ export async function getServerSideProps(context) {
 
 const AppHomePage = () => {
   const router = useRouter();
-  const { identifier } = useCampaigns();
-  const { domain, publicationId } = useShop();
-  const { listing, isLoading } = usePublication();
+  const {
+    settings: { shop: domain, domain: identifier },
+  } = useStoreSettings();
+  const { id: publicationId, listing, isLoading } = usePublication();
 
   const availableCollectionCount = listing.length;
   const unassignedCollections = listing.filter((item) => !item.isCampaign);
