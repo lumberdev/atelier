@@ -1,6 +1,4 @@
-import { useCampaignAccessControlForm } from "@/lib/hooks/app/useCampaignAccessControlForm";
-import { useToast } from "@/lib/hooks/app/useToast";
-import { campaigns } from "@prisma/client";
+import { useCampaignForm } from "@/lib/hooks/app/useCampaignForm";
 import {
   Button,
   Card,
@@ -11,36 +9,31 @@ import {
   HorizontalStack,
   Text,
   TextField,
-  Toast,
   VerticalStack,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
 const CampaignAccessControlFormSlice = ({
-  campaign,
+  control,
+  watch,
+  imageUrl,
+  imageFile,
+  setImageFile,
+  isLoading,
 }: {
-  campaign: campaigns;
+  control: ReturnType<typeof useCampaignForm>["control"];
+  watch: ReturnType<typeof useCampaignForm>["watch"];
+  imageUrl: ReturnType<typeof useCampaignForm>["imageUrl"];
+  imageFile: ReturnType<typeof useCampaignForm>["imageFile"];
+  setImageFile: ReturnType<typeof useCampaignForm>["setImageFile"];
+  isLoading: boolean;
 }) => {
-  const { toasts, triggerToast, dismissToast } = useToast();
-  const {
-    control,
-    imageUrl,
-    imageFile,
-    onSubmit,
-    watch,
-    setValue,
-    setImageFile,
-    formState,
-  } = useCampaignAccessControlForm({
-    campaign,
-    onSuccess: () => triggerToast("Access control updated"),
-  });
   const [useCTA, setUseCTA] = useState<boolean>(false);
 
-  const password = watch("password");
-  const layout = watch("layout");
-  const ctaText = watch("ctaText");
+  const password = watch("acpPassword");
+  const layout = watch("acpLayout");
+  const ctaText = watch("acpCTAText");
 
   useEffect(() => {
     if (!ctaText) return;
@@ -51,9 +44,13 @@ const CampaignAccessControlFormSlice = ({
   return (
     <Card>
       <VerticalStack gap="4">
+        <Text as="h3" variant="headingSm">
+          Access Control
+        </Text>
+
         <Controller
           control={control}
-          name="password"
+          name="acpPassword"
           render={({ field }) => (
             <TextField label="Password" autoComplete="false" {...field} />
           )}
@@ -68,48 +65,28 @@ const CampaignAccessControlFormSlice = ({
               Configure the look and feel of your password page.
             </Text>
 
-            <ChoiceList
-              title="Page Layout"
-              choices={[
-                {
-                  label: "Background",
-                  value: "DEFAULT",
-                  helpText: "Use a background color or image.",
-                },
-                {
-                  label: "Stacked Layout",
-                  value: "STACKED",
-                  helpText:
-                    "Display an image on top of the page content on mobile and side by side on desktop.",
-                },
-              ]}
-              selected={[layout]}
-              onChange={([v]) => setValue("layout", v as "DEFAULT" | "STACKED")}
-            />
-
             <Controller
               control={control}
-              name="headline"
-              render={({ field }) => (
-                <TextField autoComplete="false" label="Headline" {...field} />
-              )}
-            />
-            <Controller
-              control={control}
-              name="body"
-              render={({ field }) => (
-                <TextField label="Body Text" autoComplete="false" {...field} />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="passwordPlaceholder"
-              render={({ field }) => (
-                <TextField
-                  label="Field Placeholder"
-                  helpText="This will show when he password field is empty. ie Enter Password"
-                  autoComplete="false"
+              name="acpLayout"
+              render={({ field: { value, onChange, ...field } }) => (
+                <ChoiceList
+                  title="Page Layout"
+                  choices={[
+                    {
+                      label: "Background",
+                      value: "DEFAULT",
+                      helpText: "Use a background color or image.",
+                    },
+                    {
+                      label: "Stacked Layout",
+                      value: "STACKED",
+                      helpText:
+                        "Display an image on top of the page content on mobile and side by side on desktop.",
+                    },
+                  ]}
+                  selected={[value]}
+                  onChange={([v]) => onChange(v)}
+                  disabled={isLoading}
                   {...field}
                 />
               )}
@@ -117,11 +94,51 @@ const CampaignAccessControlFormSlice = ({
 
             <Controller
               control={control}
-              name="backgroundColor"
+              name="acpHeadline"
+              render={({ field }) => (
+                <TextField
+                  autoComplete="false"
+                  label="Headline"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="acpBody"
+              render={({ field }) => (
+                <TextField
+                  label="Body Text"
+                  autoComplete="false"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="acpPasswordPlaceholder"
+              render={({ field }) => (
+                <TextField
+                  label="Field Placeholder"
+                  helpText="This will show when he password field is empty. ie Enter Password"
+                  autoComplete="false"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="acpBackgroundColor"
               render={({ field }) => (
                 <TextField
                   label="Background Color"
                   autoComplete="false"
+                  disabled={isLoading}
                   {...field}
                 />
               )}
@@ -147,6 +164,7 @@ const CampaignAccessControlFormSlice = ({
                   acceptedFiles: File[],
                   _rejectedFiles: File[]
                 ) => setImageFile(acceptedFiles[0])}
+                disabled={isLoading}
               >
                 {imageUrl && (
                   <HorizontalStack>
@@ -172,28 +190,31 @@ const CampaignAccessControlFormSlice = ({
               helpText="Adds a link for taking further action"
               checked={useCTA}
               onChange={(checked) => setUseCTA(checked)}
+              disabled={isLoading}
             />
 
             {useCTA && (
               <Grid columns={{ xs: 2, sm: 2, md: 2, lg: 2 }}>
                 <Controller
                   control={control}
-                  name="ctaText"
+                  name="acpCTAText"
                   render={({ field }) => (
                     <TextField
                       label="CTA Text"
                       autoComplete="false"
+                      disabled={isLoading}
                       {...field}
                     />
                   )}
                 />
                 <Controller
                   control={control}
-                  name="ctaUrl"
+                  name="acpCTAUrl"
                   render={({ field }) => (
                     <TextField
                       label="CTA URL"
                       autoComplete="false"
+                      disabled={isLoading}
                       {...field}
                     />
                   )}
@@ -202,25 +223,7 @@ const CampaignAccessControlFormSlice = ({
             )}
           </>
         )}
-
-        {!!password && (
-          <Button
-            primary
-            disabled={!formState.isValid}
-            onClick={() => onSubmit()}
-          >
-            Save
-          </Button>
-        )}
       </VerticalStack>
-
-      {toasts.map((toast, index) => (
-        <Toast
-          content={toast}
-          onDismiss={() => dismissToast(index)}
-          key={index}
-        />
-      ))}
     </Card>
   );
 };

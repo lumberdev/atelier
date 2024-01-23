@@ -8,6 +8,15 @@ export interface CampaignInput {
   cartCheckoutButtonStyle?: string;
   cartBackgroundColor?: string;
   cartTextColor?: string;
+  acpLayout?: string;
+  acpPassword?: string;
+  acpHeadline?: string;
+  acpBody?: string;
+  acpPasswordPlaceholder?: string;
+  acpCTAText?: string;
+  acpCTAUrl?: string;
+  acpBackgroundColor?: string;
+  acpBackgroundImage?: string;
 }
 
 export interface ProductResourceItem {

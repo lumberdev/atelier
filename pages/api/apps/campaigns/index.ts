@@ -42,26 +42,37 @@ router.get(async (req, res) => {
 
 router.post(async (req, res) => {
   const shop = req.user_session.shop;
-  const body = JSON.parse(req.body) as CampaignInput;
+  const body = JSON.parse(req.body) as CampaignInput & {
+    handle: string;
+    collectionId: string;
+  };
 
   const campaign = await prisma.campaigns.upsert({
     where: { id: body.id ?? "" },
     create: {
-      title: body.title ?? "",
       handle: body.handle ?? "",
-      description: body.description ?? "",
-      announcement: body.announcement ?? "",
-      collectionIds: body.collectionIds ?? [],
-      productIds: body.productIds ?? [],
-      variantIds: body.variantIds ?? [],
-      image: body.image ?? "",
+      collectionId: body.collectionId ?? "",
       isActive: body.isActive ?? false,
+      announcement: body.announcement ?? "",
       cartTitle: body.cartTitle ?? "",
-      cartDescription: body.cartDescription ?? "",
       cartItemsImageStyle: body.cartItemsImageStyle ?? "",
+      cartDescription: body.cartDescription ?? "",
       cartCheckoutButtonStyle: body.cartCheckoutButtonStyle ?? "",
       cartBackgroundColor: body.cartBackgroundColor ?? "",
       cartTextColor: body.cartTextColor ?? "",
+      accessPageConfig: {
+        create: {
+          layout: body.acpLayout ?? "",
+          headline: body.acpHeadline ?? "",
+          body: body.acpBody ?? "",
+          password: body.acpPassword ?? "",
+          passwordPlaceholder: body.acpPasswordPlaceholder ?? "",
+          ctaText: body.acpCTAText ?? "",
+          ctaUrl: body.acpCTAUrl ?? "",
+          backgroundColor: body.acpBackgroundColor ?? "",
+          backgroundImage: body.acpBackgroundImage ?? "",
+        },
+      },
       store: {
         connect: {
           shop,
@@ -69,21 +80,27 @@ router.post(async (req, res) => {
       },
     },
     update: {
-      title: body.title,
-      handle: body.handle,
-      description: body.description,
-      announcement: body.announcement,
-      collectionIds: body.collectionIds,
-      productIds: body.productIds,
-      variantIds: body.variantIds,
-      image: body.image,
-      isActive: body.isActive,
-      cartTitle: body.cartTitle,
-      cartDescription: body.cartDescription,
-      cartItemsImageStyle: body.cartItemsImageStyle,
-      cartCheckoutButtonStyle: body.cartCheckoutButtonStyle,
-      cartBackgroundColor: body.cartBackgroundColor,
-      cartTextColor: body.cartTextColor,
+      isActive: body.isActive ?? false,
+      announcement: body.announcement ?? "",
+      cartTitle: body.cartTitle ?? "",
+      cartItemsImageStyle: body.cartItemsImageStyle ?? "",
+      cartDescription: body.cartDescription ?? "",
+      cartCheckoutButtonStyle: body.cartCheckoutButtonStyle ?? "",
+      cartBackgroundColor: body.cartBackgroundColor ?? "",
+      cartTextColor: body.cartTextColor ?? "",
+      accessPageConfig: {
+        update: {
+          layout: body.acpLayout ?? "",
+          headline: body.acpHeadline ?? "",
+          body: body.acpBody ?? "",
+          password: body.acpPassword ?? "",
+          passwordPlaceholder: body.acpPasswordPlaceholder ?? "",
+          ctaText: body.acpCTAText ?? "",
+          ctaUrl: body.acpCTAUrl ?? "",
+          backgroundColor: body.acpBackgroundColor ?? "",
+          backgroundImage: body.acpBackgroundImage ?? "",
+        },
+      },
     },
   });
 
