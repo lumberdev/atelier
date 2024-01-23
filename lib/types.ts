@@ -114,3 +114,18 @@ export type PublicationCollectionListing = {
   productCount: number;
   previewToken?: string;
 }[];
+
+export type CampaignCollection = {
+  id: string;
+  handle: string;
+  title: string;
+  description?: string;
+  descriptionHtml?: string;
+  image?: {
+    id: string;
+    width: number;
+    height: number;
+    altText?: string;
+    url: string;
+  };
+};
