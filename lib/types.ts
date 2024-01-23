@@ -1,14 +1,7 @@
 export interface CampaignInput {
   id?: string;
-  title: string;
-  handle: string;
-  description?: string;
-  announcement?: string;
-  collectionIds: string[];
-  productIds: string[];
-  variantIds: string[];
-  image?: string;
   isActive: boolean;
+  announcement?: string;
   cartTitle?: string;
   cartItemsImageStyle?: string;
   cartDescription?: string;
