@@ -61,7 +61,7 @@ router.get(async (req, res) => {
       previewToken: true,
     },
   });
-  const campaignIds = campaigns.map((campaign) => campaign.id);
+  const campaignIds = campaigns.map((campaign) => campaign.collectionId);
 
   const listing: PublicationCollectionListing = collections.map(
     ({ node: collection }) => ({
