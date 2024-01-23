@@ -1,4 +1,3 @@
-import useShop from "@/lib/hooks/app/useShop";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { PublicationCollectionListing } from "@/lib/types";
 import {
@@ -88,7 +87,7 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                   <Button
                     onClick={() => {
                       router.push(
-                        `/app/campaign/new?collection=${item.id
+                        `/app/campaign/new?collection_id=${item.id
                           .split("/")
                           .reverse()
                           .at(0)}`
