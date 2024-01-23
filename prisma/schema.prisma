@@ -32,8 +32,9 @@ model campaigns {
   storeId                 String
   store                   stores            @relation(fields: [storeId], references: [shop])
   collectionId            String
-  announcement            String
+  handle                  String
   isActive                Boolean           @default(false)
+  announcement            String
   accessPageConfig        accessPageConfig?
   createdAt               DateTime          @default(now())
   updatedAt               DateTime          @updatedAt
