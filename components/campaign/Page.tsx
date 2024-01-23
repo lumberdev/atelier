@@ -24,6 +24,7 @@ import { useCampaignForm } from "@/lib/hooks/app/useCampaignForm";
 import { ContextualSaveBar } from "@shopify/app-bridge-react";
 import { useRouter } from "next/router";
 import { Controller } from "react-hook-form";
+import CampaignAccessControlFormSlice from "./AccessControlFormSlice";
 
 const CampaignPage: FC<{
   collection: CampaignCollection;
@@ -33,7 +34,21 @@ const CampaignPage: FC<{
   const {
     settings: { shop },
   } = useStoreSettings();
-  const { control, isLoading, formState, reset, onSubmit } = useCampaignForm();
+  const {
+    control,
+    isLoading,
+    formState,
+    imageUrl,
+    imageFile,
+    reset,
+    onSubmit,
+    watch,
+    setImageFile,
+    didSelectImageFile,
+  } = useCampaignForm({
+    handle: collection.handle,
+    collectionId: collection.id,
+  });
 
   const collectionUrl = `https://${shop}/admin/collections/${collection.id
     .split("/")
@@ -43,7 +58,7 @@ const CampaignPage: FC<{
   return (
     <Frame>
       <ContextualSaveBar
-        visible={formState.isDirty}
+        visible={formState.isDirty || didSelectImageFile}
         saveAction={{
           disabled: !formState.isValid,
           onAction: onSubmit,
@@ -156,7 +171,14 @@ const CampaignPage: FC<{
               title="Access Control"
               description="Restrict access to your campaign page. Customers will have to enter the password to access your product listing."
             >
-              {/* <CampaignAccessControlFormSlice campaign={campaign} /> */}
+              <CampaignAccessControlFormSlice
+                control={control}
+                isLoading={isLoading}
+                watch={watch}
+                imageUrl={imageUrl}
+                imageFile={imageFile}
+                setImageFile={setImageFile}
+              />
             </Layout.AnnotatedSection>
 
             <Layout.AnnotatedSection
