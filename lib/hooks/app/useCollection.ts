@@ -10,9 +10,6 @@ const useCollection = (id: string) => {
     queryKey: ["collection", id],
     queryFn: () =>
       fetch(`/api/apps/collection/${id}`).then((response) => response.json()),
-    onSuccess: (response) => {
-      console.log("[AT]", { collection: response });
-    },
   });
 
   return {

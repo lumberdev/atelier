@@ -16,9 +16,6 @@ const usePublication = () => {
       queryKey: "publication",
       queryFn: () =>
         fetch("/api/apps/publication").then((response) => response.json()),
-      onSuccess: (response) => {
-        console.log("[AT] usePublication ::", { response });
-      },
     }
   );
 
