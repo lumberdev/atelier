@@ -117,6 +117,7 @@ export type CurrentSubscription = {
 export type PublicationCollectionListing = {
   id: string;
   isCampaign: boolean;
+  campaignId: string;
   isActive: boolean;
   handle: string;
   title: string;
@@ -137,4 +138,47 @@ export type CampaignCollection = {
     altText?: string;
     url: string;
   };
+};
+
+export type CampaignQueryFields = {
+  id: string;
+  collectionId: string;
+  isActive: boolean;
+  announcement: string;
+  cartTitle: string;
+  cartDescription: string;
+  cartItemsImageStyle: string;
+  cartBackgroundColor: string;
+  cartTextColor: string;
+  accessPageConfig: {
+    layout: string;
+    password: string;
+    headline: string;
+    body: string;
+    passwordPlaceholder: string;
+    ctaText: string;
+    ctaUrl: string;
+    backgroundColor: string;
+    backgroundImage: string;
+  };
+};
+
+export type CampaignFlatFields = {
+  id: string;
+  isActive: boolean;
+  announcement: string;
+  cartTitle: string;
+  cartDescription: string;
+  cartItemsImageStyle: string;
+  cartBackgroundColor: string;
+  cartTextColor: string;
+  acpLayout: string;
+  acpPassword: string;
+  acpHeadline: string;
+  acpBody: string;
+  acpPasswordPlaceholder: string;
+  acpCTAText: string;
+  acpCTAUrl: string;
+  acpBackgroundColor: string;
+  acpBackgroundImage: string;
 };

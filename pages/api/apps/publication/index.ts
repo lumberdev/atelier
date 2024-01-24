@@ -67,6 +67,9 @@ router.get(async (req, res) => {
     ({ node: collection }) => ({
       id: collection.id,
       isCampaign: campaignIds.includes(collection.id),
+      campaignId:
+        campaigns.find((campaign) => campaign.collectionId === collection.id)
+          ?.id ?? "",
       isActive:
         campaigns.find((campaign) => campaign.collectionId === collection.id)
           ?.isActive ?? false,

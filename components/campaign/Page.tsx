@@ -1,5 +1,5 @@
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
-import { CampaignCollection } from "@/lib/types";
+import { CampaignCollection, CampaignInput } from "@/lib/types";
 import {
   CallbackAction,
   Card,
@@ -13,6 +13,7 @@ import {
   Select,
   SkeletonThumbnail,
   Text,
+  Toast,
   VerticalStack,
 } from "@shopify/polaris";
 import { ExternalMinor } from "@shopify/polaris-icons";
@@ -25,15 +26,19 @@ import { ContextualSaveBar } from "@shopify/app-bridge-react";
 import { useRouter } from "next/router";
 import { Controller } from "react-hook-form";
 import CampaignAccessControlFormSlice from "./AccessControlFormSlice";
+import { useToast } from "@/lib/hooks/app/useToast";
 
 const CampaignPage: FC<{
   collection: CampaignCollection;
+  campaign?: CampaignInput;
   backAction?: CallbackAction | LinkAction;
-}> = ({ collection, backAction }) => {
+}> = ({ collection, campaign, backAction }) => {
   const router = useRouter();
   const {
     settings: { shop },
   } = useStoreSettings();
+
+  const { toasts, triggerToast, dismissToast } = useToast();
   const {
     control,
     isLoading,
@@ -46,8 +51,15 @@ const CampaignPage: FC<{
     setImageFile,
     didSelectImageFile,
   } = useCampaignForm({
+    initialValues: campaign,
     handle: collection.handle,
     collectionId: collection.id,
+    onCreate: (campaign) => {
+      router.push(`/app/campaign/${campaign.id}`);
+    },
+    onUpdate: () => {
+      triggerToast("Campaign updated");
+    },
   });
 
   const collectionUrl = `https://${shop}/admin/collections/${collection.id
@@ -203,6 +215,14 @@ const CampaignPage: FC<{
             </Layout.AnnotatedSection>
           </Layout>
         </Form>
+
+        {toasts.map((toast, index) => (
+          <Toast
+            content={toast}
+            onDismiss={() => dismissToast(index)}
+            key={index}
+          />
+        ))}
       </Page>
     </Frame>
   );
