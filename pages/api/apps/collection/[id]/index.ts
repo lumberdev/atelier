@@ -15,8 +15,6 @@ router.get(async (req, res) => {
   const shop = req.user_session.shop;
   const collectionId = req.query.id;
 
-  console.log("[AT]");
-
   const { client } = await clientProvider.offline.graphqlClient({ shop });
 
   const response = await client.query({

@@ -4,9 +4,8 @@ import * as yup from "yup";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import useFetch from "@/components/hooks/useFetch";
-import { CampaignInput } from "../../types";
+import { CampaignFlatFields } from "../../types";
 import { useRouter } from "next/router";
-import { campaigns } from "@prisma/client";
 import { useStoreSettings } from "./useStoreSettings";
 import { supabaseStorage } from "@/utils/supabase";
 
@@ -36,14 +35,20 @@ const schema = yup
   })
   .required();
 
-type UseCampaignFormProps =
-  | { campaign: campaigns; handle?: never; collectionId?: never }
-  | { campaign?: never; handle: string; collectionId: string };
+type UseCampaignFormProps = {
+  initialValues?: CampaignFlatFields;
+  handle: string;
+  collectionId: string;
+  onCreate?: (campaign: CampaignFlatFields) => void;
+  onUpdate?: () => void;
+};
 
 export const useCampaignForm = ({
-  campaign,
+  initialValues,
   handle,
   collectionId,
+  onCreate = () => {},
+  onUpdate = () => {},
 }: UseCampaignFormProps) => {
   const router = useRouter();
   const fetch = useFetch();
@@ -54,13 +59,20 @@ export const useCampaignForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // Background image
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>(() => {
+    if (!initialValues) return "";
+
+    const image = supabaseStorage.getPublicUrl(
+      initialValues.acpBackgroundImage
+    );
+    return image?.data.publicUrl ?? "";
+  });
   const [imageFile, setImageFile] = useState<File>();
 
   const { handleSubmit, ...form } = useForm({
     resolver: yupResolver(schema),
     /* Provide all default values so we can trigger the contextual save menu on value change */
-    defaultValues: (campaign as any) || {
+    defaultValues: initialValues || {
       id: "",
       isActive: false,
       announcement: "",
@@ -82,17 +94,20 @@ export const useCampaignForm = ({
   });
 
   const { mutate: upsertCampaign } = useMutation<
-    { campaign?: campaigns; error?: { code: string; message: string } },
+    {
+      campaign?: CampaignFlatFields;
+      error?: { code: string; message: string };
+    },
     any,
-    { data: CampaignInput }
+    { data: CampaignFlatFields }
   >(
     (variables) =>
       fetch("/api/apps/campaigns", {
         method: "POST",
         body: JSON.stringify({
           ...variables.data,
-          handle: campaign ? campaign.handle : handle,
-          collectionId: campaign ? campaign.collectionId : collectionId,
+          handle,
+          collectionId,
         }),
       }).then((response) => response.json()),
     {
@@ -105,18 +120,22 @@ export const useCampaignForm = ({
         const campaign = response.campaign;
 
         setIsLoading(false);
-        router.push(`/app/campaign/${campaign.id}`);
+
+        if (!initialValues?.id) return onCreate(campaign);
+
+        onUpdate();
+        form.reset(campaign);
       },
     }
   );
 
-  const onSubmit = handleSubmit(async (fields: CampaignInput, event) => {
+  const onSubmit = handleSubmit(async (fields: CampaignFlatFields, event) => {
     setIsLoading(true);
 
     if (imageFile) {
       // 1. Upload image
       const [shopId] = shop.split(".");
-      const fileName = `${campaign ? campaign.handle : handle}-access-page`;
+      const fileName = `${handle}-access-page`;
       const [fileExt] = imageFile.name.split(".").reverse();
 
       const storageResponse = await supabaseStorage.upload(

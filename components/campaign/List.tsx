@@ -67,7 +67,13 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
 
               {item.isCampaign ? (
                 <ButtonGroup>
-                  <Button>Configure Campaign</Button>
+                  <Button
+                    onClick={() =>
+                      router.push(`/app/campaign/${item.campaignId}`)
+                    }
+                  >
+                    Configure Campaign
+                  </Button>
 
                   <Button
                     target="_blank"

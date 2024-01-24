@@ -1,4 +1,5 @@
-import { CampaignInput } from "@/lib/types";
+import { CampaignInput, CampaignQueryFields } from "@/lib/types";
+import flattenCampaignFields from "@/utils/flattenCampaignFields";
 import verifyRequest from "@/utils/middleware/verifyRequest";
 import prisma from "@/utils/prisma";
 import { Session } from "@shopify/shopify-api";
@@ -47,7 +48,7 @@ router.post(async (req, res) => {
     collectionId: string;
   };
 
-  const campaign = await prisma.campaigns.upsert({
+  const campaign: CampaignQueryFields = await prisma.campaigns.upsert({
     where: { id: body.id ?? "" },
     create: {
       handle: body.handle ?? "",
@@ -102,9 +103,14 @@ router.post(async (req, res) => {
         },
       },
     },
+    include: {
+      accessPageConfig: true,
+    },
   });
 
-  return res.status(200).json({ campaign });
+  const fields = flattenCampaignFields(campaign);
+
+  return res.status(200).json({ campaign: fields });
 });
 
 export default router.handler();

@@ -1,12 +1,33 @@
 import prisma from "@/utils/prisma";
-import { campaigns } from "@prisma/client";
-import { Page } from "@shopify/polaris";
 import { FC } from "react";
 import { useRouter } from "next/router";
-import CampaignForm from "@/components/CampaignForm";
-import { useQuery } from "react-query";
-import useFetch from "@/components/hooks/useFetch";
-import { CollectionResourceItem, ProductResourceItem } from "@/lib/types";
+import CampaignPage from "@/components/campaign/Page";
+import { CampaignInput, CampaignQueryFields } from "@/lib/types";
+import useCollection from "@/lib/hooks/app/useCollection";
+import CampaignSkeletonPage from "@/components/campaign/SkeletonPage";
+import flattenCampaignFields from "@/utils/flattenCampaignFields";
+
+const EditCampaignPage: FC<{
+  data: { campaign: CampaignInput; collectionId: string };
+}> = ({ data: { campaign, collectionId } }) => {
+  const router = useRouter();
+  const { isLoading, ...collection } = useCollection(collectionId);
+
+  if (isLoading) return <CampaignSkeletonPage />;
+
+  return (
+    <CampaignPage
+      collection={collection}
+      campaign={campaign}
+      backAction={{
+        content: "Campaign",
+        onAction: () => router.back(),
+      }}
+    />
+  );
+};
+
+export default EditCampaignPage;
 
 export const getServerSideProps = async ({
   params,
@@ -15,47 +36,16 @@ export const getServerSideProps = async ({
 }) => {
   const { id } = params;
 
-  const campaign = await prisma.campaigns.findUnique({
+  const campaign: CampaignQueryFields = await prisma.campaigns.findUnique({
     where: { id },
+    include: {
+      accessPageConfig: true,
+    },
   });
 
-  return { props: { data: { campaign } } };
+  const collectionId = campaign.collectionId.split("/").reverse().at(0);
+
+  const fields = flattenCampaignFields(campaign);
+
+  return { props: { data: { campaign: fields, collectionId } } };
 };
-
-const CampaignPage: FC<{ data: { campaign: campaigns } }> = ({
-  data: { campaign },
-}) => {
-  const router = useRouter();
-  const fetch = useFetch();
-
-  const { data } = useQuery<{
-    campaign: campaigns;
-    collections: CollectionResourceItem[];
-    products: ProductResourceItem[];
-  }>({
-    queryKey: ["campaign", campaign.id],
-    queryFn: () =>
-      fetch(`/api/apps/campaigns/${campaign.id}`).then((response) =>
-        response.json()
-      ),
-  });
-
-  return (
-    <Page
-      title={campaign.title}
-      backAction={{ content: "Campaigns", onAction: () => router.push("/app") }}
-    >
-      {data && (
-        <CampaignForm
-          campaign={data.campaign}
-          collections={data.collections}
-          products={data.products}
-          isCreating={false}
-        />
-      )}
-      <div className="h-16" />
-    </Page>
-  );
-};
-
-export default CampaignPage;
