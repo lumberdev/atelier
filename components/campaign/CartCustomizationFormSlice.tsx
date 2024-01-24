@@ -26,7 +26,6 @@ const CartCustomizationFormSlice: FC<{
             <TextField
               label="Cart Title"
               autoComplete="off"
-              autoFocus
               disabled={isLoading}
               {...field}
             />
@@ -39,7 +38,6 @@ const CartCustomizationFormSlice: FC<{
             <TextField
               label="Background Color"
               autoComplete="off"
-              autoFocus
               disabled={isLoading}
               {...field}
             />
@@ -52,7 +50,6 @@ const CartCustomizationFormSlice: FC<{
             <TextField
               label="Text Color"
               autoComplete="off"
-              autoFocus
               disabled={isLoading}
               {...field}
             />
