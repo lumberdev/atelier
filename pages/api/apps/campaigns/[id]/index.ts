@@ -78,4 +78,28 @@ router.get(async (req, res) => {
   return res.status(200).json({ campaign, products, collections });
 });
 
+router.post(async (req, res) => {
+  const shop = req.user_session.shop;
+  const id = req.query.id as string;
+  const { status } = JSON.parse(req.body);
+
+  const campaign = await prisma.campaigns.update({
+    where: {
+      id,
+      store: {
+        shop,
+      },
+    },
+    data: {
+      isActive: status,
+    },
+    select: {
+      id: true,
+      isActive: true,
+    },
+  });
+
+  return res.status(200).json({ campaign });
+});
+
 export default router.handler();

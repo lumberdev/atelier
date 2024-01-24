@@ -1,5 +1,9 @@
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
-import { CampaignCollection, CampaignInput } from "@/lib/types";
+import {
+  CampaignCollection,
+  CampaignFlatFields,
+  CampaignInput,
+} from "@/lib/types";
 import {
   CallbackAction,
   Card,
@@ -30,7 +34,7 @@ import { useToast } from "@/lib/hooks/app/useToast";
 
 const CampaignPage: FC<{
   collection: CampaignCollection;
-  campaign?: CampaignInput;
+  campaign?: CampaignFlatFields;
   backAction?: CallbackAction | LinkAction;
 }> = ({ collection, campaign, backAction }) => {
   const router = useRouter();
