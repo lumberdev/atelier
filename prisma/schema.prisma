@@ -11,14 +11,15 @@ datasource db {
 }
 
 model stores {
-  shop       String       @id
-  isActive   Boolean?     @default(false)
-  identifier String?      @unique
-  secret     String?      @default(uuid())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  campaigns  campaigns[]
-  theme      storeThemes?
+  shop          String       @id
+  isActive      Boolean?     @default(false)
+  identifier    String?      @unique
+  secret        String?      @default(uuid())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  campaigns     campaigns[]
+  theme         storeThemes?
+  publicationId String
 }
 
 model session {
