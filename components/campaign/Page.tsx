@@ -138,6 +138,7 @@ const CampaignPage: FC<{
                     totalProductCount={collection.productsCount}
                     products={collection.products.edges.map(({ node }) => node)}
                     manageProductsUrl={collectionProductsUrl}
+                    collectionUrl={collectionUrl}
                   />
                 </BlockStack>
 

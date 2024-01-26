@@ -9,14 +9,18 @@ import {
   Text,
   Thumbnail,
   BlockStack,
+  EmptyState,
+  Icon,
 } from "@shopify/polaris";
 import { FC } from "react";
+import { ExternalIcon } from "@shopify/polaris-icons";
 
 const ProductListing: FC<{
   totalProductCount: number;
   products: CampaignProduct[];
   manageProductsUrl: string;
-}> = ({ totalProductCount, products, manageProductsUrl }) => {
+  collectionUrl: string;
+}> = ({ totalProductCount, products, manageProductsUrl, collectionUrl }) => {
   const {
     settings: { shop },
   } = useStoreSettings();
@@ -30,11 +34,13 @@ const ProductListing: FC<{
           </Text>
 
           <div className="flex-1">
-            <InlineStack gap="400" align="end">
-              <Link target="_blank" url={manageProductsUrl}>
-                Manage {totalProductCount} products
-              </Link>
-            </InlineStack>
+            {totalProductCount > 0 && (
+              <InlineStack gap="400" align="end">
+                <Link target="_blank" url={manageProductsUrl}>
+                  Manage {totalProductCount} products
+                </Link>
+              </InlineStack>
+            )}
           </div>
         </InlineStack>
 
@@ -43,6 +49,20 @@ const ProductListing: FC<{
           itemCount={products.length}
           condensed
           headings={[{ title: "Title" }]}
+          emptyState={
+            <EmptyState
+              image=""
+              heading="Collection is empty"
+              action={{
+                content: "Manage Collection",
+                external: true,
+                url: collectionUrl,
+                icon: ExternalIcon,
+              }}
+            >
+              You have not yet assigned any products to this collection
+            </EmptyState>
+          }
         >
           {products.map((product, index) => (
             <IndexTable.Row id={product.id} position={index} key={product.id}>
