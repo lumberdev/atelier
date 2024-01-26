@@ -6,6 +6,7 @@ import {
 import prisma from "@/utils/prisma";
 import sessionHandler from "@/utils/sessionHandler.js";
 import shopify from "@/utils/shopify.js";
+import clientProvider from "@/utils/clientProvider";
 
 const handler = async (req, res) => {
   try {
@@ -20,12 +21,33 @@ const handler = async (req, res) => {
     const host = req.query.host;
     const { shop } = session;
 
+    const { client: graphqlClient } =
+      await clientProvider.offline.graphqlClient({
+        shop,
+      });
+
+    const response = await graphqlClient.query({
+      data: `
+      query ShopPublication {
+        currentAppInstallation {
+          publication {
+            id
+          }
+        }
+      }
+    `,
+    });
+
+    const publication = (response.body as any).data?.currentAppInstallation
+      ?.publication;
+
     await prisma.stores.upsert({
       where: { shop: shop },
       update: { isActive: true },
       create: {
         shop: shop,
         isActive: true,
+        publicationId: publication.id,
         theme: { create: { borderRadius: 0 } },
       },
     });
