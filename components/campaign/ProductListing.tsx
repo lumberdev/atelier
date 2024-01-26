@@ -3,12 +3,12 @@ import { CampaignProduct } from "@/lib/types";
 import {
   Badge,
   Card,
-  HorizontalStack,
+  InlineStack,
   IndexTable,
   Link,
   Text,
   Thumbnail,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 import { FC } from "react";
 
@@ -23,20 +23,20 @@ const ProductListing: FC<{
 
   return (
     <Card>
-      <VerticalStack gap="4">
-        <HorizontalStack align="space-between">
+      <BlockStack gap="400">
+        <InlineStack align="space-between">
           <Text as="h2" variant="headingMd">
             Product Listing
           </Text>
 
           <div className="flex-1">
-            <HorizontalStack gap="4" align="end">
+            <InlineStack gap="400" align="end">
               <Link target="_blank" url={manageProductsUrl}>
                 Manage {totalProductCount} products
               </Link>
-            </HorizontalStack>
+            </InlineStack>
           </div>
-        </HorizontalStack>
+        </InlineStack>
 
         <IndexTable
           resourceName={{ singular: "product", plural: "products" }}
@@ -47,7 +47,7 @@ const ProductListing: FC<{
           {products.map((product, index) => (
             <IndexTable.Row id={product.id} position={index} key={product.id}>
               <div className="py-4">
-                <HorizontalStack gap="4" blockAlign="start">
+                <InlineStack gap="400" blockAlign="start">
                   <Thumbnail
                     source={product.featuredImage.url}
                     size="medium"
@@ -55,8 +55,8 @@ const ProductListing: FC<{
                   />
 
                   <div className="flex-1">
-                    <VerticalStack gap="2">
-                      <HorizontalStack align="space-between">
+                    <BlockStack gap="200">
+                      <InlineStack align="space-between">
                         <Text as="h3" variant="headingMd">
                           {product.title}
                         </Text>
@@ -64,13 +64,13 @@ const ProductListing: FC<{
                         <Text as="p" variant="bodyLg">
                           ${product.priceRangeV2.maxVariantPrice.amount}
                         </Text>
-                      </HorizontalStack>
+                      </InlineStack>
 
                       <Text as="p">{product.description}</Text>
 
                       <div>
                         <Badge
-                          status={
+                          tone={
                             product.publishedOnPublication ? "success" : "new"
                           }
                         >
@@ -79,14 +79,14 @@ const ProductListing: FC<{
                             : "Not Published"}
                         </Badge>
                       </div>
-                    </VerticalStack>
+                    </BlockStack>
                   </div>
-                </HorizontalStack>
+                </InlineStack>
               </div>
             </IndexTable.Row>
           ))}
         </IndexTable>
-      </VerticalStack>
+      </BlockStack>
     </Card>
   );
 };

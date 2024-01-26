@@ -6,10 +6,10 @@ import {
   ChoiceList,
   DropZone,
   Grid,
-  HorizontalStack,
+  InlineStack,
   Text,
   TextField,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
@@ -43,7 +43,7 @@ const CampaignAccessControlFormSlice = ({
 
   return (
     <Card>
-      <VerticalStack gap="4">
+      <BlockStack gap="400">
         <Text as="h3" variant="headingSm">
           Access Control
         </Text>
@@ -58,7 +58,7 @@ const CampaignAccessControlFormSlice = ({
 
         {!!password && (
           <>
-            <Text as="h4" variant="headingXs">
+            <Text as="h4" variant="headingSm">
               Password Page
             </Text>
             <Text as="p" variant="bodyMd">
@@ -144,16 +144,20 @@ const CampaignAccessControlFormSlice = ({
               )}
             />
 
-            <VerticalStack gap="4">
-              <HorizontalStack align="space-between">
+            <BlockStack gap="400">
+              <InlineStack align="space-between">
                 <Text variant="headingSm" as="h4">
                   {layout === "DEFAULT" ? "Background Image" : "Image"}
                 </Text>
 
-                <Button destructive plain onClick={() => setImageFile(null)}>
+                <Button
+                  variant="plain"
+                  tone="critical"
+                  onClick={() => setImageFile(null)}
+                >
                   Remove
                 </Button>
-              </HorizontalStack>
+              </InlineStack>
 
               <DropZone
                 accept="image/*"
@@ -167,14 +171,14 @@ const CampaignAccessControlFormSlice = ({
                 disabled={isLoading}
               >
                 {imageUrl && (
-                  <HorizontalStack>
+                  <InlineStack>
                     <img
                       src={imageUrl}
                       alt=""
                       loading="eager"
                       className="aspect-auto h-auto w-full rounded-lg"
                     />
-                  </HorizontalStack>
+                  </InlineStack>
                 )}
 
                 {!imageFile && !imageUrl && <DropZone.FileUpload />}
@@ -183,7 +187,7 @@ const CampaignAccessControlFormSlice = ({
               {layout === "DEFAULT"
                 ? "Setting an image will override the background color."
                 : ""}
-            </VerticalStack>
+            </BlockStack>
 
             <Checkbox
               label="Use Call to Action"
@@ -223,7 +227,7 @@ const CampaignAccessControlFormSlice = ({
             )}
           </>
         )}
-      </VerticalStack>
+      </BlockStack>
     </Card>
   );
 };

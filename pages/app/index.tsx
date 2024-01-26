@@ -3,7 +3,7 @@ import {
   Badge,
   CalloutCard,
   Card,
-  HorizontalStack,
+  InlineStack,
   Layout,
   Link,
   Page,
@@ -11,7 +11,7 @@ import {
   SkeletonDisplayText,
   SkeletonPage,
   Text,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
 import usePublication from "@/lib/hooks/app/usePublication";
@@ -48,28 +48,28 @@ const AppHomePage = () => {
   if (isLoading)
     return (
       <SkeletonPage title="Overview">
-        <VerticalStack gap="4">
+        <BlockStack gap="400">
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <SkeletonDisplayText />
               <SkeletonBodyText />
-            </VerticalStack>
+            </BlockStack>
           </Card>
 
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <SkeletonDisplayText />
               <SkeletonBodyText />
-            </VerticalStack>
+            </BlockStack>
           </Card>
 
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <SkeletonDisplayText />
               <SkeletonBodyText />
-            </VerticalStack>
+            </BlockStack>
           </Card>
-        </VerticalStack>
+        </BlockStack>
       </SkeletonPage>
     );
 
@@ -78,8 +78,8 @@ const AppHomePage = () => {
     return (
       <Page title="Overview">
         <Layout>
-          <Layout.Section fullWidth>
-            <VerticalStack gap="4">
+          <Layout.Section variant="fullWidth">
+            <BlockStack gap="400">
               <CalloutCard
                 title="Get your domain"
                 primaryAction={{
@@ -95,7 +95,7 @@ const AppHomePage = () => {
                   identify you.
                 </p>
               </CalloutCard>
-            </VerticalStack>
+            </BlockStack>
           </Layout.Section>
         </Layout>
         <div className="h-16" />
@@ -106,11 +106,11 @@ const AppHomePage = () => {
   return (
     <Page title="Overview">
       <Layout>
-        <Layout.Section fullWidth>
-          <VerticalStack gap="4">
+        <Layout.Section variant="fullWidth">
+          <BlockStack gap="400">
             <Card>
-              <VerticalStack gap="4">
-                <HorizontalStack align="space-between">
+              <BlockStack gap="400">
+                <InlineStack align="space-between">
                   <Text as="h2" variant="headingMd">
                     {availableCollectionCount} collection
                     {availableCollectionCount === 1 ? "" : "s"} available to
@@ -125,40 +125,40 @@ const AppHomePage = () => {
                   >
                     Manage availability
                   </Link>
-                </HorizontalStack>
+                </InlineStack>
 
-                <HorizontalStack gap="4">
-                  <Badge status="warning">Unassigned</Badge>
+                <InlineStack gap="400">
+                  <Badge tone="warning">Unassigned</Badge>
 
                   <Text as="p" variant="bodyMd">
                     {unassignedCollectionsCount} collection
                     {unassignedCollectionsCount === 1 ? "" : "s"} without a
                     campaign
                   </Text>
-                </HorizontalStack>
+                </InlineStack>
 
-                <HorizontalStack gap="4">
-                  <Badge status="new">Draft</Badge>
+                <InlineStack gap="400">
+                  <Badge tone="new">Draft</Badge>
 
                   <Text as="p" variant="bodyMd">
                     {draftCampaignsCount} campaign
                     {draftCampaignsCount === 1 ? "" : "s"} in draft mode
                   </Text>
-                </HorizontalStack>
+                </InlineStack>
 
-                <HorizontalStack gap="4">
-                  <Badge status="success">Active</Badge>
+                <InlineStack gap="400">
+                  <Badge tone="success">Active</Badge>
 
                   <Text as="p" variant="bodyMd">
                     {activeCampaignsCount} active campaign
                     {activeCampaignsCount === 1 ? "" : "s"}
                   </Text>
-                </HorizontalStack>
-              </VerticalStack>
+                </InlineStack>
+              </BlockStack>
             </Card>
 
             <CampaignListing listing={listing} />
-          </VerticalStack>
+          </BlockStack>
         </Layout.Section>
       </Layout>
       <div className="h-16" />

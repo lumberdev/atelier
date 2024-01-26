@@ -9,15 +9,15 @@ import {
   DropZone,
   Form,
   FormLayout,
-  HorizontalGrid,
-  HorizontalStack,
+  InlineGrid,
+  InlineStack,
   Layout,
   Modal,
   Page,
   Text,
   TextField,
   Toast,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -95,7 +95,7 @@ const SettingsPage = () => {
                   }
                   connectedRight={
                     <Button
-                      primary
+                      variant="primary"
                       submit
                       loading={isUpdatingStoreDomain}
                       disabled={!domain || domain == settings.domain}
@@ -118,21 +118,21 @@ const SettingsPage = () => {
           <Card>
             <Form onSubmit={onSubmitTheme}>
               <FormLayout>
-                <HorizontalStack align="space-between">
+                <InlineStack align="space-between">
                   <Text variant="headingSm" as="h3">
                     Logo
                   </Text>
 
                   {imageFile && (
                     <Button
-                      destructive
-                      plain
+                      tone="critical"
+                      variant="plain"
                       onClick={() => setImageFile(null)}
                     >
                       Remove
                     </Button>
                   )}
-                </HorizontalStack>
+                </InlineStack>
 
                 <DropZone
                   accept="image/*"
@@ -145,20 +145,20 @@ const SettingsPage = () => {
                   ) => setImageFile(acceptedFiles[0])}
                 >
                   {logoUrl && (
-                    <HorizontalStack>
+                    <InlineStack>
                       <img
                         src={logoUrl}
                         alt=""
                         loading="eager"
                         className="aspect-auto h-auto w-full rounded-lg"
                       />
-                    </HorizontalStack>
+                    </InlineStack>
                   )}
 
                   {!imageFile && <DropZone.FileUpload />}
                 </DropZone>
 
-                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap={{ sm: "4" }}>
                   <Controller
                     control={control}
                     name="primaryColor"
@@ -184,9 +184,9 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </HorizontalGrid>
+                </InlineGrid>
 
-                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap={{ sm: "4" }}>
                   <Controller
                     control={control}
                     name="backgroundColor"
@@ -199,9 +199,9 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </HorizontalGrid>
+                </InlineGrid>
 
-                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap={{ sm: "4" }}>
                   <Controller
                     control={control}
                     name="borderRadius"
@@ -214,9 +214,9 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </HorizontalGrid>
+                </InlineGrid>
 
-                <HorizontalGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap={{ sm: "4" }}>
                   {" "}
                   <Controller
                     control={control}
@@ -235,13 +235,13 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </HorizontalGrid>
+                </InlineGrid>
 
-                <HorizontalGrid alignItems="center">
-                  <Button primary submit loading={isLoading}>
+                <InlineGrid alignItems="center">
+                  <Button variant="primary" submit loading={isLoading}>
                     Save
                   </Button>
-                </HorizontalGrid>
+                </InlineGrid>
               </FormLayout>
             </Form>
           </Card>
@@ -253,7 +253,7 @@ const SettingsPage = () => {
           description="Details about your subscription plan"
         >
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <Text as="p" variant="bodyLg">
                 You are currently subscribed to: <b>{subscription?.name}</b>
               </Text>
@@ -263,13 +263,13 @@ const SettingsPage = () => {
                 You will be charged <b>${subscription?.price}</b>
               </Text>
 
-              <HorizontalStack align="end" gap="4">
-                <Button destructive onClick={cancel}>
+              <InlineStack align="end" gap="400">
+                <Button tone="critical" onClick={cancel}>
                   Cancel
                 </Button>
                 {/* <Button>Upgrade</Button> */}
-              </HorizontalStack>
-            </VerticalStack>
+              </InlineStack>
+            </BlockStack>
           </Card>
         </Layout.AnnotatedSection>
       </Layout>

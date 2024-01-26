@@ -4,159 +4,165 @@ import {
   Card,
   Divider,
   Grid,
-  HorizontalStack,
+  InlineStack,
   Icon,
   Layout,
   Page,
   Text,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
-import { TickMinor, MinusMinor } from "@shopify/polaris-icons";
+import { CheckIcon, MinusIcon } from "@shopify/polaris-icons";
 
 const OnboardingPage = () => {
   const { subscribe } = useBilling();
 
   return (
     <Page>
-      <VerticalStack gap="24">
-        <VerticalStack gap="4">
+      <BlockStack gap="2400">
+        <BlockStack gap="400">
           <Text as="h1" variant="heading3xl">
             Select the right plan for you
           </Text>
 
           <Text as="p">All our plans include an 8 week free trial</Text>
-        </VerticalStack>
+        </BlockStack>
 
         <Grid columns={{ sm: 1, md: 2, lg: 2 }}>
           <Grid.Cell>
             <Card>
-              <VerticalStack gap="4">
+              <BlockStack gap="400">
                 <Text as="h2" variant="bodyLg">
                   Starter
                 </Text>
                 <Text as="p" variant="headingXl">
                   $49 / month
                 </Text>
-                <Text as="p" color="success" fontWeight="bold">
+                <Text as="p" tone="success" fontWeight="bold">
                   8 week free trial
                 </Text>
 
                 <Divider />
 
-                <VerticalStack gap="2">
-                  <HorizontalStack align="start" gap="2">
+                <BlockStack gap="200">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Create as many sales as you want
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Add all the products you want
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Password protect your sale
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={MinusMinor} color="subdued" />
+                      <Icon source={MinusIcon} tone="subdued" />
                     </div>
 
-                    <Text as="p" variant="bodyLg" color="subdued">
+                    <Text as="p" variant="bodyLg" tone="subdued">
                       <s>Remove Atelier branding</s>
                     </Text>
-                  </HorizontalStack>
-                </VerticalStack>
+                  </InlineStack>
+                </BlockStack>
 
-                <Button primary onClick={() => subscribe({ plan: "STARTER" })}>
+                <Button
+                  variant="primary"
+                  onClick={() => subscribe({ plan: "STARTER" })}
+                >
                   Subscribe to Starter
                 </Button>
-              </VerticalStack>
+              </BlockStack>
             </Card>
           </Grid.Cell>
 
           <Grid.Cell>
             <Card>
-              <VerticalStack gap="4">
+              <BlockStack gap="400">
                 <Text as="h2" variant="bodyLg">
                   Premium
                 </Text>
                 <Text as="p" variant="headingXl">
                   $99 / month
                 </Text>
-                <Text as="p" color="success" fontWeight="bold">
+                <Text as="p" tone="success" fontWeight="bold">
                   8 week free trial
                 </Text>
 
                 <Divider />
 
-                <VerticalStack gap="2">
-                  <HorizontalStack align="start" gap="2">
+                <BlockStack gap="200">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Create as many sales as you want
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Add all the products you want
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Password protect your sale
                     </Text>
-                  </HorizontalStack>
+                  </InlineStack>
 
-                  <HorizontalStack align="start" gap="2">
+                  <InlineStack align="start" gap="200">
                     <div>
-                      <Icon source={TickMinor} color="success" />
+                      <Icon source={CheckIcon} tone="success" />
                     </div>
 
                     <Text as="p" variant="bodyLg">
                       Remove Atelier branding
                     </Text>
-                  </HorizontalStack>
-                </VerticalStack>
+                  </InlineStack>
+                </BlockStack>
 
-                <Button primary onClick={() => subscribe({ plan: "PREMIUM" })}>
+                <Button
+                  variant="primary"
+                  onClick={() => subscribe({ plan: "PREMIUM" })}
+                >
                   Subscribe to Premium
                 </Button>
-              </VerticalStack>
+              </BlockStack>
             </Card>
           </Grid.Cell>
         </Grid>
-      </VerticalStack>
+      </BlockStack>
     </Page>
   );
 };

@@ -1,14 +1,14 @@
 import {
   Box,
   Card,
-  HorizontalGrid,
+  InlineGrid,
   IndexTable,
   Layout,
   SkeletonBodyText,
   SkeletonDisplayText,
   SkeletonPage,
   SkeletonThumbnail,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 
 const CampaignSkeletonPage = () => {
@@ -16,15 +16,15 @@ const CampaignSkeletonPage = () => {
     <SkeletonPage primaryAction backAction>
       <Layout>
         <Layout.Section>
-          <HorizontalGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="8">
+          <InlineGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="800">
             {/* RIGHT PANEL */}
-            <VerticalStack gap="4">
-              <VerticalStack gap="4">
+            <BlockStack gap="400">
+              <BlockStack gap="400">
                 <SkeletonBodyText />
-              </VerticalStack>
+              </BlockStack>
 
               <Card>
-                <VerticalStack gap="4">
+                <BlockStack gap="400">
                   <SkeletonDisplayText />
 
                   <IndexTable
@@ -39,7 +39,7 @@ const CampaignSkeletonPage = () => {
                     condensed
                   >
                     <IndexTable.Row id="1" position={0}>
-                      <VerticalStack gap="4">
+                      <BlockStack gap="400">
                         <Box />
 
                         <SkeletonThumbnail size="small" />
@@ -47,11 +47,11 @@ const CampaignSkeletonPage = () => {
                         <SkeletonBodyText />
 
                         <Box />
-                      </VerticalStack>
+                      </BlockStack>
                     </IndexTable.Row>
 
                     <IndexTable.Row id="1" position={0}>
-                      <VerticalStack gap="4">
+                      <BlockStack gap="400">
                         <Box />
 
                         <SkeletonThumbnail size="small" />
@@ -59,15 +59,15 @@ const CampaignSkeletonPage = () => {
                         <SkeletonBodyText />
 
                         <Box />
-                      </VerticalStack>
+                      </BlockStack>
                     </IndexTable.Row>
                   </IndexTable>
-                </VerticalStack>
+                </BlockStack>
               </Card>
-            </VerticalStack>
+            </BlockStack>
 
             {/* LEFT PANEL */}
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <Card>
                 <SkeletonThumbnail size="large" />
               </Card>
@@ -75,8 +75,8 @@ const CampaignSkeletonPage = () => {
               <Card>
                 <SkeletonBodyText />
               </Card>
-            </VerticalStack>
-          </HorizontalGrid>
+            </BlockStack>
+          </InlineGrid>
         </Layout.Section>
 
         <Layout.AnnotatedSection
@@ -84,10 +84,10 @@ const CampaignSkeletonPage = () => {
           description={<SkeletonBodyText />}
         >
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <SkeletonDisplayText />
               <SkeletonBodyText />
-            </VerticalStack>
+            </BlockStack>
           </Card>
         </Layout.AnnotatedSection>
 
@@ -96,10 +96,10 @@ const CampaignSkeletonPage = () => {
           description={<SkeletonBodyText />}
         >
           <Card>
-            <VerticalStack gap="4">
+            <BlockStack gap="400">
               <SkeletonDisplayText />
               <SkeletonBodyText />
-            </VerticalStack>
+            </BlockStack>
           </Card>
         </Layout.AnnotatedSection>
       </Layout>

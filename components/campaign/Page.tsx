@@ -6,7 +6,7 @@ import {
   EmptyState,
   Form,
   Frame,
-  HorizontalGrid,
+  InlineGrid,
   Layout,
   LinkAction,
   Page,
@@ -15,9 +15,9 @@ import {
   Text,
   Thumbnail,
   Toast,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
-import { ExternalMinor } from "@shopify/polaris-icons";
+import { ExternalIcon } from "@shopify/polaris-icons";
 import { FC } from "react";
 import StoreCustomizationFormSlice from "./StoreCustomizationFormSlice";
 import CartCustomizationFormSlice from "./CartCustomizationFormSlice";
@@ -105,9 +105,9 @@ const CampaignPage: FC<{
         <Form onSubmit={onSubmit}>
           <Layout>
             <Layout.Section>
-              <HorizontalGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="4">
+              <InlineGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="400">
                 {/* LEFT PANEL */}
-                <VerticalStack gap="4">
+                <BlockStack gap="400">
                   {collection.descriptionHtml ? (
                     <div
                       className="pb-8"
@@ -120,7 +120,7 @@ const CampaignPage: FC<{
                       image=""
                       action={{
                         content: "Go to Collection",
-                        icon: ExternalMinor,
+                        icon: ExternalIcon,
                         external: true,
                         url: collectionUrl,
                       }}
@@ -139,12 +139,12 @@ const CampaignPage: FC<{
                     products={collection.products.edges.map(({ node }) => node)}
                     manageProductsUrl={collectionProductsUrl}
                   />
-                </VerticalStack>
+                </BlockStack>
 
                 {/* RIGHT PANEL */}
-                <VerticalStack gap="4">
+                <BlockStack gap="400">
                   <Card>
-                    <VerticalStack gap="4">
+                    <BlockStack gap="400">
                       <Text as="h2" variant="headingMd">
                         Status
                       </Text>
@@ -166,11 +166,11 @@ const CampaignPage: FC<{
                           />
                         )}
                       />
-                    </VerticalStack>
+                    </BlockStack>
                   </Card>
 
                   <Card>
-                    <VerticalStack gap="4">
+                    <BlockStack gap="400">
                       <Text as="h2" variant="headingMd">
                         Image
                       </Text>
@@ -186,10 +186,10 @@ const CampaignPage: FC<{
                           Configure the campaign image on the collection page
                         </Text>
                       )}
-                    </VerticalStack>
+                    </BlockStack>
                   </Card>
-                </VerticalStack>
-              </HorizontalGrid>
+                </BlockStack>
+              </InlineGrid>
 
               <div className="h-8" />
             </Layout.Section>

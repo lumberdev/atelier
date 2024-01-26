@@ -5,11 +5,11 @@ import {
   Button,
   ButtonGroup,
   Card,
-  HorizontalStack,
+  InlineStack,
   Link,
   Text,
   Toast,
-  VerticalStack,
+  BlockStack,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -41,7 +41,7 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
 
   return (
     <>
-      <VerticalStack gap="4">
+      <BlockStack gap="400">
         {listing.map((item) => {
           const previewTokenQuery = new URLSearchParams({
             preview_token: item.previewToken,
@@ -54,19 +54,19 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
 
           return (
             <Card key={item.id}>
-              <VerticalStack gap="4">
-                <HorizontalStack align="space-between">
-                  <HorizontalStack gap="2">
+              <BlockStack gap="400">
+                <InlineStack align="space-between">
+                  <InlineStack gap="200">
                     <Text as="h2" variant="headingLg">
                       {item.title}
                     </Text>
 
                     {item.isCampaign ? (
-                      <Badge status={item.isActive ? "success" : "new"}>
+                      <Badge tone={item.isActive ? "success" : "new"}>
                         {item.isActive ? "Published" : "Draft"}
                       </Badge>
                     ) : null}
-                  </HorizontalStack>
+                  </InlineStack>
 
                   <Link
                     target="_blank"
@@ -76,7 +76,7 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                   >
                     Manage collection
                   </Link>
-                </HorizontalStack>
+                </InlineStack>
 
                 <Text as="p" variant="bodyMd">
                   {item.productCount} product
@@ -109,8 +109,8 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                           status: !item.isActive,
                         })
                       }
-                      primary={!item.isActive}
-                      destructive={item.isActive}
+                      variant={!item.isActive ? "primary" : "plain"}
+                      tone={item.isActive ? "critical" : "success"}
                     >
                       {item.isActive ? "Unpubish" : "Publish"}
                     </Button>
@@ -130,11 +130,11 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                     </Button>
                   </ButtonGroup>
                 )}
-              </VerticalStack>
+              </BlockStack>
             </Card>
           );
         })}
-      </VerticalStack>
+      </BlockStack>
 
       {toasts.map((toast, index) => (
         <Toast

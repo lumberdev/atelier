@@ -1,4 +1,4 @@
-import { Card, Text, TextField, VerticalStack } from "@shopify/polaris";
+import { Card, Text, TextField, BlockStack } from "@shopify/polaris";
 import { FC } from "react";
 import { Control, Controller, FieldValues } from "react-hook-form";
 
@@ -8,7 +8,7 @@ const StoreCustomizationFormSlice: FC<{
 }> = ({ control, isLoading }) => {
   return (
     <Card>
-      <VerticalStack gap="4">
+      <BlockStack gap="400">
         <Text variant="headingSm" as="h3">
           Store Details
         </Text>
@@ -25,7 +25,7 @@ const StoreCustomizationFormSlice: FC<{
             />
           )}
         />
-      </VerticalStack>
+      </BlockStack>
     </Card>
   );
 };
