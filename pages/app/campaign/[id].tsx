@@ -2,13 +2,14 @@ import prisma from "@/utils/prisma";
 import { FC } from "react";
 import { useRouter } from "next/router";
 import CampaignPage from "@/components/campaign/Page";
-import { CampaignInput, CampaignQueryFields } from "@/lib/types";
+import { CampaignFlatFields, CampaignQueryFields } from "@/lib/types";
 import useCollection from "@/lib/hooks/app/useCollection";
 import CampaignSkeletonPage from "@/components/campaign/SkeletonPage";
 import flattenCampaignFields from "@/utils/flattenCampaignFields";
+import getIdFromGid from "@/utils/getIdFromGid";
 
 const EditCampaignPage: FC<{
-  data: { campaign: CampaignInput; collectionId: string };
+  data: { campaign: CampaignFlatFields; collectionId: string };
 }> = ({ data: { campaign, collectionId } }) => {
   const router = useRouter();
   const { isLoading, ...collection } = useCollection(collectionId);
@@ -43,7 +44,7 @@ export const getServerSideProps = async ({
     },
   });
 
-  const collectionId = campaign.collectionId.split("/").reverse().at(0);
+  const collectionId = getIdFromGid(campaign.collectionId);
 
   const fields = flattenCampaignFields(campaign);
 

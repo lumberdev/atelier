@@ -1,9 +1,5 @@
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
-import {
-  CampaignCollection,
-  CampaignFlatFields,
-  CampaignInput,
-} from "@/lib/types";
+import { CampaignCollection, CampaignFlatFields } from "@/lib/types";
 import {
   CallbackAction,
   Card,
@@ -17,6 +13,7 @@ import {
   Select,
   SkeletonThumbnail,
   Text,
+  Thumbnail,
   Toast,
   VerticalStack,
 } from "@shopify/polaris";
@@ -31,6 +28,8 @@ import { useRouter } from "next/router";
 import { Controller } from "react-hook-form";
 import CampaignAccessControlFormSlice from "./AccessControlFormSlice";
 import { useToast } from "@/lib/hooks/app/useToast";
+import usePublication from "@/lib/hooks/app/usePublication";
+import getIdFromGid from "@/utils/getIdFromGid";
 
 const CampaignPage: FC<{
   collection: CampaignCollection;
@@ -41,6 +40,7 @@ const CampaignPage: FC<{
   const {
     settings: { shop },
   } = useStoreSettings();
+  const { id: publicationId } = usePublication();
 
   const { toasts, triggerToast, dismissToast } = useToast();
   const {
@@ -66,10 +66,13 @@ const CampaignPage: FC<{
     },
   });
 
-  const collectionUrl = `https://${shop}/admin/collections/${collection.id
-    .split("/")
-    .reverse()
-    .at(0)}`;
+  const collectionUrl = `https://${shop}/admin/collections/${getIdFromGid(
+    collection.id
+  )}`;
+
+  const collectionProductsUrl = `https://${shop}//admin/bulk?resource_name=Product&edit=publications.${getIdFromGid(
+    publicationId
+  )}.published_at&collection_id=${getIdFromGid(collection.id)}`;
 
   return (
     <Frame>
@@ -107,6 +110,7 @@ const CampaignPage: FC<{
                 <VerticalStack gap="4">
                   {collection.descriptionHtml ? (
                     <div
+                      className="pb-8"
                       dangerouslySetInnerHTML={{
                         __html: collection.descriptionHtml,
                       }}
@@ -129,29 +133,16 @@ const CampaignPage: FC<{
                       </Text>
                     </EmptyState>
                   )}
-                  <Text as="p">{collection.description}</Text>
 
-                  <ProductListing />
+                  <ProductListing
+                    totalProductCount={collection.productsCount}
+                    products={collection.products.edges.map(({ node }) => node)}
+                    manageProductsUrl={collectionProductsUrl}
+                  />
                 </VerticalStack>
 
                 {/* RIGHT PANEL */}
                 <VerticalStack gap="4">
-                  <Card>
-                    <VerticalStack gap="4">
-                      <Text as="h2" variant="headingMd">
-                        Image
-                      </Text>
-
-                      {collection.image ? (
-                        <SkeletonThumbnail />
-                      ) : (
-                        <Text as="p" variant="bodySm">
-                          Configure the campaign image on the collection page
-                        </Text>
-                      )}
-                    </VerticalStack>
-                  </Card>
-
                   <Card>
                     <VerticalStack gap="4">
                       <Text as="h2" variant="headingMd">
@@ -175,6 +166,26 @@ const CampaignPage: FC<{
                           />
                         )}
                       />
+                    </VerticalStack>
+                  </Card>
+
+                  <Card>
+                    <VerticalStack gap="4">
+                      <Text as="h2" variant="headingMd">
+                        Image
+                      </Text>
+
+                      {collection.image ? (
+                        <img
+                          src={collection.image.url}
+                          alt={collection.image.altText}
+                          className="aspect-square w-full rounded-md object-cover"
+                        />
+                      ) : (
+                        <Text as="p" variant="bodySm">
+                          Configure the campaign image on the collection page
+                        </Text>
+                      )}
                     </VerticalStack>
                   </Card>
                 </VerticalStack>

@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import usePublication from "@/lib/hooks/app/usePublication";
 import CampaignListing from "@/components/campaign/List";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
+import getIdFromGid from "@/utils/getIdFromGid";
 
 //On first install, check if the store is installed and redirect accordingly
 export async function getServerSideProps(context) {
@@ -118,9 +119,9 @@ const AppHomePage = () => {
 
                   <Link
                     target="_blank"
-                    url={`https://${domain}/admin/bulk?resource_name=Collection&edit=publications.${
-                      publicationId.split("/").reverse()[0]
-                    }.published_at`}
+                    url={`https://${domain}/admin/bulk?resource_name=Collection&edit=publications.${getIdFromGid(
+                      publicationId
+                    )}.published_at`}
                   >
                     Manage availability
                   </Link>

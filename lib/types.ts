@@ -125,6 +125,28 @@ export type PublicationCollectionListing = {
   previewToken?: string;
 }[];
 
+export type CampaignProduct = {
+  id: string;
+  title: string;
+  featuredImage: {
+    altText: string;
+    width: string;
+    height: string;
+    url: string;
+  };
+  description?: string;
+  descriptionHtml?: string;
+  priceRangeV2: {
+    minVariantPrice: {
+      amount: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+    };
+  };
+  publishedOnPublication: boolean;
+};
+
 export type CampaignCollection = {
   id: string;
   handle: string;
@@ -137,6 +159,17 @@ export type CampaignCollection = {
     height: number;
     altText?: string;
     url: string;
+  };
+  productsCount: number;
+  products: {
+    pageInfo?: {
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+    };
+
+    edges: {
+      node: CampaignProduct;
+    }[];
   };
 };
 

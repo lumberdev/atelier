@@ -16,6 +16,7 @@ import { FC } from "react";
 import { useMutation } from "react-query";
 import useFetch from "../hooks/useFetch";
 import { useToast } from "@/lib/hooks/app/useToast";
+import getIdFromGid from "@/utils/getIdFromGid";
 
 const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
   listing,
@@ -69,10 +70,9 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
 
                   <Link
                     target="_blank"
-                    url={`https://${domain}/admin/collections/${item.id
-                      .split("/")
-                      .reverse()
-                      .at(0)}`}
+                    url={`https://${domain}/admin/collections/${getIdFromGid(
+                      item.id
+                    )}`}
                   >
                     Manage collection
                   </Link>
@@ -120,10 +120,9 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                     <Button
                       onClick={() => {
                         router.push(
-                          `/app/campaign/new?collection_id=${item.id
-                            .split("/")
-                            .reverse()
-                            .at(0)}`
+                          `/app/campaign/new?collection_id=${getIdFromGid(
+                            item.id
+                          )}`
                         );
                       }}
                     >
