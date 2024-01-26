@@ -5,15 +5,18 @@ import { useRouter } from "next/router";
 
 const NewCampaignPage = () => {
   const router = useRouter();
-  const { isLoading, ...collection } = useCollection(
-    router.query.collection_id as string
-  );
+  const { isLoading, goToNextPage, goToPreviousPage, ...collection } =
+    useCollection(router.query.collection_id as string);
 
   if (isLoading) return <CampaignSkeletonPage />;
 
   return (
     <CampaignPage
       collection={collection}
+      pagination={{
+        goToNextPage,
+        goToPreviousPage,
+      }}
       backAction={{
         content: "Campaigns",
         onAction: () => {

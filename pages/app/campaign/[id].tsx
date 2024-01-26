@@ -12,7 +12,8 @@ const EditCampaignPage: FC<{
   data: { campaign: CampaignFlatFields; collectionId: string };
 }> = ({ data: { campaign, collectionId } }) => {
   const router = useRouter();
-  const { isLoading, ...collection } = useCollection(collectionId);
+  const { isLoading, goToNextPage, goToPreviousPage, ...collection } =
+    useCollection(collectionId);
 
   if (isLoading) return <CampaignSkeletonPage />;
 
@@ -20,6 +21,10 @@ const EditCampaignPage: FC<{
     <CampaignPage
       collection={collection}
       campaign={campaign}
+      pagination={{
+        goToNextPage,
+        goToPreviousPage,
+      }}
       backAction={{
         content: "Campaign",
         onAction: () => router.back(),

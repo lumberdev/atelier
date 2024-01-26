@@ -1,7 +1,6 @@
 import { CampaignCollection } from "@/lib/types";
 import clientProvider from "@/utils/clientProvider";
 import verifyRequest from "@/utils/middleware/verifyRequest";
-import prisma from "@/utils/prisma";
 import { Session } from "@shopify/shopify-api";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
@@ -15,7 +14,11 @@ router.use(verifyRequest);
 
 router.get(async (req, res) => {
   const shop = req.user_session.shop;
-  const id = req.query.id;
+  const {
+    id,
+    after: paginateAfter = "",
+    before: paginateBefore = "",
+  } = req.query;
   const collectionId = `gid://shopify/Collection/${id}`;
 
   const { client } = await clientProvider.offline.graphqlClient({ shop });
@@ -34,6 +37,14 @@ router.get(async (req, res) => {
   const publication = (publicationResponse.body as any)?.data
     .currentAppInstallation?.publication;
 
+  const productsPerPage = 5;
+  const pagination = {
+    forward: paginateAfter
+      ? `first: ${productsPerPage}, after: "${paginateAfter}"`
+      : `first: ${productsPerPage}`,
+    backward: `last: ${productsPerPage}, before: "${paginateBefore}"`,
+  };
+
   const response = await client.query({
     data: `
       query Collection {
@@ -51,10 +62,14 @@ router.get(async (req, res) => {
             url
           }
           productsCount
-          products(first: 100) {
+          products(${
+            paginateBefore ? pagination.backward : pagination.forward
+          }) {
             pageInfo {
               hasPreviousPage
               hasNextPage
+              startCursor
+              endCursor
             }
 
             edges {

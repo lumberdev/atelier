@@ -165,6 +165,8 @@ export type CampaignCollection = {
     pageInfo?: {
       hasPreviousPage: boolean;
       hasNextPage: boolean;
+      startCursor?: string;
+      endCursor?: string;
     };
 
     edges: {

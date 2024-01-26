@@ -35,7 +35,13 @@ const CampaignPage: FC<{
   collection: CampaignCollection;
   campaign?: CampaignFlatFields;
   backAction?: CallbackAction | LinkAction;
-}> = ({ collection, campaign, backAction }) => {
+  pagination: { goToNextPage: () => void; goToPreviousPage: () => void };
+}> = ({
+  collection,
+  campaign,
+  backAction,
+  pagination: { goToPreviousPage = () => {}, goToNextPage = () => {} },
+}) => {
   const router = useRouter();
   const {
     settings: { shop },
@@ -139,6 +145,12 @@ const CampaignPage: FC<{
                     products={collection.products.edges.map(({ node }) => node)}
                     manageProductsUrl={collectionProductsUrl}
                     collectionUrl={collectionUrl}
+                    pagination={{
+                      hasPrevious: collection.products.pageInfo.hasPreviousPage,
+                      onPrevious: goToPreviousPage,
+                      hasNext: collection.products.pageInfo.hasNextPage,
+                      onNext: goToNextPage,
+                    }}
                   />
                 </BlockStack>
 

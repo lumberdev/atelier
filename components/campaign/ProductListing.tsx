@@ -20,35 +20,60 @@ const ProductListing: FC<{
   products: CampaignProduct[];
   manageProductsUrl: string;
   collectionUrl: string;
-}> = ({ totalProductCount, products, manageProductsUrl, collectionUrl }) => {
+  pagination: {
+    hasPrevious: boolean;
+    onPrevious: () => void;
+    hasNext: boolean;
+    onNext: () => void;
+  };
+}> = ({
+  totalProductCount,
+  products,
+  manageProductsUrl,
+  collectionUrl,
+  pagination: {
+    hasNext,
+    hasPrevious,
+    onPrevious = () => {},
+    onNext = () => {},
+  },
+}) => {
   const {
     settings: { shop },
   } = useStoreSettings();
 
   return (
-    <Card>
+    <Card padding="0">
       <BlockStack gap="400">
-        <InlineStack align="space-between">
-          <Text as="h2" variant="headingMd">
-            Product Listing
-          </Text>
+        <div className="px-5 py-6">
+          <InlineStack align="space-between">
+            <Text as="h2" variant="headingMd">
+              Product Listing
+            </Text>
 
-          <div className="flex-1">
-            {totalProductCount > 0 && (
-              <InlineStack gap="400" align="end">
-                <Link target="_blank" url={manageProductsUrl}>
-                  Manage {totalProductCount} products
-                </Link>
-              </InlineStack>
-            )}
-          </div>
-        </InlineStack>
+            <div className="flex-1">
+              {totalProductCount > 0 && (
+                <InlineStack gap="400" align="end">
+                  <Link target="_blank" url={manageProductsUrl}>
+                    Manage {totalProductCount} products
+                  </Link>
+                </InlineStack>
+              )}
+            </div>
+          </InlineStack>
+        </div>
 
         <IndexTable
           resourceName={{ singular: "product", plural: "products" }}
           itemCount={products.length}
           condensed
           headings={[{ title: "Title" }]}
+          pagination={{
+            hasNext,
+            hasPrevious,
+            onNext,
+            onPrevious,
+          }}
           emptyState={
             <EmptyState
               image=""
@@ -66,7 +91,7 @@ const ProductListing: FC<{
         >
           {products.map((product, index) => (
             <IndexTable.Row id={product.id} position={index} key={product.id}>
-              <div className="py-4">
+              <div className="px-5 py-4">
                 <InlineStack gap="400" blockAlign="start">
                   <Thumbnail
                     source={product.featuredImage.url}
