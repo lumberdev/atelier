@@ -13,73 +13,37 @@ import LoadingScreen from "@/components/LoadingScreen";
 import Page from "@/components/Page";
 import NotFoundPage from "@/components/NotFoundPage";
 import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
+import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
+import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   query: { handle },
 }) => {
-  const url = new URL(
-    req.url,
-    `${process.env.NODE_ENV === "production" ? "https" : "http"}://${
-      req.headers.host
-    }`
-  );
-  const [subdomain] = url.hostname.split(".");
-  const queryPreviewToken = url.searchParams.get("preview_token");
+  const { data, redirect: invalidCampaignRequestError } =
+    await getCampaignForRequest({
+      req,
+      campaignHandle: handle as string,
+    });
 
-  if (["localhost", "atelier"].includes(subdomain))
-    return {
-      redirect: {
-        destination: "",
-        permanent: false,
-      },
-    };
+  if (invalidCampaignRequestError)
+    return { redirect: invalidCampaignRequestError };
 
-  const merchant = await prisma.stores.findUnique({
-    where: {
-      identifier: subdomain,
-    },
-    include: {
-      campaigns: {
-        where: {
-          handle: handle as string,
-        },
-        include: {
-          accessPageConfig: true,
-        },
-      },
-    },
-  });
+  const { merchant, config, campaign } = data;
 
-  const merchantSecret = merchant.secret;
-  const [{ accessPageConfig: config, ...campaign }] = merchant.campaigns;
-  const campaignPassword = config?.password;
-
-  if (!config || !campaignPassword)
-    return {
-      props: {
-        campaign,
-      },
-    };
-
-  const authorized = authorizeRequest({
+  const authorization = await verifyAccessPermission({
     req,
-    merchantSecret,
-    campaignPassword,
+    merchant,
+    campaign: {
+      handle: handle as string,
+      password: config.password,
+      ...campaign,
+    },
   });
 
-  if (!authorized)
-    return {
-      redirect: {
-        destination: `/${handle as string}/password${
-          !campaign.isActive && queryPreviewToken
-            ? `?preview_token=${queryPreviewToken}`
-            : ""
-        }`,
-        permanent: false,
-      },
-    };
+  if (authorization.notFound || authorization.redirect) return authorization;
 
+  // Campaign is protected and request is authorized, complete request
   return {
     props: {
       campaign,

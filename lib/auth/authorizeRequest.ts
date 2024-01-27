@@ -11,7 +11,6 @@ export const authorizeRequest = ({
   campaignPassword: string;
 }) => {
   const token = req.cookies["auth_token"];
-  console.log("[AT]", token);
 
   if (!token) return false;
 
