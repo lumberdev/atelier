@@ -15,22 +15,70 @@ import NotFoundPage from "@/components/NotFoundPage";
 import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
+import getProductListing from "@/lib/campaign/getProductListing";
+import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
 
-export const getServerSideProps: GetServerSideProps = async ({
+interface PageProps {
+  collection: Awaited<ReturnType<typeof getCampaignCollection>>;
+  listing: Awaited<ReturnType<typeof getProductListing>>;
+  isActive: boolean;
+  previewToken: string; // TODO: Draft mode validation should be moved to server-side
+}
+
+const CampaignPage: FC<PageProps> = ({
+  collection,
+  listing,
+  isActive,
+  previewToken,
+}) => {
+  // const router = useRouter();
+
+  // TODO: Move this to server-side to avoid leaking the preview token
+  const { showNotFoundPage } = useDraftCampaign({
+    isCampaignActive: isActive,
+    previewToken: previewToken,
+  });
+
+  if (showNotFoundPage) return <NotFoundPage />;
+
+  // if (productsLoading || collectionsLoading) return <LoadingScreen />;
+
+  // return (
+  //   <Page {...{ campaign }}>
+  //     <AnnouncementBar
+  //       announcement={campaign?.announcement}
+  //       className="hidden lg:block"
+  //     />
+  //     <Header {...{ campaign, campaignHandle: handle, collections }} />
+  //     <ProductGrid {...{ products: homepageProducts, handle }} />
+  //   </Page>
+  // );
+
+  return <pre>{JSON.stringify({ collection, listing }, null, 2)}</pre>;
+};
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
   query: { handle },
 }) => {
-  const { data, redirect: invalidCampaignRequestError } =
-    await getCampaignForRequest({
-      req,
-      campaignHandle: handle as string,
-    });
+  // 1. Get campaign associated with shop and handle
+  const {
+    data,
+    redirect: invalidCampaignRequestError,
+    notFound,
+  } = await getCampaignForRequest({
+    req,
+    campaignHandle: handle as string,
+  });
 
-  if (invalidCampaignRequestError)
+  if (!data && invalidCampaignRequestError)
     return { redirect: invalidCampaignRequestError };
+
+  if (!data && notFound) return { notFound: true };
 
   const { merchant, config, campaign } = data;
 
+  // 2. Run access control
   const authorization = await verifyAccessPermission({
     req,
     merchant,
@@ -43,60 +91,29 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   if (authorization.notFound || authorization.redirect) return authorization;
 
-  // Campaign is protected and request is authorized, complete request
+  // 3. Get collection. This is static so server-render should be enough
+  const collection = await getCampaignCollection({
+    shop: merchant.shop,
+    handle: handle as string,
+    publicationId: merchant.publicationId,
+  });
+
+  // 4. Ger paginated product listing. This will change client-side so server-render only for the initial load
+  const listing = await getProductListing({
+    handle: handle as string,
+    shop: merchant.shop,
+    publicationId: merchant.publicationId,
+    pagination: {},
+  });
+
   return {
     props: {
-      campaign,
+      collection,
+      isActive: campaign.isActive,
+      listing,
+      previewToken: campaign.previewToken,
     },
   };
-};
-
-function getUniqueProductsFromCollections(products, collections) {
-  const allProducts = [...products];
-  for (const collection of collections) {
-    allProducts.push(...collection.products);
-  }
-  const uniqueProducts = allProducts.filter(
-    (product, index, self) =>
-      index === self.findIndex((p) => p.id === product.id)
-  );
-  return uniqueProducts;
-}
-
-const CampaignPage: FC<{ campaign: campaigns }> = ({ campaign }) => {
-  const router = useRouter();
-  const { handle } = router.query;
-  const { collections, isLoading: collectionsLoading } = useCollections({
-    store_id: campaign.storeId,
-    collection_ids: campaign?.collectionIds,
-  });
-  const { products, isLoading: productsLoading } = useProducts({
-    store_id: campaign.storeId,
-    product_ids: campaign?.productIds,
-  });
-  const { showNotFoundPage } = useDraftCampaign({
-    isCampaignActive: campaign.isActive,
-    previewToken: campaign.previewToken,
-  });
-
-  if (showNotFoundPage) return <NotFoundPage />;
-
-  if (productsLoading || collectionsLoading) return <LoadingScreen />;
-  const homepageProducts = getUniqueProductsFromCollections(
-    products,
-    collections
-  );
-
-  return (
-    <Page {...{ campaign }}>
-      <AnnouncementBar
-        announcement={campaign?.announcement}
-        className="hidden lg:block"
-      />
-      <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <ProductGrid {...{ products: homepageProducts, handle }} />
-    </Page>
-  );
 };
 
 export default CampaignPage;
