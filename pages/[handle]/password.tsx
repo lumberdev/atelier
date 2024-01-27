@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import NotFoundPage from "@/components/NotFoundPage";
 import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
+import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
 
 interface ServerSideProps {
   config: Pick<
@@ -31,12 +32,7 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   const handle = ctx.query.handle as string;
 
-  const url = new URL(
-    ctx.req.url,
-    `${process.env.NODE_ENV === "production" ? "https" : "http"}://${
-      ctx.req.headers.host
-    }`
-  );
+  const url = getServerSideRequestUrl(ctx.req);
   const [subdomain] = url.hostname.split(".");
 
   const merchant = await prisma.stores.findUnique({
