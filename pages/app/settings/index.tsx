@@ -158,7 +158,7 @@ const SettingsPage = () => {
                   {!imageFile && <DropZone.FileUpload />}
                 </DropZone>
 
-                <InlineGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap="400">
                   <Controller
                     control={control}
                     name="primaryColor"
@@ -186,7 +186,7 @@ const SettingsPage = () => {
                   />
                 </InlineGrid>
 
-                <InlineGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap="400">
                   <Controller
                     control={control}
                     name="backgroundColor"
@@ -201,7 +201,7 @@ const SettingsPage = () => {
                   />
                 </InlineGrid>
 
-                <InlineGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap="400">
                   <Controller
                     control={control}
                     name="borderRadius"
@@ -216,7 +216,7 @@ const SettingsPage = () => {
                   />
                 </InlineGrid>
 
-                <InlineGrid columns={2} gap={{ sm: "4" }}>
+                <InlineGrid columns={2} gap="400">
                   {" "}
                   <Controller
                     control={control}

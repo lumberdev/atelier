@@ -13,34 +13,6 @@ const router = createRouter<
 
 router.use(verifyRequest);
 
-router.get(async (req, res) => {
-  const shop = req.user_session.shop;
-
-  const store = await prisma.stores.findUnique({
-    where: { shop },
-    include: { campaigns: true },
-  });
-
-  if (!store)
-    return res.status(500).json({
-      error: {
-        code: "UNABLE_TO_FIND_STORE",
-        message: "Unable to find a store with the provided name",
-      },
-    });
-
-  const availableProductCount = store.campaigns.reduce(
-    (acc, campaign) => acc + campaign.productIds.length,
-    0
-  );
-
-  return res.status(200).json({
-    identifier: store?.identifier,
-    campaigns: store.campaigns,
-    availableProductCount,
-  });
-});
-
 router.post(async (req, res) => {
   const shop = req.user_session.shop;
   const body = JSON.parse(req.body) as CampaignInput & {
