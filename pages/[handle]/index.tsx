@@ -17,6 +17,10 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "@/utils/queryClient";
+import { CartProvider } from "@/context/CartContext";
+import SlidingCart from "@/components/cart/SlidingCart";
 
 interface PageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -44,14 +48,19 @@ const CampaignPage: FC<PageProps> = ({
   // if (productsLoading || collectionsLoading) return <LoadingScreen />;
 
   // return (
-  //   <Page {...{ campaign }}>
-  //     <AnnouncementBar
-  //       announcement={campaign?.announcement}
-  //       className="hidden lg:block"
-  //     />
-  //     <Header {...{ campaign, campaignHandle: handle, collections }} />
-  //     <ProductGrid {...{ products: homepageProducts, handle }} />
-  //   </Page>
+  //   <QueryClientProvider client={queryClient}>
+  //     <CartProvider>
+  //       <Page {...{ campaign }}>
+  //         <AnnouncementBar
+  //           announcement={campaign?.announcement}
+  //           className="hidden lg:block"
+  //         />
+  //         <Header {...{ campaign, campaignHandle: handle, collections }} />
+  //         <ProductGrid {...{ products: homepageProducts, handle }} />
+  //       </Page>
+  //       <SlidingCart />
+  //     </CartProvider>
+  //   </QueryClientProvider>
   // );
 
   return <pre>{JSON.stringify({ collection, listing }, null, 2)}</pre>;
