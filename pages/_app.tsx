@@ -4,8 +4,6 @@ import AppBridgeProvider from "../components/providers/AppBridgeProvider";
 import { useRouter } from "next/router";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
-import { CartProvider } from "@/context/CartContext";
-import SlidingCart from "@/components/cart/SlidingCart";
 import BillingProvider from "@/context/BillingProvider";
 import Navigation from "@/components/Navigation";
 
@@ -38,12 +36,5 @@ export default function App({ Component, pageProps }) {
 
   // ATELIER WEBSITE
   import("./site-global.css" as any);
-  return (
-    <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <Component {...pageProps} />
-        <SlidingCart />
-      </CartProvider>
-    </QueryClientProvider>
-  );
+  return <Component {...pageProps} />;
 }

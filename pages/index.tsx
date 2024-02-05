@@ -1,8 +1,11 @@
+import AtelierLandingPage from "@/components/atelier-landing-page";
+import { NextUIProvider } from "@nextui-org/react";
+
 const HomePage = () => {
   return (
-    <div className="h-screen">
-      <h1>Welcome to Atelier</h1>
-    </div>
+    <NextUIProvider>
+      <AtelierLandingPage />
+    </NextUIProvider>
   );
 };
 

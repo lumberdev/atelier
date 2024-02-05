@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: white;
   overflow-y: scroll;
@@ -10,4 +14,24 @@ body {
 #__next {
   display: flex;
   flex-direction: column;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.vertical-marquee-content {
+  animation: vertical-marquee 30s linear infinite; /* Adjust timing as needed */
+}
+
+/* Define the keyframes for the vertical scrolling */
+@keyframes vertical-marquee {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%); /* Move the content up */
+  }
 }
