@@ -36,5 +36,9 @@ export default function App({ Component, pageProps }) {
 
   // ATELIER WEBSITE
   import("./site-global.css" as any);
-  return <Component {...pageProps} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+    </QueryClientProvider>
+  );
 }
