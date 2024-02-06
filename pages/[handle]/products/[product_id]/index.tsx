@@ -12,31 +12,33 @@ const ProductCampaignPage = () => {
   const router = useRouter();
   const { handle, product_id } = router.query;
 
-  const { isLoading: campaignLoading, campaign } = useCampaign({
-    handle,
-  });
-  const { isLoading: productLoading, product } = useProduct({
-    store_id: campaign?.storeId,
-    product_id,
-  });
+  // const { isLoading: campaignLoading, campaign } = useCampaign({
+  //   handle,
+  // });
+  // const { isLoading: productLoading, product } = useProduct({
+  //   store_id: campaign?.storeId,
+  //   product_id,
+  // });
 
-  const { collections, isLoading: collectionsLoading } = useCollections({
-    store_id: campaign.storeId,
-    collection_ids: campaign?.collectionIds,
-  });
+  // const { collections, isLoading: collectionsLoading } = useCollections({
+  //   store_id: campaign.storeId,
+  //   collection_ids: campaign?.collectionIds,
+  // });
 
-  if (campaignLoading || productLoading) return <LoadingScreen />;
+  // if (campaignLoading || productLoading) return <LoadingScreen />;
 
   return (
-    <Page {...{ campaign }}>
-      <AnnouncementBar
-        announcement={campaign?.announcement}
-        className="hidden lg:block"
-      />
-      <Header {...{ campaign, campaignHandle: handle, collections }} />
-      <ProductPage {...{ campaign, product }} />
-    </Page>
+    <div>
+      <h1>WIP</h1>
+    </div>
   );
+
+  // return (
+  //   <Page {...{ campaign }}>
+  //     <Header {...{ campaign, campaignHandle: handle, collections }} />
+  //     <ProductPage {...{ campaign, product }} />
+  //   </Page>
+  // );
 };
 
 export default ProductCampaignPage;
