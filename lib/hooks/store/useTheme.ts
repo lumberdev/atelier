@@ -3,7 +3,20 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 export const useTheme = () => {
-  const { data = { global: {} }, isLoading } = useQuery<{
+  const {
+    data = {
+      global: {
+        id: "",
+        logo: "",
+        backgroundColor: "",
+        borderRadius: 0,
+        logoPosition: "",
+        primaryColor: "",
+        secondaryColor: "",
+      },
+    },
+    isLoading,
+  } = useQuery<{
     global: Awaited<ReturnType<typeof getMerchantTheme>>;
   }>({
     queryKey: "theme",

@@ -47,7 +47,17 @@ const getProductListing = async ({
             description?: string;
             descriptionHtml?: string;
             publishedOnPublication: boolean;
-          };
+            priceRangeV2: {
+              maxVariantPrice: {
+                amount: string;
+                currencyCode: string;
+              };
+              minVariantPrice: {
+                amount: string;
+                currencyCode: string;
+              };
+            };
+          }[];
         };
       };
     };
@@ -77,6 +87,17 @@ const getProductListing = async ({
               description(truncateAt: 60)
               descriptionHtml
               publishedOnPublication(publicationId: "${publicationId}")
+              priceRangeV2 {
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
+
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
             }
           }
         }
@@ -85,8 +106,14 @@ const getProductListing = async ({
   });
 
   const collection = response.body?.data?.collectionByHandle;
+  const filteredProducts = collection.products.nodes.filter(
+    (product) => product.publishedOnPublication
+  );
 
-  return collection;
+  return {
+    ...collection,
+    products: { ...collection.products, nodes: filteredProducts },
+  };
 };
 
 export default getProductListing;
