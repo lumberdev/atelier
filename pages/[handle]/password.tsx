@@ -32,8 +32,7 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   const handle = ctx.query.handle as string;
 
-  const url = getServerSideRequestUrl(ctx.req);
-  const [subdomain] = url.hostname.split(".");
+  const { url, subdomain } = getServerSideRequestUrl(ctx.req);
 
   const merchant = await prisma.stores.findUnique({
     where: {

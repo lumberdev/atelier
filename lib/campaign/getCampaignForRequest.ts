@@ -17,8 +17,7 @@ const getCampaignForRequest = async ({
   | { redirect: Redirect; data?: never; notFound?: never }
   | { notFound: true; data?: never; redirect?: never }
 > => {
-  const url = getServerSideRequestUrl(req);
-  const [domain, subdomain] = url.hostname.split(".").reverse();
+  const { url, subdomain } = getServerSideRequestUrl(req);
 
   // Trying to access campaign from top-level domain, not allowed
   if (!subdomain)

@@ -21,7 +21,7 @@ const verifyAccessPermission = ({
   | { redirect: Redirect; notFound?: never; authorized?: never }
   | { notFound: true; redirect?: never; authorized?: never }
   | { authorized: true; redirect?: never; notFound?: never } => {
-  const url = getServerSideRequestUrl(req);
+  const { url } = getServerSideRequestUrl(req);
   const queryPreviewToken = url.searchParams.get("preview_token");
 
   // 1. Is merchant active?

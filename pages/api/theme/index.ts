@@ -6,8 +6,7 @@ import { createRouter } from "next-connect";
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
 router.get(async (req, res) => {
-  const url = getServerSideRequestUrl(req);
-  const [domain, subdomain] = url.hostname.split(".").reverse();
+  const { url, subdomain } = getServerSideRequestUrl(req);
 
   if (!subdomain)
     return res

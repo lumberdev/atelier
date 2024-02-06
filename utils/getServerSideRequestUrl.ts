@@ -8,7 +8,15 @@ const getServerSideRequestUrl = (req: GetServerSidePropsContext["req"]) => {
     }`
   );
 
-  return url;
+  if (process.env.NODE_ENV === "production") {
+    const [tld, domain, subdomain] = url.hostname.split(".").reverse();
+
+    return { url, subdomain };
+  }
+
+  const [subdomain] = url.hostname.split(".").reverse();
+
+  return { url, subdomain };
 };
 
 export default getServerSideRequestUrl;
