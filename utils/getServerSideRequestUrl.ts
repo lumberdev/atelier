@@ -14,7 +14,7 @@ const getServerSideRequestUrl = (req: GetServerSidePropsContext["req"]) => {
     return { url, subdomain };
   }
 
-  const [subdomain] = url.hostname.split(".").reverse();
+  const [subdomain] = url.hostname.split(".");
 
   return { url, subdomain };
 };
