@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
-import {
-  pickTextColorBasedOnBgColorAdvanced,
-  getOppositeColor,
-} from "@/lib/helper/colors";
+import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 
 const AnnouncementBar = ({ announcement, className = "" }) => {
   const {
@@ -17,16 +13,15 @@ const AnnouncementBar = ({ announcement, className = "" }) => {
 
   if (!announcement) return null;
   return (
-    <h3
-      id="announcement-bar"
-      className={`${className} w-full bg-[grey] px-3 py-2 text-center text-sm text-white`}
+    <div
+      className="bg-[grey] px-3 py-2 text-center"
       style={{
         backgroundColor: secondaryColor,
         color: announcementTextColor,
       }}
     >
-      {announcement}
-    </h3>
+      <p className={`${className} w-full text-sm text-white`}>{announcement}</p>
+    </div>
   );
 };
 
