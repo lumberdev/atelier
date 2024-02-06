@@ -56,6 +56,11 @@ const CampaignPage: FC<PageProps> = ({
         campaignHandle={collection.handle}
         announcement={announcement}
       />
+
+      <ProductGrid
+        handle={collection.handle}
+        products={listing.products.nodes}
+      />
     </div>
   );
 

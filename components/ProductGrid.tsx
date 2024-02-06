@@ -1,14 +1,21 @@
+import { FC } from "react";
 import ProductCard from "./ProductCard";
-import Section from "./Section";
-const ProductGrid = ({ products, handle }) => {
+import Container from "./general/Container";
+import getProductListing from "@/lib/campaign/getProductListing";
+
+const ProductGrid: FC<{
+  handle: string;
+  products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
+}> = ({ products, handle }) => {
   return (
-    <Section>
-      <div className="mx-4 grid w-full grid-cols-2 items-center justify-center gap-4 pt-6 xs:gap-8 sm:grid-cols-3 lg:mx-16 lg:grid-cols-4 lg:pt-2 xl:grid-cols-5">
-        {products.map((product) => {
-          return <ProductCard {...{ product, handle }} key={product.id} />;
-        })}
-      </div>
-    </Section>
+    <Container
+      variant="lg"
+      className="xs:gap-8 grid w-full grid-cols-2 items-center justify-center gap-4 pt-6 sm:grid-cols-3 lg:grid-cols-4 lg:pt-2 xl:grid-cols-5"
+    >
+      {products.map((product) => {
+        return <ProductCard {...{ product, handle }} key={product.id} />;
+      })}
+    </Container>
   );
 };
 
