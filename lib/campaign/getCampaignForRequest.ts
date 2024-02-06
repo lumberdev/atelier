@@ -29,10 +29,12 @@ const getCampaignForRequest = async ({
       },
     };
 
+  console.log("[AT]", { subdomain, campaignHandle });
   const data = await getCampaignData({
     identifier: subdomain,
     handle: campaignHandle,
   });
+  console.log("[AT]", { data });
 
   if (!data)
     return {
@@ -80,6 +82,8 @@ const getCampaignData = async ({
       theme: true,
     },
   });
+
+  console.log("[AT]", { identifier, handle, merchant });
 
   if (!merchant || !merchant.campaigns.length) return null;
 
