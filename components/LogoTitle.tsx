@@ -5,12 +5,7 @@ import { storeThemes } from "@prisma/client";
 import Image from "next/image";
 import { supabaseStorage } from "@/utils/supabase";
 
-const LogoTitle = ({
-  campaign,
-  campaignHandle,
-  color = "black",
-  className = "",
-}) => {
+const LogoTitle = ({ title, handle, color = "black", className = "" }) => {
   const {
     global: { logo },
   } = useTheme() as { global: storeThemes };
@@ -25,7 +20,7 @@ const LogoTitle = ({
 
   return (
     <Link
-      href={`/${campaignHandle}`}
+      href={`/${handle}`}
       className={`flex items-center no-underline ${className}`}
     >
       {imageUrl !== "" ? (
@@ -33,7 +28,7 @@ const LogoTitle = ({
           width={100}
           height={100}
           src={imageUrl}
-          alt={campaign?.title}
+          alt={title}
           className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
         />
       ) : (
@@ -41,7 +36,7 @@ const LogoTitle = ({
           className="mx-1 py-0 text-xl text-black lg:py-4 lg:text-3xl"
           style={{ color: color }}
         >
-          {campaign?.title}
+          {title}
         </h1>
       )}
     </Link>

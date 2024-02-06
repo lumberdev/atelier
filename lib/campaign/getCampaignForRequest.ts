@@ -63,6 +63,13 @@ const getCampaignData = async ({
           collectionId: true,
           isActive: true,
           previewToken: true,
+          announcement: true,
+          cartBackgroundColor: true,
+          cartCheckoutButtonStyle: true,
+          cartDescription: true,
+          cartItemsImageStyle: true,
+          cartTextColor: true,
+          cartTitle: true,
           accessPageConfig: {
             select: {
               password: true,

@@ -27,6 +27,7 @@ interface PageProps {
   listing: Awaited<ReturnType<typeof getProductListing>>;
   isActive: boolean;
   previewToken: string; // TODO: Draft mode validation should be moved to server-side
+  announcement?: string;
 }
 
 const CampaignPage: FC<PageProps> = ({
@@ -34,6 +35,7 @@ const CampaignPage: FC<PageProps> = ({
   listing,
   isActive,
   previewToken,
+  announcement,
 }) => {
   // const router = useRouter();
 
@@ -46,6 +48,16 @@ const CampaignPage: FC<PageProps> = ({
   if (showNotFoundPage) return <NotFoundPage />;
 
   // if (productsLoading || collectionsLoading) return <LoadingScreen />;
+
+  return (
+    <div className="min-h-screen">
+      <Header
+        title={collection.title}
+        campaignHandle={collection.handle}
+        announcement={announcement}
+      />
+    </div>
+  );
 
   // return (
   //   <QueryClientProvider client={queryClient}>
@@ -121,6 +133,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       isActive: campaign.isActive,
       listing,
       previewToken: campaign.previewToken,
+      announcement: campaign.announcement,
     },
   };
 };
