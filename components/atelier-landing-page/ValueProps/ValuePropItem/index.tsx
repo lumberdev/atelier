@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import DropDownIcon from "@/assets/dropdown-icon.svg";
-import ArrowRightIcon from "@/assets/arrow-right.svg";
+import ArrowRightIcon from "@/components/general/icons/ArrowRightIcon";
 
 interface ValuePropItemProps {
   title: string;
@@ -32,12 +32,7 @@ const ValuePropItem = ({ title, description, url }: ValuePropItemProps) => {
               <p className="font-brand-heading text-[1.125rem] font-medium">
                 GET STARTED
               </p>
-              <Image
-                src={ArrowRightIcon}
-                alt="GET STARTED"
-                width="20"
-                height="20"
-              />
+              <ArrowRightIcon color="#2F2F2E" />
             </div>
           ) : (
             <Image
