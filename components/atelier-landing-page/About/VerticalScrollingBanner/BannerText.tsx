@@ -1,6 +1,6 @@
 const BannerText = () => {
   return (
-    <div className="flex flex-1 flex-col gap-[1.875rem] text-[3.75rem] font-light italic text-brand-2">
+    <div className="[&>*]:font-brand-body flex flex-1 flex-col gap-[1.875rem] text-[4.6875rem] italic text-brand-2 [&>*]:font-light">
       <p>sample sales</p>
       <p>early access</p>
       <p>limited editions</p>

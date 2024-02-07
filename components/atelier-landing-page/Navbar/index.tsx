@@ -59,7 +59,7 @@ export default function NavbarComponent() {
           </Button>
           <NavbarItem>
             <Drawer direction="right">
-              <DrawerTrigger>
+              <DrawerTrigger className="flex items-center">
                 <Image
                   src={HamburgerIcon}
                   alt="Hamburger menu"

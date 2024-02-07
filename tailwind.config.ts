@@ -25,6 +25,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        "brand-heading": ["var(--font-dmmono)"],
+        "brand-body": ["var(--font-taviraj)"],
+      },
       colors: {
         "brand-1": "#2F2F2E",
         "brand-2": "#CDCDC3",
