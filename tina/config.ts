@@ -29,6 +29,19 @@ export default defineConfig({
   schema: {
     collections: [
       {
+        name: "page",
+        label: "Pages",
+        path: "content/pages",
+        format: "json",
+        fields: [
+          {
+            name: "subtitle",
+            label: "Subtitle",
+            type: "string",
+          },
+        ],
+      },
+      {
         name: "post",
         label: "Posts",
         path: "content/posts",
