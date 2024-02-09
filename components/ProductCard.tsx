@@ -4,7 +4,6 @@ import { currencyFormatter } from "@/lib/helper/currency";
 import Link from "next/link";
 import { FC } from "react";
 import getProductListing from "@/lib/campaign/getProductListing";
-import getIdFromGid from "@/utils/getIdFromGid";
 
 const ProductCard: FC<{
   product: Awaited<
@@ -16,13 +15,13 @@ const ProductCard: FC<{
 
   const backgroundColor = global.backgroundColor ?? "";
 
-  const { minVariantPrice, maxVariantPrice } = product.priceRangeV2;
+  const { maxVariantPrice } = product.priceRangeV2;
 
   const cardTextColor = backgroundColor
     ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
     : "";
 
-  const href = `/${handle}/products/${getIdFromGid(product.id)}`;
+  const href = `/${handle}/${product.handle}`;
   const amount = Number(maxVariantPrice.amount);
 
   return (
