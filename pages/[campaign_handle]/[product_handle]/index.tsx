@@ -35,7 +35,7 @@ export default ProductDetailPage;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
-  query: { handle, productHandle },
+  query: { campaign_handle: handle, product_handle: productHandle },
 }) => {
   // 1. Get campaign associated with shop and handle
   const {
