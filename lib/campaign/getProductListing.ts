@@ -38,6 +38,7 @@ const getProductListing = async ({
           nodes: {
             id: string;
             title?: string;
+            handle: string;
             featuredImage?: {
               altText: string;
               width: number;
@@ -78,6 +79,7 @@ const getProductListing = async ({
             nodes {
               id
               title
+              handle
               featuredImage {
                 altText
                 width

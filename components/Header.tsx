@@ -3,7 +3,6 @@ import { useCart } from "@/context/CartContext";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import CartEmpty from "./general/icons/CartEmpty";
 import CartFilled from "./general/icons/CartFilled";
-import { storeThemes } from "@prisma/client";
 import {
   pickTextColorBasedOnBgColorAdvanced,
   getOppositeColor,
@@ -21,7 +20,7 @@ const Header: FC<{
   const { toggleCart, cartCount } = useCart();
   const {
     global: { primaryColor, logoPosition },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   const navTextIconColor = primaryColor
     ? pickTextColorBasedOnBgColorAdvanced(primaryColor, "white", "black")
