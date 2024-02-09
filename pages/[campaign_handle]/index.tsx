@@ -108,7 +108,7 @@ const CampaignPage: FC<PageProps> = ({
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
-  query: { handle },
+  query: { campaign_handle: handle },
 }) => {
   // 1. Get campaign associated with shop and handle
   const {

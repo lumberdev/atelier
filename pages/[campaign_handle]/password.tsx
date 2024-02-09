@@ -30,7 +30,7 @@ interface ServerSideProps {
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const handle = ctx.query.handle as string;
+  const handle = ctx.query.campaign_handle as string;
 
   const { url, subdomain } = getServerSideRequestUrl(ctx.req);
 
