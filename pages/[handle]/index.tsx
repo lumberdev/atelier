@@ -17,6 +17,7 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
+import getCampaignTheme from "@/lib/theme/getCampaignTheme";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
@@ -38,7 +39,7 @@ const CampaignPage: FC<PageProps> = ({
   announcement,
 }) => {
   // const router = useRouter();
-
+  
   // TODO: Move this to server-side to avoid leaking the preview token
   const { showNotFoundPage } = useDraftCampaign({
     isCampaignActive: isActive,
@@ -131,6 +132,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     publicationId: merchant.publicationId,
     pagination: {},
   });
+
+  const themes = await getCampaignTheme({ shop: merchant.shop });
 
   return {
     props: {

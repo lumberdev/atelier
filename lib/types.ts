@@ -175,6 +175,18 @@ export type CampaignCollection = {
   };
 };
 
+export type CampaignTheme = {
+  id: string;
+  created_at: string;
+  name: string;
+  previewable: boolean;
+  processing: boolean;
+  role: string;
+  src: string;
+  theme_store_id: string;
+  updated_ap: string;
+};
+
 export type CampaignQueryFields = {
   id: string;
   collectionId: string;
