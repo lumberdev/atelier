@@ -17,7 +17,7 @@ export const config = {
 
 export function middleware(request) {
   const {
-    nextUrl: { search },
+    nextUrl: { pathname, search },
   } = request;
   const urlSearchParams = new URLSearchParams(search);
   const params = Object.fromEntries(urlSearchParams.entries());
@@ -25,11 +25,15 @@ export function middleware(request) {
   const shop = params.shop || "*.myshopify.com";
 
   const res = NextResponse.next();
-  res.headers.set(
-    "Content-Security-Policy",
-    `frame-ancestors https://${shop} https://admin.shopify.com;`
-  );
 
+  // Exclude "/admin/index.html" and "/", this causes tinacms admin panel and live preview to crash 
+  if (!(pathname.includes("/admin/index.html") || pathname === "/")) {
+    res.headers.set(
+      "Content-Security-Policy",
+      `frame-ancestors https://${shop} https://admin.shopify.com;`
+    );
+  }
+  
   // You can also set request headers in NextResponse.rewrite
   return res;
 }
