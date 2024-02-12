@@ -7,8 +7,8 @@
     "url": "https://github.com/lumber/atelier.git"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev\"",
+    "build": "tinacms build && next build",
     "start": "next start",
     "pretty": "prettier --write ./",
     "update": "ncu -u",
@@ -68,6 +68,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "tinacms": "^1.5.28",
     "vaul": "^0.8.9",
     "yup": "^1.2.0"
   },
@@ -75,7 +76,9 @@
     "@shopify/app": "^3.47.5",
     "@shopify/cli": "^3.47.5",
     "@shopify/cli-kit": "^3.47.5",
+    "@tinacms/cli": "^1.5.39",
     "@types/cookie": "^0.5.1",
+    "@types/node": "^20.11.17",
     "dotenv": "^16.3.1",
     "ngrok": "^4.3.3",
     "npm-check-updates": "^16.10.16",
