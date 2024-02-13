@@ -6,6 +6,7 @@ import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import BillingProvider from "@/context/BillingProvider";
 import Navigation from "@/components/Navigation";
+import CartProvider from "@/context/CartProvider";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -38,7 +39,9 @@ export default function App({ Component, pageProps }) {
   import("./site-global.css" as any);
   return (
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      <CartProvider>
+        <Component {...pageProps} />
+      </CartProvider>
     </QueryClientProvider>
   );
 }
