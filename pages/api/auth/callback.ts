@@ -7,6 +7,7 @@ import prisma from "@/utils/prisma";
 import sessionHandler from "@/utils/sessionHandler.js";
 import shopify from "@/utils/shopify.js";
 import clientProvider from "@/utils/clientProvider";
+import createStorefrontAccessToken from "@/lib/auth/createStorefrontAccessToken.ts";
 
 const handler = async (req, res) => {
   try {
@@ -15,10 +16,8 @@ const handler = async (req, res) => {
       rawResponse: res,
     });
 
-    const { session } = callbackResponse;
-    await sessionHandler.storeSession(session);
-
     const host = req.query.host;
+    const { session } = callbackResponse;
     const { shop } = session;
 
     const { client: graphqlClient } =
@@ -28,7 +27,21 @@ const handler = async (req, res) => {
 
     const response = await graphqlClient.query({
       data: `
-      query ShopPublication {
+      query Shop {
+        shop {
+          storefrontAccessTokens(first: 1) {
+            nodes {
+              id
+              title
+              accessScopes {
+                handle
+                description
+              }
+              accessToken
+            }
+          }
+        }
+
         currentAppInstallation {
           publication {
             id
@@ -38,8 +51,18 @@ const handler = async (req, res) => {
     `,
     });
 
-    const publication = (response.body as any).data?.currentAppInstallation
-      ?.publication;
+    const data = (response.body as any).data ?? {};
+    const [storefrontAccessToken] =
+      data.shop.storefrontAccessTokens?.nodes ?? [];
+    const publication = data.currentAppInstallation?.publication;
+
+    if (!storefrontAccessToken) {
+      await createStorefrontAccessToken({
+        client: graphqlClient,
+      });
+    }
+
+    await sessionHandler.storeSession(session);
 
     await prisma.stores.upsert({
       where: { shop: shop },
