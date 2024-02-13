@@ -29,11 +29,11 @@ else
   echo "SHOPIFY_APP_URL_OPEN=$ngrok_url/api/auth?shop=river-theme.myshopify.com" >> .env
 fi
 
-# Run yarn update:url
-yarn update:url
+# Run npm update:url
+npm update:url
 
 # Display the URL for confirmation
 echo "Shopify App: $ngrok_url/api/auth?shop=river-theme.myshopify.com"
 
-# Run yarn dev in the background
-yarn dev 
+# Run npm dev in the background
+npm run dev 
