@@ -42,7 +42,7 @@
     "@shopify/shopify-api": "^7.5.0",
     "@supabase/supabase-js": "^2.31.0",
     "autoprefixer": "^10.4.14",
-    "axios": "^1.4.0",
+    "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.0",
