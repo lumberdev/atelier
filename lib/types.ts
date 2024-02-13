@@ -43,6 +43,7 @@ export interface CollectionResourceItem {
 
 export interface StoreThemeInput {
   id?: string;
+  favicon?: string
   logo?: string;
   primaryColor?: string;
   secondaryColor?: string;

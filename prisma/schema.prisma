@@ -52,6 +52,7 @@ model storeThemes {
   id              String   @id @default(cuid())
   storeId         String   @unique
   store           stores   @relation(fields: [storeId], references: [shop])
+  favicon         String?
   logo            String?
   primaryColor    String?
   secondaryColor  String?

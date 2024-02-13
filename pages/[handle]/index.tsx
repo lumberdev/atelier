@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { authorizeRequest } from "@/lib/auth/authorizeRequest";
 import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
@@ -22,6 +23,9 @@ import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
 import SlidingCart from "@/components/cart/SlidingCart";
+import { useTheme } from "@/lib/hooks/store/useTheme";
+import { storeThemes } from "@prisma/client";
+import { supabaseStorage } from "@/utils/supabase";
 
 interface PageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -39,6 +43,17 @@ const CampaignPage: FC<PageProps> = ({
   announcement,
 }) => {
   // const router = useRouter();
+  const {
+    global: { favicon },
+  } = useTheme() as { global: storeThemes };
+
+  useEffect(() => {
+    if(!favicon) return;
+    const image = supabaseStorage.getPublicUrl(favicon);
+
+    const faviconElem = document.querySelector("head .favicon");
+    faviconElem["href"] = image?.data.publicUrl || "";
+  }, [favicon])
   
   // TODO: Move this to server-side to avoid leaking the preview token
   const { showNotFoundPage } = useDraftCampaign({
