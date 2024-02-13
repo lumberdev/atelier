@@ -11,9 +11,8 @@ const getCampaignTheme = async ({
     const response = await client.get({ path: `themes`});
     const themes = response.body["themes"];
     const theme_id = themes.find((theme: CampaignTheme) => theme.role === "main")?.id;
-    // assume everything is here for now
     const demoAsset = await client.get({ path: `themes/${theme_id}/assets.json?asset[key]=config/settings_data.json` });
-    console.log("everything is the main theme here", JSON.parse(demoAsset.body['asset'].value));
+    // console.log("favicon updates for main theme", JSON.parse(demoAsset.body['asset'].value));
 
     return themes;
 };

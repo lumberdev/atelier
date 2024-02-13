@@ -215,6 +215,8 @@ export type CampaignFlatFields = {
   id: string;
   isActive: boolean;
   announcement: string;
+  pageTitle: string;
+  pageDescription: string;
   cartTitle: string;
   cartDescription: string;
   cartItemsImageStyle: string;
