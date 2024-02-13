@@ -5,13 +5,13 @@ Private sales for your Shopify store.
 ## Requirements
 
 - Node.js (v18.17.0 or newer)
-- NPM
+- Yarn (v1.22.19 or newer)
 - (For local development) A PostgreSQL database
 
 ## Up and Running
 
 1. Create a local PostgreSQL database
-2. Install dependencies with `npm install`
+2. Install dependencies with `yarn install`
 3. Create your development app on the [Shopify Partner Dashboard](https://partners.shopify.com/1011478/apps)
 
    - Click `Create App`
@@ -24,7 +24,7 @@ Private sales for your Shopify store.
    - Add the following API scopes: `read_products,read_checkouts,write_checkouts`
    - You can leave `SHOPIFY_APP_URL` empty for now, will be filled in the development workflow section
    - File uploads use the Supabase instance, in order to not mix prod and dev uploads we provide the `NEXT_PUBLIC_SUPABASE_STORAGE_KEY` variable that defines the folder where assets are saved. You can check the name of your folder in [Supabase](https://app.supabase.com/project/lypfjowlwsqnrjphjfgs/storage/buckets)
-5. Push the database schema to your database with `npm run prisma db push`
+5. Push the database schema to your database with `yarn prisma db push`
 6. Enable customer data usage (otherwise checkout will not work). (Full instructions [here](https://shopify.dev/docs/apps/store/data-protection/protected-customer-data#request-access-to-protected-customer-data)):
 
    - Go to the partners dashboard
@@ -36,11 +36,11 @@ Private sales for your Shopify store.
 
 ## Development workflow
 
-1. Start your local server with `npm run ngrok`
+1. Start your local server with `yarn ngrok`
    - If ngrok is not globally authenticated you can pass the auth token manually:
-     `npm run ngrok --authtoken <ngrok_token>`
+     `yarn ngrok --authtoken <ngrok_token>`
 2. Copy the forwarding `https` url from ngrok and add it to `SHOPIFY_APP_URL`
-3. Update the Shopify App urls to point to your local server with `npm run update:url`
+3. Update the Shopify App urls to point to your local server with `yarn update:url`
 4. Open `<SHOPIFY_APP_URL>/api/auth?shop=<shopify store domain>` (ie `https://<id>.ngrok-free.app/api/auth?shop=river-theme.myshopify.com`)
    - This will open your development app (served by your local server) on the provided store
 
