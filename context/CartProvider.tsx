@@ -6,6 +6,7 @@ import {
   StoreCart,
   getCart,
   removeLineItem,
+  updateLineItem,
 } from "@/lib/cart";
 import axios, { AxiosInstance } from "axios";
 import { useRouter } from "next/router";
@@ -22,6 +23,10 @@ import {
 interface ICartContext {
   isLoading: boolean;
   cart: StoreCart | null;
+  updateQuantity: (props: {
+    lineId: string;
+    quantity: number;
+  }) => Promise<StoreCart | null>;
   removeItem: (props: { lineId: string }) => Promise<StoreCart | null>;
   addToCart: (props: {
     variantId: string;
@@ -32,6 +37,7 @@ interface ICartContext {
 const CartContext = createContext<ICartContext>({
   isLoading: true,
   cart: null,
+  updateQuantity: ({}) => Promise.resolve(null),
   removeItem: ({}) => Promise.resolve(null),
   addToCart: ({}) => Promise.resolve(null),
 });
@@ -137,6 +143,22 @@ const CartProvider: FC<{
     return updatedCart;
   };
 
+  const updateQuantity: ICartContext["updateQuantity"] = async ({
+    lineId,
+    quantity,
+  }) => {
+    const updatedCart = await updateLineItem({
+      cartId: cart.id,
+      client: shopClient.current,
+      lineId,
+      quantity,
+    });
+
+    setCart(updatedCart);
+
+    return updatedCart;
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -144,6 +166,7 @@ const CartProvider: FC<{
         cart,
         addToCart: addOrCreateCart,
         removeItem,
+        updateQuantity,
       }}
     >
       {children}

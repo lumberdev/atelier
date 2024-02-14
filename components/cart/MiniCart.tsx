@@ -22,7 +22,7 @@ const MiniCart = () => {
     <Drawer.Root direction="right">
       <Drawer.Trigger aria-label="Open cart drawer" className="relative">
         <CartIcon />
-        {cart?.totalQuantity && (
+        {cart?.totalQuantity > 0 && (
           <span className="absolute -right-2 -top-3 flex aspect-square h-5 w-5 items-center justify-center rounded-full bg-black text-center text-[10px] text-white">
             {cart.totalQuantity}
           </span>
@@ -43,7 +43,7 @@ const MiniCart = () => {
 
           <Body />
 
-          {cart && (
+          {cart?.cost?.totalAmount?.amount !== "0.0" && (
             <CartSummary costs={cart.cost} checkoutUrl={cart.checkoutUrl} />
           )}
         </Drawer.Content>
