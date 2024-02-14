@@ -26,8 +26,10 @@ import SlidingCart from "@/components/cart/SlidingCart";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
+import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
+import { RequiredStorePageProps } from "@/lib/types";
 
-interface PageProps {
+interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   listing: Awaited<ReturnType<typeof getProductListing>>;
   isActive: boolean;
@@ -44,7 +46,7 @@ const CampaignPage: FC<PageProps> = ({
   previewToken,
   announcement,
   defaultFavUrl,
-  shop
+  shop,
 }) => {
   // const router = useRouter();
   const {
@@ -53,15 +55,15 @@ const CampaignPage: FC<PageProps> = ({
 
   useEffect(() => {
     const faviconElem = document.querySelector("head .favicon");
-    if(favicon) {
+    if (favicon) {
       const image = supabaseStorage.getPublicUrl(favicon);
       faviconElem["href"] = image?.data.publicUrl || "";
       return;
     }
 
     faviconElem["href"] = `https://${shop}/cdn/shop/files/${defaultFavUrl}`;
-  }, [favicon])
-  
+  }, [favicon]);
+
   // TODO: Move this to server-side to avoid leaking the preview token
   const { showNotFoundPage } = useDraftCampaign({
     isCampaignActive: isActive,
@@ -141,14 +143,14 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   if (authorization.notFound || authorization.redirect) return authorization;
 
   // 3. Get collection. This is static so server-render should be enough
-  const collection = await getCampaignCollection({
+  const collectionPromise = getCampaignCollection({
     shop: merchant.shop,
     handle: handle as string,
     publicationId: merchant.publicationId,
   });
 
   // 4. Ger paginated product listing. This will change client-side so server-render only for the initial load
-  const listing = await getProductListing({
+  const listingPromise = getProductListing({
     handle: handle as string,
     shop: merchant.shop,
     publicationId: merchant.publicationId,
@@ -158,6 +160,16 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   const theme_config = await getCampaignThemeConfig({ shop: merchant.shop });
   const faviconUrl = theme_config.current["favicon"]?.split("/").reverse()[0];
 
+  // 5. Get storefront access token
+  const storefrontAccessTokenPromise = getStorefrontAccessToken({
+    shop: merchant.shop,
+  });
+
+  const [collection, listing, storefrontAccessToken] = await Promise.all([
+    collectionPromise,
+    listingPromise,
+    storefrontAccessTokenPromise,
+  ]);
 
   return {
     props: {
@@ -167,7 +179,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
       defaultFavUrl: faviconUrl,
-      shop: merchant.shop
+      shop: merchant.shop,
+      storefrontAccessToken,
     },
   };
 };

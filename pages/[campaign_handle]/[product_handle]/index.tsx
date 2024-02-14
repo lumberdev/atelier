@@ -6,8 +6,10 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import Header from "@/components/Header";
+import { RequiredStorePageProps } from "@/lib/types";
+import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 
-interface PageProps {
+interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   product: Awaited<ReturnType<typeof getProductDetails>>;
   announcement?: string;
@@ -68,24 +70,37 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   if (authorization.notFound || authorization.redirect) return authorization;
 
   // 3. Get collection. This is static so server-render should be enough
-  const collection = await getCampaignCollection({
+  const collectionPromise = await getCampaignCollection({
     shop: merchant.shop,
     handle: handle as string,
     publicationId: merchant.publicationId,
   });
 
   // 4. Get product details. This is also static
-  const product = await getProductDetails({
+  const productPromise = await getProductDetails({
     shop: merchant.shop,
     handle: productHandle as string,
     publicationId: merchant.publicationId,
   });
+
+  // 5. Get storefront access token
+  const storefrontAccessTokenPromise = getStorefrontAccessToken({
+    shop: merchant.shop,
+  });
+
+  const [collection, product, storefrontAccessToken] = await Promise.all([
+    collectionPromise,
+    productPromise,
+    storefrontAccessTokenPromise,
+  ]);
 
   return {
     props: {
       collection,
       product,
       announcement: campaign.announcement,
+      shop: merchant.shop,
+      storefrontAccessToken,
     },
   };
 };

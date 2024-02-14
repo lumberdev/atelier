@@ -236,3 +236,8 @@ export type CampaignFlatFields = {
   acpBackgroundColor: string;
   acpBackgroundImage: string;
 };
+
+export type RequiredStorePageProps = {
+  shop: string;
+  storefrontAccessToken: string;
+};

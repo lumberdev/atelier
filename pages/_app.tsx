@@ -39,7 +39,10 @@ export default function App({ Component, pageProps }) {
   import("./site-global.css" as any);
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
+      <CartProvider
+        shop={pageProps.shop}
+        storefrontAccessToken={pageProps.storefrontAccessToken}
+      >
         <Component {...pageProps} />
       </CartProvider>
     </QueryClientProvider>
