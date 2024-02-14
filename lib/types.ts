@@ -2,6 +2,8 @@ export interface CampaignInput {
   id?: string;
   isActive: boolean;
   announcement?: string;
+  pageTitle?: string;
+  pageDescription?: string;
   cartTitle?: string;
   cartItemsImageStyle?: string;
   cartDescription?: string;
@@ -43,6 +45,7 @@ export interface CollectionResourceItem {
 
 export interface StoreThemeInput {
   id?: string;
+  favicon?: string
   logo?: string;
   primaryColor?: string;
   secondaryColor?: string;
@@ -175,11 +178,25 @@ export type CampaignCollection = {
   };
 };
 
+export type CampaignTheme = {
+  id: string;
+  created_at: string;
+  name: string;
+  previewable: boolean;
+  processing: boolean;
+  role: string;
+  src: string;
+  theme_store_id: string;
+  updated_ap: string;
+};
+
 export type CampaignQueryFields = {
   id: string;
   collectionId: string;
   isActive: boolean;
   announcement: string;
+  pageTitle: string;
+  pageDescription: string;
   cartTitle: string;
   cartDescription: string;
   cartItemsImageStyle: string;
@@ -202,6 +219,8 @@ export type CampaignFlatFields = {
   id: string;
   isActive: boolean;
   announcement: string;
+  pageTitle: string;
+  pageDescription: string;
   cartTitle: string;
   cartDescription: string;
   cartItemsImageStyle: string;

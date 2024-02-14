@@ -63,6 +63,8 @@ const getCampaignData = async ({
           isActive: true,
           previewToken: true,
           announcement: true,
+          pageTitle: true,
+          pageDescription: true,
           cartBackgroundColor: true,
           cartCheckoutButtonStyle: true,
           cartDescription: true,

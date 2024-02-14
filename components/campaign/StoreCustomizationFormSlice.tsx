@@ -25,6 +25,33 @@ const StoreCustomizationFormSlice: FC<{
             />
           )}
         />
+
+        <Controller
+          control={control}
+          name="pageTitle"
+          render={({ field }) => (
+            <TextField
+              label="Page Title"
+              autoComplete="off"
+              disabled={isLoading}
+              {...field}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="pageDescription"
+          render={({ field }) => (
+            <TextField
+              multiline={4}
+              label="Page Description"
+              autoComplete="off"
+              disabled={isLoading}
+              {...field}
+            />
+          )}
+        />
       </BlockStack>
     </Card>
   );

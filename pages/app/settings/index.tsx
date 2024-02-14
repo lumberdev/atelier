@@ -1,6 +1,7 @@
 import { useBilling } from "@/context/BillingProvider";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
+import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
 import {
   Button,
@@ -41,6 +42,16 @@ const SettingsPage = () => {
   } = useStoreThemeForm({
     onUpsert: () => triggerToast("Store theme updated"),
   });
+
+  const {
+    faviconUrl,
+    imageFile: faviconImgFile,
+    setImageFile: setFaviconImgFile,
+    onSubmit: onSubmitMetadata,
+    isLoading: faIsLoading,
+  } = useStoreMetadataForm({
+    onUpsert: () => triggerToast("Store metadata updated"),
+  })
 
   const { handleSubmit, setValue, watch } = useForm<{
     domain: string;
@@ -105,6 +116,62 @@ const SettingsPage = () => {
                   }
                   helpText="This is the Atelier subdomain where your campaigns will live under."
                 />
+              </FormLayout>
+            </Form>
+          </Card>
+        </Layout.AnnotatedSection>
+
+        <Layout.AnnotatedSection
+          id="storeSettings"
+          title="Store Metadata"
+          description="Add theme metadata"
+        >
+          <Card>
+            <Form onSubmit={onSubmitMetadata}>
+              <FormLayout>
+                <InlineStack align="space-between">
+                  <Text variant="headingSm" as="h3">
+                    Favicon
+                  </Text>
+
+                  {faviconImgFile && (
+                    <Button 
+                      tone="critical"
+                      variant="plain"
+                      onClick={() => setFaviconImgFile(null)}
+                    >Remove</Button>
+                  )}
+                </InlineStack>
+
+                <DropZone
+                  accept="image/*"
+                  type="image"
+                  allowMultiple={false}
+                  onDrop={(
+                    _dropFiles: File[],
+                    acceptedFiles: File[],
+                    _rejectedFiles: File[]
+                  ) => setFaviconImgFile(acceptedFiles[0])}
+                >
+                  {faviconUrl && (
+                    <InlineStack>
+                      <img
+                        src={faviconUrl}
+                        alt=""
+                        loading="eager"
+                        className="aspect-auto h-auto w-full rounded-lg"
+                      />
+                    </InlineStack>
+                  )}
+
+                  {!faviconImgFile && <DropZone.FileUpload />}
+                </DropZone>
+
+                <InlineGrid alignItems="center">
+                  <Button variant="primary" submit loading={faIsLoading}>
+                    Save
+                  </Button>
+                </InlineGrid>
               </FormLayout>
             </Form>
           </Card>

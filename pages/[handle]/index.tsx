@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { authorizeRequest } from "@/lib/auth/authorizeRequest";
 import prisma from "@/utils/prisma";
 import { campaigns } from "@prisma/client";
@@ -17,10 +18,14 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
+import getCampaignThemeConfig from "@/lib/theme/getCampaignThemeConfig";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
 import SlidingCart from "@/components/cart/SlidingCart";
+import { useTheme } from "@/lib/hooks/store/useTheme";
+import { storeThemes } from "@prisma/client";
+import { supabaseStorage } from "@/utils/supabase";
 
 interface PageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -28,6 +33,8 @@ interface PageProps {
   isActive: boolean;
   previewToken: string; // TODO: Draft mode validation should be moved to server-side
   announcement?: string;
+  defaultFavUrl?: string;
+  shop?: Awaited<string>;
 }
 
 const CampaignPage: FC<PageProps> = ({
@@ -36,9 +43,25 @@ const CampaignPage: FC<PageProps> = ({
   isActive,
   previewToken,
   announcement,
+  defaultFavUrl,
+  shop
 }) => {
   // const router = useRouter();
+  const {
+    global: { favicon },
+  } = useTheme() as { global: storeThemes };
 
+  useEffect(() => {
+    const faviconElem = document.querySelector("head .favicon");
+    if(favicon) {
+      const image = supabaseStorage.getPublicUrl(favicon);
+      faviconElem["href"] = image?.data.publicUrl || "";
+      return;
+    }
+
+    faviconElem["href"] = `https://${shop}/cdn/shop/files/${defaultFavUrl}`;
+  }, [favicon])
+  
   // TODO: Move this to server-side to avoid leaking the preview token
   const { showNotFoundPage } = useDraftCampaign({
     isCampaignActive: isActive,
@@ -132,6 +155,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     pagination: {},
   });
 
+  const theme_config = await getCampaignThemeConfig({ shop: merchant.shop });
+  const faviconUrl = theme_config.current["favicon"]?.split("/").reverse()[0];
+
+
   return {
     props: {
       collection,
@@ -139,6 +166,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
+      defaultFavUrl: faviconUrl,
+      shop: merchant.shop
     },
   };
 };
