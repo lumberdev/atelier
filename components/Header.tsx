@@ -11,6 +11,7 @@ import AnnouncementBar from "./AnnouncementBar";
 import Container from "./general/Container";
 import classNames from "classnames";
 import { FC } from "react";
+import MiniCart from "./cart/MiniCart";
 
 const Header: FC<{
   title: string;
@@ -52,27 +53,7 @@ const Header: FC<{
         />
 
         <div className="col-start-3 flex h-[40px] items-center justify-end">
-          <button
-            className="cursor-pointer border-none bg-transparent"
-            onClick={toggleCart}
-          >
-            {cartCount >= 1 ? (
-              <div className="relative">
-                <CartFilled color={navTextIconColor} />
-                <div
-                  className="absolute bottom-2 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black p-2 text-[0.5rem] text-white"
-                  style={{
-                    backgroundColor: navTextIconColor,
-                    color: getOppositeColor(navTextIconColor),
-                  }}
-                >
-                  {cartCount}
-                </div>
-              </div>
-            ) : (
-              <CartEmpty color={navTextIconColor} />
-            )}
-          </button>
+          <MiniCart />
         </div>
       </Container>
     </div>

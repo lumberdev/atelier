@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
-import { useCart } from "@/context/CartContext";
+// import { useCart } from "@/context/CartContext";
 import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import { useTheme } from "@/lib/hooks/store/useTheme";
@@ -8,12 +8,14 @@ import PrimaryButton from "@/components/PrimaryButton";
 import SecondaryButton from "./SecondaryButton";
 import { useCheckout } from "@/lib/hooks/store/useCheckout";
 import getProductDetails from "@/lib/campaign/getProductDetails";
+import { useCart } from "@/context/CartProvider";
 
 const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
 }> = ({ product }) => {
-  const { addItem, cartItems } = useCart();
-  const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(false);
+  const { addToCart } = useCart();
+  // const { addItem, cartItems } = useCart();
+  const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(true);
   const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
 
   const {
@@ -47,7 +49,7 @@ const ProductPage: FC<{
       });
     });
     form.setAttribute("value-variant-id", variant.id);
-    checkQuantityIsInLimit();
+    // checkQuantityIsInLimit();
   };
 
   const onSubmit = (e) => {
@@ -71,13 +73,14 @@ const ProductPage: FC<{
       inventoryQuantity: variant.inventoryQuantity,
       quantity: quantity,
     };
-    addItem(item);
-    checkQuantityIsInLimit();
+
+    addToCart({ variantId: variant.id, quantity: 1 });
+    // checkQuantityIsInLimit();
   };
 
-  useEffect(() => {
-    checkQuantityIsInLimit();
-  }, [cartItems]);
+  // useEffect(() => {
+  //   checkQuantityIsInLimit();
+  // }, [cartItems]);
 
   // const { checkout, isLoading: checkoutLoading } = useCheckout({
   //   store_id: campaign.storeId,
@@ -161,11 +164,7 @@ const ProductPage: FC<{
                 </React.Fragment>
               ) : null
             )}
-            <PrimaryButton
-              type="submit"
-              onClick={onSubmit}
-              disabled={!addToCartBtnEnabled}
-            >
+            <PrimaryButton type="submit" onClick={onSubmit}>
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </PrimaryButton>
             {/* <SecondaryButton
