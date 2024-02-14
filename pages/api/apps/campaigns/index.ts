@@ -27,6 +27,8 @@ router.post(async (req, res) => {
       collectionId: body.collectionId ?? "",
       isActive: body.isActive ?? false,
       announcement: body.announcement ?? "",
+      pageTitle: body.pageTitle ?? "",
+      pageDescription: body.pageDescription ?? "",
       cartTitle: body.cartTitle ?? "",
       cartItemsImageStyle: body.cartItemsImageStyle ?? "",
       cartDescription: body.cartDescription ?? "",
@@ -55,6 +57,8 @@ router.post(async (req, res) => {
     update: {
       isActive: body.isActive ?? false,
       announcement: body.announcement ?? "",
+      pageTitle: body.pageTitle ?? "",
+      pageDescription: body.pageDescription ?? "",
       cartTitle: body.cartTitle ?? "",
       cartItemsImageStyle: body.cartItemsImageStyle ?? "",
       cartDescription: body.cartDescription ?? "",

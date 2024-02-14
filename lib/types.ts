@@ -2,6 +2,8 @@ export interface CampaignInput {
   id?: string;
   isActive: boolean;
   announcement?: string;
+  pageTitle?: string;
+  pageDescription?: string;
   cartTitle?: string;
   cartItemsImageStyle?: string;
   cartDescription?: string;
@@ -193,6 +195,8 @@ export type CampaignQueryFields = {
   collectionId: string;
   isActive: boolean;
   announcement: string;
+  pageTitle: string;
+  pageDescription: string;
   cartTitle: string;
   cartDescription: string;
   cartItemsImageStyle: string;

@@ -7,6 +7,8 @@ const flattenCampaignFields = (
     id: campaign.id,
     isActive: campaign.isActive,
     announcement: campaign.announcement,
+    pageTitle: campaign.pageTitle,
+    pageDescription: campaign.pageDescription,
     cartTitle: campaign.cartTitle,
     cartDescription: campaign.cartDescription,
     cartItemsImageStyle: campaign.cartItemsImageStyle,

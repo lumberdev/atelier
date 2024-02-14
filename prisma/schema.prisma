@@ -39,6 +39,8 @@ model campaigns {
   accessPageConfig        accessPageConfig?
   createdAt               DateTime          @default(now())
   updatedAt               DateTime          @updatedAt
+  pageTitle               String?
+  pageDescription         String?
   cartTitle               String?
   cartItemsImageStyle     String?
   cartDescription         String?

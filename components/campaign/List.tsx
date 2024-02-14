@@ -112,7 +112,7 @@ const CampaignListing: FC<{ listing: PublicationCollectionListing }> = ({
                       variant={!item.isActive ? "primary" : "plain"}
                       tone={item.isActive ? "critical" : "success"}
                     >
-                      {item.isActive ? "Unpubish" : "Publish"}
+                      {item.isActive ? "Unpublish" : "Publish"}
                     </Button>
                   </ButtonGroup>
                 ) : (
