@@ -5,9 +5,11 @@ import PlusIcon from "@/assets/icons/plus.svg";
 import MinusIcon from "@/assets/icons/minus.svg";
 import { currencyFormatter } from "@/lib/helper/currency";
 import Image from "next/image";
+import { useCart } from "@/context/CartProvider";
 
 const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
+  const { removeItem } = useCart();
 
   const price = Number(item.cost.amountPerQuantity.amount);
   const compareAtPrice = item.cost.compareAtAmountPerQuantity?.amount
@@ -37,7 +39,10 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
               {item.merchandise.product.title}
             </h2>
 
-            <button aria-label="Delete">
+            <button
+              aria-label="Delete"
+              onClick={() => removeItem({ lineId: item.id })}
+            >
               <DeleteIcon className="u-icon-stroke--black" />
             </button>
           </div>
