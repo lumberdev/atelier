@@ -5,14 +5,16 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import NotFoundPage from "@/components/NotFoundPage";
 import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
+import { RequiredStorePageProps } from "@/lib/types";
+import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 
-interface ServerSideProps {
+interface PageProps extends RequiredStorePageProps {
   config: Pick<
     accessPageConfig,
     | "layout"
@@ -29,48 +31,12 @@ interface ServerSideProps {
   previewToken: string;
 }
 
-export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const handle = ctx.query.campaign_handle as string;
-
-  const { url, subdomain } = getServerSideRequestUrl(ctx.req);
-
-  const merchant = await prisma.stores.findUnique({
-    where: {
-      identifier: subdomain,
-    },
-    include: {
-      campaigns: {
-        where: {
-          handle: handle as string,
-        },
-      },
-      theme: true,
-    },
-  });
-
-  const theme = merchant.theme;
-  const [campaign] = merchant.campaigns;
-
-  const config = await prisma.accessPageConfig.findUnique({
-    where: { campaignId: campaign.id },
-  });
-
-  return {
-    props: {
-      config,
-      theme,
-      isCampaignActive: campaign.isActive,
-      previewToken: campaign.previewToken,
-    },
-  };
-}) satisfies GetServerSideProps<ServerSideProps>;
-
 const CampaignPasswordPage = ({
   config,
   theme,
   isCampaignActive,
   previewToken,
-}: ServerSideProps) => {
+}: PageProps) => {
   const { query, replace } = useRouter();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
@@ -108,7 +74,9 @@ const CampaignPasswordPage = ({
     text: config.ctaText,
     url: config.ctaUrl,
   };
+
   if (showNotFoundPage) return <NotFoundPage />;
+
   if (layout === "STACKED")
     return (
       <div className="grid-rows-[25rem, 1fr] grid min-h-screen w-screen md:grid-cols-2 md:grid-rows-none">
@@ -221,3 +189,54 @@ const CampaignPasswordPage = ({
 };
 
 export default CampaignPasswordPage;
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({
+  req,
+  query: { campaign_handle },
+}) => {
+  const { url, subdomain } = getServerSideRequestUrl(req);
+
+  // 1. Get merchant associated with shop and handle
+  const merchant = await prisma.stores.findUnique({
+    where: {
+      identifier: subdomain,
+    },
+    include: {
+      campaigns: {
+        where: {
+          handle: campaign_handle as string,
+        },
+      },
+      theme: true,
+    },
+  });
+
+  const theme = merchant.theme;
+  const [campaign] = merchant.campaigns;
+
+  // 2. Get access control config
+  const configPromise = await prisma.accessPageConfig.findUnique({
+    where: { campaignId: campaign.id },
+  });
+
+  // 3. Get storefront access token
+  const storefrontAccessTokenPromise = getStorefrontAccessToken({
+    shop: merchant.shop,
+  });
+
+  const [config, storefrontAccessToken] = await Promise.all([
+    configPromise,
+    storefrontAccessTokenPromise,
+  ]);
+
+  return {
+    props: {
+      config,
+      theme,
+      isCampaignActive: campaign.isActive,
+      previewToken: campaign.previewToken,
+      shop: merchant.shop,
+      storefrontAccessToken,
+    },
+  };
+};

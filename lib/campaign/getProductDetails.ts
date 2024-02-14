@@ -166,11 +166,6 @@ const getProductDetails = async ({
     `,
   });
 
-  console.log(
-    "[at]",
-    JSON.stringify(response.body.data.productByHandle, null, 2)
-  );
-
   return response.body?.data?.productByHandle;
 };
 

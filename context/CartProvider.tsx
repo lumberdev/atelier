@@ -17,9 +17,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { useQuery } from "react-query";
 
 interface ICartContext {
+  isLoading: boolean;
   cart: StoreCart | null;
   addToCart: (props: {
     variantId: string;
@@ -28,55 +28,63 @@ interface ICartContext {
 }
 
 const CartContext = createContext<ICartContext>({
+  isLoading: true,
   cart: null,
   addToCart: ({}) => Promise.resolve(null),
 });
 export const useCart = () => useContext(CartContext);
 
-const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const CartProvider: FC<{
+  shop?: string;
+  storefrontAccessToken?: string;
+  children: ReactNode;
+}> = ({ shop, storefrontAccessToken, children }) => {
   const router = useRouter();
-  const { store } = useStore();
-
-  const shopClient = useRef<AxiosInstance>();
-  const [cart, setCart] = useState<ICartContext["cart"]>();
-
   const campaignHandle = router.query.campaign_handle as string;
 
+  // If we're not at a campaign (sub)route we don't need to load a cart
+  if (!router.pathname.includes("campaign_handle")) return children;
+  if (!shop || !storefrontAccessToken) {
+    console.error(
+      "[CRITICAL] Unable to initialize CartProvider. Check the page props for missing dependencies."
+    );
+    return children;
+  }
+
+  const shopClient = useRef<AxiosInstance>();
+  const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const [cart, setCart] = useState<ICartContext["cart"]>();
+
   useEffect(() => {
-    // If we're not at a campaign (sub)route we don't need to load a cart
-    if (!router.pathname.includes("campaign_handle")) return;
-
-    // If we don't have a store and access token skip client assignment
-    if (!store.domain || !store.storefrontAccessToken) {
-      shopClient.current = null;
-      return;
-    }
-
     // 1. Configure shopify client for the corresponding store
     shopClient.current = axios.create({
-      baseURL: `https://${store.domain}/api/${process.env.NEXT_PUBLIC_SHOPIFY_API_VERSION}/graphql.json`,
+      baseURL: `https://${shop}/api/${process.env.NEXT_PUBLIC_SHOPIFY_API_VERSION}/graphql.json`,
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": store.storefrontAccessToken,
+        "X-Shopify-Storefront-Access-Token": storefrontAccessToken,
       },
     });
 
     // 2. Get cart for the corresponding campaign
     const persistedCartId = getCartIdForCampaign({
-      store: store.domain,
+      store: shop,
       campaign: campaignHandle,
     });
 
-    if (!persistedCartId) return;
+    if (!persistedCartId) {
+      setIsLoadingCart(false);
+      return;
+    }
 
     getCart({
       client: shopClient.current,
       id: persistedCartId,
-    }).then((cart) => {
-      console.log("[AT]", cart);
-      setCart(cart);
-    });
-  }, [router.pathname, store]);
+    })
+      .then((cart) => {
+        setCart(cart);
+      })
+      .finally(() => setIsLoadingCart(false));
+  }, []);
 
   const addOrCreateCart: ICartContext["addToCart"] = async ({
     variantId,
@@ -93,7 +101,7 @@ const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       persistCartIdForCampaign({
         cart: newCart,
         campaign: campaignHandle,
-        store: store.domain,
+        store: shop,
       });
 
       setCart(newCart);
@@ -115,36 +123,16 @@ const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart: addOrCreateCart }}>
+    <CartContext.Provider
+      value={{
+        isLoading: isLoadingCart,
+        cart,
+        addToCart: addOrCreateCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
 
 export default CartProvider;
-
-const useStore = () => {
-  const {
-    data = {
-      domain: "",
-      storefrontAccessToken: "",
-    },
-    ...query
-  } = useQuery<
-    any,
-    { error: { code: string; message: string } },
-    { domain: string; storefrontAccessToken: string }
-  >({
-    queryKey: ["store"],
-    queryFn: () =>
-      axios
-        .get("/api/store")
-        .then((response) => response.data)
-        .catch((error) => error?.response?.data?.error),
-  });
-
-  return {
-    store: data,
-    ...query,
-  };
-};
