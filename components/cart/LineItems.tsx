@@ -6,10 +6,11 @@ import MinusIcon from "@/assets/icons/minus.svg";
 import { currencyFormatter } from "@/lib/helper/currency";
 import Image from "next/image";
 import { useCart } from "@/context/CartProvider";
+import classNames from "classnames";
 
 const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
-  const [quantity, setQuantity] = useState(item.quantity);
-  const { removeItem } = useCart();
+  const { removeItem, updateQuantity } = useCart();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const price = Number(item.cost.amountPerQuantity.amount);
   const compareAtPrice = item.cost.compareAtAmountPerQuantity?.amount
@@ -29,6 +30,7 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
             item.merchandise.product.featuredImage.altText
           }
           fill
+          objectFit="cover"
         />
       </div>
 
@@ -72,14 +74,47 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
             </p>
           </div>
 
-          <div className="flex items-center bg-black text-white">
-            <button className="px-2 py-2" aria-label="Decrease quantity">
+          <div
+            className={classNames("flex items-center bg-black text-white", {
+              "opacity-80": isLoading,
+            })}
+          >
+            <button
+              className="px-2 py-2 disabled:cursor-progress"
+              aria-label="Decrease quantity"
+              disabled={isLoading}
+              onClick={async () => {
+                setIsLoading(true);
+                if (item.quantity === 1) return removeItem({ lineId: item.id });
+
+                await updateQuantity({
+                  lineId: item.id,
+                  quantity: item.quantity - 1,
+                });
+
+                setIsLoading(false);
+              }}
+            >
               <MinusIcon className="u-icon-stroke--white w-4" />
             </button>
 
-            <span className="flex-1 px-2  font-semibold">{quantity}</span>
+            <span className="flex-1 px-2  font-semibold">{item.quantity}</span>
 
-            <button className="px-2 py-2" aria-label="Increase quantity">
+            <button
+              className="px-2 py-2 disabled:cursor-progress"
+              aria-label="Increase quantity"
+              disabled={isLoading}
+              onClick={async () => {
+                setIsLoading(true);
+
+                await updateQuantity({
+                  lineId: item.id,
+                  quantity: item.quantity + 1,
+                });
+
+                setIsLoading(false);
+              }}
+            >
               <PlusIcon className="u-icon-stroke--white w-4" />
             </button>
           </div>

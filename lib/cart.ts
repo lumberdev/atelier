@@ -356,3 +356,47 @@ export const removeLineItem = async ({
 
   return data.data.cartLinesRemove.cart;
 };
+
+export const updateLineItem = async ({
+  client,
+  cartId,
+  lineId,
+  quantity,
+}: {
+  client: AxiosInstance;
+  cartId: string;
+  lineId: string;
+  quantity: number;
+}) => {
+  const { data } = await client.post<{
+    data: {
+      cartLinesUpdate: {
+        userErrors: { code: string; field: string; message: string }[];
+        cart: StoreCart;
+      };
+    };
+  }>("", {
+    query: `
+      mutation UpdateLineItem {
+        cartLinesUpdate(cartId: "${cartId}", lines: [
+          {
+            id: "${lineId}",
+            quantity: ${quantity}
+          }
+        ]) {
+          userErrors {
+            code
+            field
+            message
+          }
+
+          cart {
+            ${CART_FIELDS}
+          }
+        }
+      }
+    `,
+  });
+
+  return data.data.cartLinesUpdate.cart;
+};
