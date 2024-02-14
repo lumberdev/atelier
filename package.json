@@ -77,6 +77,7 @@
     "@shopify/cli": "^3.47.5",
     "@shopify/cli-kit": "^3.47.5",
     "@tinacms/cli": "^1.5.39",
+    "@svgr/webpack": "^8.1.0",
     "@types/cookie": "^0.5.1",
     "@types/node": "^20.11.17",
     "dotenv": "^16.3.1",

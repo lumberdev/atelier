@@ -35,3 +35,11 @@ body {
     transform: translateY(-50%); /* Move the content up */
   }
 }
+
+.u-icon-stroke--black path {
+  @apply stroke-black;
+}
+
+.u-icon-stroke--white path {
+  @apply stroke-white;
+}
