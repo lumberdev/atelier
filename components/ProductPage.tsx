@@ -25,15 +25,15 @@ const ProductPage: FC<{
     ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
     : "";
 
-  const checkQuantityIsInLimit = () => {
-    const form = document.getElementById("productForm");
-    const variant = product.variants.nodes.find(
-      (variant) => variant.id === form.getAttribute("value-variant-id")
-    );
-    const cartItem = cartItems.find((item) => item.id == variant.id);
-    const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-    setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
-  };
+  // const checkQuantityIsInLimit = () => {
+  //   const form = document.getElementById("productForm");
+  //   const variant = product.variants.nodes.find(
+  //     (variant) => variant.id === form.getAttribute("value-variant-id")
+  //   );
+  //   const cartItem = cartItems.find((item) => item.id == variant.id);
+  //   const cartItemQuantity = cartItem ? cartItem.quantity : 0;
+  //   setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
+  // };
 
   const formChange = (e) => {
     const form = e.target.form;

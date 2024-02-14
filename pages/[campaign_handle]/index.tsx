@@ -36,7 +36,6 @@ interface PageProps extends RequiredStorePageProps {
   previewToken: string; // TODO: Draft mode validation should be moved to server-side
   announcement?: string;
   defaultFavUrl?: string;
-  shop?: Awaited<string>;
 }
 
 const CampaignPage: FC<PageProps> = ({
