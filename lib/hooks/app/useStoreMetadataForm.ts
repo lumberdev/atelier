@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { StoreThemeInput } from "../../types";
 import { useStoreSettings } from "./useStoreSettings";
+import getCampaignThemeConfig from "@/lib/theme/getCampaignThemeConfig";
 
 const schema = yup
   .object({
@@ -40,6 +41,26 @@ export const useStoreMetadataForm = ({
 
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<File>();
+
+  /**
+   * TODO: Allows automatic update on the editor
+   */
+  // useEffect(() => {
+  //   (async function () {
+  //     const theme_config = await getCampaignThemeConfig({ shop });
+  //     const favicon_url = theme_config.current["favicon"]?.split("/").reverse()[0];
+      
+  //     const newfile = await fetch(`https://${shop}/cdn/shop/files/${favicon_url}`)
+  //     .then(res => res.blob())
+  //     .then(blob => {
+  //       const fileExt = favicon_url.split(".").reverse()[0];
+  //       const file = new File([blob], favicon_url, { type: blob.type });
+  //       return file;
+  //     })
+
+  //     console.log("newfile", newfile);
+  //   })();
+  // }, []);
 
   const { mutate: upsertTheme } = useMutation<
     { theme?: storeThemes; error?: { code: string; message: string } },

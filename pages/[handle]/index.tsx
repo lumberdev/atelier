@@ -18,7 +18,7 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import getCampaignTheme from "@/lib/theme/getCampaignTheme";
+import getCampaignThemeConfig from "@/lib/theme/getCampaignThemeConfig";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/utils/queryClient";
 import { CartProvider } from "@/context/CartContext";
@@ -33,6 +33,8 @@ interface PageProps {
   isActive: boolean;
   previewToken: string; // TODO: Draft mode validation should be moved to server-side
   announcement?: string;
+  defaultFavUrl?: string;
+  shop?: Awaited<string>;
 }
 
 const CampaignPage: FC<PageProps> = ({
@@ -41,6 +43,8 @@ const CampaignPage: FC<PageProps> = ({
   isActive,
   previewToken,
   announcement,
+  defaultFavUrl,
+  shop
 }) => {
   // const router = useRouter();
   const {
@@ -48,11 +52,14 @@ const CampaignPage: FC<PageProps> = ({
   } = useTheme() as { global: storeThemes };
 
   useEffect(() => {
-    if(!favicon) return;
-    const image = supabaseStorage.getPublicUrl(favicon);
-
     const faviconElem = document.querySelector("head .favicon");
-    faviconElem["href"] = image?.data.publicUrl || "";
+    if(favicon) {
+      const image = supabaseStorage.getPublicUrl(favicon);
+      faviconElem["href"] = image?.data.publicUrl || "";
+      return;
+    }
+
+    faviconElem["href"] = `https://${shop}/cdn/shop/files/${defaultFavUrl}`;
   }, [favicon])
   
   // TODO: Move this to server-side to avoid leaking the preview token
@@ -148,7 +155,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     pagination: {},
   });
 
-  const themes = await getCampaignTheme({ shop: merchant.shop });
+  const theme_config = await getCampaignThemeConfig({ shop: merchant.shop });
+  const faviconUrl = theme_config.current["favicon"]?.split("/").reverse()[0];
+
 
   return {
     props: {
@@ -157,6 +166,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
+      defaultFavUrl: faviconUrl,
+      shop: merchant.shop
     },
   };
 };
