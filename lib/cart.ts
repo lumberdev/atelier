@@ -46,6 +46,38 @@ const CART_FIELDS = `
         ... on ProductVariant {
           id
           sku
+          title
+          image {
+            id
+            altText
+            width
+            height
+            url
+          }
+          price {
+            amount
+            currencyCode
+          }
+          compareAtPrice {
+            amount
+            currencyCode
+          }
+          selectedOptions {
+            name
+            value
+          }
+          product {
+            id
+            handle
+            title
+            featuredImage {
+              id
+              altText
+              width
+              height
+              url
+            }
+          }
         }
       }
     }
@@ -95,6 +127,38 @@ export interface StoreCart {
       merchandise: {
         id: string;
         sku: string;
+        title: string;
+        image: {
+          id: string;
+          altText: string;
+          width: number;
+          height: number;
+          url: string;
+        };
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
+        compareAtPrice: {
+          amount: string;
+          currencyCode: string;
+        };
+        selectedOptions: {
+          name: string;
+          value: string;
+        }[];
+        product: {
+          id: string;
+          handle: string;
+          title: string;
+          featuredImage: {
+            id: string;
+            altText: string;
+            width: number;
+            height: number;
+            url: string;
+          };
+        };
       };
     }[];
   };
