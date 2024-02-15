@@ -43,7 +43,7 @@ const MiniCart = () => {
 
           <Body />
 
-          {cart?.cost?.totalAmount?.amount !== "0.0" && (
+          {(cart && cart?.cost?.totalAmount?.amount !== "0.0") && (
             <CartSummary costs={cart.cost} checkoutUrl={cart.checkoutUrl} />
           )}
         </Drawer.Content>

@@ -7,7 +7,7 @@
     "url": "https://github.com/lumber/atelier.git"
   },
   "scripts": {
-    "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev\"",
+    "dev": "tinacms dev -c \"next dev\"",
     "build": "tinacms build && next build",
     "start": "next start",
     "pretty": "prettier --write ./",
