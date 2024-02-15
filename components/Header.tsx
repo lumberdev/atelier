@@ -1,12 +1,6 @@
 import LogoTitle from "./LogoTitle";
-import { useCart } from "@/context/CartContext";
 import { useTheme } from "@/lib/hooks/store/useTheme";
-import CartEmpty from "./general/icons/CartEmpty";
-import CartFilled from "./general/icons/CartFilled";
-import {
-  pickTextColorBasedOnBgColorAdvanced,
-  getOppositeColor,
-} from "@/lib/helper/colors";
+import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import AnnouncementBar from "./AnnouncementBar";
 import Container from "./general/Container";
 import classNames from "classnames";
@@ -18,7 +12,6 @@ const Header: FC<{
   campaignHandle: string;
   announcement?: string;
 }> = ({ campaignHandle, title, announcement }) => {
-  const { toggleCart, cartCount } = useCart();
   const {
     global: { primaryColor, logoPosition },
   } = useTheme();

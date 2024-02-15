@@ -1,12 +1,9 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, FC } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
-// import { useCart } from "@/context/CartContext";
 import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import PrimaryButton from "@/components/PrimaryButton";
-import SecondaryButton from "./SecondaryButton";
-import { useCheckout } from "@/lib/hooks/store/useCheckout";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
 
@@ -14,9 +11,7 @@ const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
 }> = ({ product }) => {
   const { addToCart } = useCart();
-  // const { addItem, cartItems } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(true);
-  const [checkoutButtonDisabled, setCheckoutButtonDisabled] = useState(true);
 
   const {
     global: { backgroundColor },
@@ -24,16 +19,6 @@ const ProductPage: FC<{
   const productTextColor = backgroundColor
     ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
     : "";
-
-  // const checkQuantityIsInLimit = () => {
-  //   const form = document.getElementById("productForm");
-  //   const variant = product.variants.nodes.find(
-  //     (variant) => variant.id === form.getAttribute("value-variant-id")
-  //   );
-  //   const cartItem = cartItems.find((item) => item.id == variant.id);
-  //   const cartItemQuantity = cartItem ? cartItem.quantity : 0;
-  //   setAddToCartBtnEnabled(variant.inventoryQuantity - cartItemQuantity > 0);
-  // };
 
   const formChange = (e) => {
     const form = e.target.form;
@@ -49,7 +34,6 @@ const ProductPage: FC<{
       });
     });
     form.setAttribute("value-variant-id", variant.id);
-    // checkQuantityIsInLimit();
   };
 
   const onSubmit = (e) => {
@@ -75,31 +59,7 @@ const ProductPage: FC<{
     };
 
     addToCart({ variantId: variant.id, quantity: 1 });
-    // checkQuantityIsInLimit();
   };
-
-  // useEffect(() => {
-  //   checkQuantityIsInLimit();
-  // }, [cartItems]);
-
-  // const { checkout, isLoading: checkoutLoading } = useCheckout({
-  //   store_id: campaign.storeId,
-  //   cart_items: cartItems,
-  // });
-
-  // const checkoutButtonClick = async () => {
-  //   const checkoutUrl = checkout.checkout.web_url;
-  //   window.open(checkoutUrl, "_self");
-  // };
-
-  // useEffect(() => {
-  //   const checkoutDisabled =
-  //     checkoutLoading ||
-  //     cartItems.length === 0 ||
-  //     !checkout ||
-  //     Boolean(checkout.errors);
-  //   setCheckoutButtonDisabled(checkoutDisabled);
-  // }, [checkoutLoading, cartItems, checkout]);
 
   return (
     <div className="container mx-auto p-6">
@@ -167,12 +127,6 @@ const ProductPage: FC<{
             <PrimaryButton type="submit" onClick={onSubmit}>
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </PrimaryButton>
-            {/* <SecondaryButton
-              onClick={checkoutButtonClick}
-              disabled={checkoutButtonDisabled}
-            >
-              {checkoutLoading ? "Loading..." : "Checkout"}
-            </SecondaryButton> */}
           </form>
         </div>
       </div>
