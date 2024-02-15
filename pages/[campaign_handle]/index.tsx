@@ -1,17 +1,8 @@
 import { useEffect } from "react";
-import { authorizeRequest } from "@/lib/auth/authorizeRequest";
-import prisma from "@/utils/prisma";
-import { campaigns } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
-import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
-import { useRouter } from "next/router";
-import { useProducts } from "@/lib/hooks/store/useProducts";
-import { useCollections } from "@/lib/hooks/store/useCollections";
-import LoadingScreen from "@/components/LoadingScreen";
-import Page from "@/components/Page";
 import NotFoundPage from "@/components/NotFoundPage";
 import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
@@ -19,10 +10,6 @@ import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
 import { getCampaignThemeOffline } from "@/lib/theme/getCampaignThemeConfig";
-import { QueryClientProvider } from "react-query";
-import { queryClient } from "@/utils/queryClient";
-import { CartProvider } from "@/context/CartContext";
-import SlidingCart from "@/components/cart/SlidingCart";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
@@ -71,8 +58,6 @@ const CampaignPage: FC<PageProps> = ({
 
   if (showNotFoundPage) return <NotFoundPage />;
 
-  // if (productsLoading || collectionsLoading) return <LoadingScreen />;
-
   return (
     <div className="min-h-screen">
       <Header
@@ -87,24 +72,6 @@ const CampaignPage: FC<PageProps> = ({
       />
     </div>
   );
-
-  // return (
-  //   <QueryClientProvider client={queryClient}>
-  //     <CartProvider>
-  //       <Page {...{ campaign }}>
-  //         <AnnouncementBar
-  //           announcement={campaign?.announcement}
-  //           className="hidden lg:block"
-  //         />
-  //         <Header {...{ campaign, campaignHandle: handle, collections }} />
-  //         <ProductGrid {...{ products: homepageProducts, handle }} />
-  //       </Page>
-  //       <SlidingCart />
-  //     </CartProvider>
-  //   </QueryClientProvider>
-  // );
-
-  return <pre>{JSON.stringify({ collection, listing }, null, 2)}</pre>;
 };
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({

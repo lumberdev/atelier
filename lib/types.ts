@@ -21,31 +21,9 @@ export interface CampaignInput {
   acpBackgroundImage?: string;
 }
 
-export interface ProductResourceItem {
-  id: string;
-  handle: string;
-  title: string;
-  images: {
-    src: string;
-  }[];
-  variants: {
-    id: string;
-  }[];
-}
-
-export interface CollectionResourceItem {
-  id: string;
-  handle: string;
-  title: string;
-  image?: {
-    src: string;
-  };
-  productsCount: number;
-}
-
 export interface StoreThemeInput {
   id?: string;
-  favicon?: string
+  favicon?: string;
   logo?: string;
   primaryColor?: string;
   secondaryColor?: string;
@@ -54,14 +32,6 @@ export interface StoreThemeInput {
   logoPosition?: string;
 }
 
-export interface CartItemType {
-  id: number;
-  title: string;
-  qty: number;
-  price: string;
-  description: string;
-  imageUrl: string;
-}
 export interface AccessPageConfigInput {
   id?: string;
   campaignId: string;

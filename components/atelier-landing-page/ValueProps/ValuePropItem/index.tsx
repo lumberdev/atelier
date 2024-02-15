@@ -1,7 +1,6 @@
 import React from "react";
-import Image from "next/image";
-import DropDownIcon from "@/assets/dropdown-icon.svg";
-import ArrowRightIcon from "@/components/general/icons/ArrowRightIcon";
+import DropDownIcon from "@/assets/icons/dropdown-icon.svg";
+import ArrowRightIcon from "@/components/atelier-landing-page/general/ArrowRightIcon";
 
 interface ValuePropItemProps {
   title: string;
@@ -19,10 +18,10 @@ const ValuePropItem = ({ title, description, url }: ValuePropItemProps) => {
     >
       <div className="flex w-full items-center justify-between">
         <div>
-          <h3 className="font-brand-heading mb-[0.625rem] text-[1.75rem] font-medium">
+          <h3 className="mb-[0.625rem] font-brand-heading text-[1.75rem] font-medium">
             {title}
           </h3>
-          <p className="font-brand-body max-w-[43.75rem] text-[1.125rem]">
+          <p className="max-w-[43.75rem] font-brand-body text-[1.125rem]">
             {description}
           </p>
         </div>
@@ -35,12 +34,7 @@ const ValuePropItem = ({ title, description, url }: ValuePropItemProps) => {
               <ArrowRightIcon color="#2F2F2E" />
             </div>
           ) : (
-            <Image
-              src={DropDownIcon}
-              alt="GET STARTED"
-              width="40"
-              height="40"
-            />
+            <DropDownIcon width={42} height={43} />
           )}
         </div>
       </div>
