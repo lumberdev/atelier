@@ -112,7 +112,7 @@ export const useStoreThemeForm = ({
     }
   }, [imageFile]);
 
-  const onSubmit = handleSubmit(async (fields: StoreThemeInput) => {
+  const onSubmit = handleSubmit(async (fields) => {
     setIsLoading(true);
 
     if (imageFile) {
