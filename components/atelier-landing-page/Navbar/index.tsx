@@ -17,9 +17,8 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
-import HamburgerIcon from "@/assets/hamburger-menu.svg";
-import AtelierLogo from "@/assets/atelier-brand-logo.svg";
-import Image from "next/image";
+import HamburgerIcon from "@/assets/icons/hamburger-menu.svg";
+import AtelierLogo from "@/assets/logos/atelier-brand-logo.svg";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +50,7 @@ export default function NavbarComponent() {
         )}
       >
         <NavbarBrand>
-          <Image src={AtelierLogo} alt="Atelier" width="120" height="40" />
+          <AtelierLogo width={120} height={40} />
         </NavbarBrand>
         <NavbarContent justify="end" className="flex gap-10">
           <Button variant="outline" className="rounded-none text-[0.875rem]">
@@ -60,12 +59,7 @@ export default function NavbarComponent() {
           <NavbarItem>
             <Drawer direction="right">
               <DrawerTrigger className="flex items-center">
-                <Image
-                  src={HamburgerIcon}
-                  alt="Hamburger menu"
-                  width="40"
-                  height="20"
-                />
+                <HamburgerIcon width={40} height={21} />
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
