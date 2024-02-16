@@ -14,8 +14,13 @@ const Navigation = () => {
     destination: "/app/settings",
   });
 
+  const tagmanager = AppLink.create(app, {
+    label: "Tag Manager",
+    destination: "/app/tag-manager",
+  });
+
   ChannelMenu.create(app, {
-    items: [home, settings],
+    items: [home, settings, tagmanager],
     active: home,
   });
 
