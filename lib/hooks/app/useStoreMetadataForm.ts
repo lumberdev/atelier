@@ -9,7 +9,6 @@ import { useMutation, useQuery } from "react-query";
 import * as yup from "yup";
 import { StoreThemeInput } from "../../types";
 import { useStoreSettings } from "./useStoreSettings";
-import getCampaignThemeConfig from "@/lib/theme/getCampaignThemeConfig";
 
 const schema = yup
   .object({

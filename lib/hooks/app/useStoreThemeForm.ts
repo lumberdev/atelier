@@ -73,7 +73,7 @@ export const useStoreThemeForm = ({
   const { data = { theme: {} } } = useQuery<{ theme: storeThemes }>({
     queryKey: "theme",
     queryFn: () =>
-      fetch("/api/apps/store-themes").then((response) => response.json()),
+      fetch("/api/apps/settings/themeconfig").then((response) => response.json()),
     onSuccess: (response) => {
       if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;

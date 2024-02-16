@@ -133,7 +133,6 @@ const SettingsPage = () => {
                   <Text variant="headingSm" as="h3">
                     Favicon
                   </Text>
-
                   {faviconImgFile && (
                     <Button 
                       tone="critical"
@@ -142,7 +141,6 @@ const SettingsPage = () => {
                     >Remove</Button>
                   )}
                 </InlineStack>
-
                 <DropZone
                   accept="image/*"
                   type="image"
@@ -166,7 +164,7 @@ const SettingsPage = () => {
 
                   {!faviconImgFile && <DropZone.FileUpload />}
                 </DropZone>
-
+                <Text variant="bodySm" as="span" tone="subdued">Default favicon will be retrieved from the current merchant website.</Text>
                 <InlineGrid alignItems="center">
                   <Button variant="primary" submit loading={faIsLoading}>
                     Save
