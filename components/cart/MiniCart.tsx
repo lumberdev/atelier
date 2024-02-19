@@ -7,7 +7,7 @@ import LineItems from "./LineItems";
 import CartSummary from "./Summary";
 
 const MiniCart = () => {
-  const { cart, isLoading } = useCart();
+  const { cart, isLoading, miniCartOpen, onMiniCartOpenChange } = useCart();
 
   if (isLoading) return null;
 
@@ -18,8 +18,17 @@ const MiniCart = () => {
       <EmptyCart />
     );
 
+  const hasTotalAmount =
+    cart &&
+    !!cart.cost?.totalAmount?.amount &&
+    cart.cost.totalAmount.amount !== "0.0";
+
   return (
-    <Drawer.Root direction="right">
+    <Drawer.Root
+      direction="right"
+      open={miniCartOpen}
+      onOpenChange={onMiniCartOpenChange}
+    >
       <Drawer.Trigger aria-label="Open cart drawer" className="relative">
         <CartIcon />
         {cart?.totalQuantity > 0 && (
@@ -43,7 +52,7 @@ const MiniCart = () => {
 
           <Body />
 
-          {(cart && cart?.cost?.totalAmount?.amount !== "0.0") && (
+          {hasTotalAmount && (
             <CartSummary costs={cart.cost} checkoutUrl={cart.checkoutUrl} />
           )}
         </Drawer.Content>
