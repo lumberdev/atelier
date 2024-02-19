@@ -9,12 +9,13 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import { getCampaignThemeOffline } from "@/lib/theme/getCampaignThemeConfig";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 import { RequiredStorePageProps } from "@/lib/types";
+import getThemeConfig from "@/lib/theme/getThemeConfig";
+import clientProvider from "@/utils/clientProvider";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -108,6 +109,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   if (authorization.notFound || authorization.redirect) return authorization;
 
+  const { client: graphql } = await clientProvider.offline.graphqlClient({
+    shop: merchant.shop,
+  });
+
   // 3. Get collection. This is static so server-render should be enough
   const collectionPromise = getCampaignCollection({
     shop: merchant.shop,
@@ -123,19 +128,29 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     pagination: {},
   });
 
-  const theme_config = await getCampaignThemeOffline({ shop: merchant.shop });
-  const faviconUrl = theme_config.current["favicon"]?.split("/").reverse()[0];
+  const { client: restClient } = await clientProvider.offline.restClient({
+    shop: merchant.shop,
+  });
 
-  // 5. Get storefront access token
+  // 5. Get theme configuration
+  const themePromise = getThemeConfig({
+    shop: merchant.shop,
+    handle: handle as string,
+    restClient,
+  });
+
+  // 6. Get storefront access token
   const storefrontAccessTokenPromise = getStorefrontAccessToken({
     shop: merchant.shop,
   });
 
-  const [collection, listing, storefrontAccessToken] = await Promise.all([
-    collectionPromise,
-    listingPromise,
-    storefrontAccessTokenPromise,
-  ]);
+  const [collection, listing, storefrontAccessToken, themeConfig] =
+    await Promise.all([
+      collectionPromise,
+      listingPromise,
+      storefrontAccessTokenPromise,
+      themePromise,
+    ]);
 
   return {
     props: {
@@ -144,9 +159,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
-      defaultFavUrl: faviconUrl,
+      defaultFavUrl: themeConfig.theme.favicon?.split("/").reverse()[0],
       shop: merchant.shop,
       storefrontAccessToken,
+      themeConfig,
     },
   };
 };
