@@ -62,7 +62,7 @@ const getThemeConfig = async ({
 
   return {
     theme: {
-      favicon,
+      favicon: favicon?.split("/").reverse()[0],
       primaryColor: colors_accent_1,
       secondaryColor: colors_accent_2,
       backgroundColor: colors_background_1,

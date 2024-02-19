@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { storeThemes } from "@prisma/client";
 import Image from "next/image";
 import { supabaseStorage } from "@/utils/supabase";
+import { useTheme } from "@/context/ThemeProvider";
 
 const LogoTitle = ({ title, handle, color = "black", className = "" }) => {
   const {
     global: { logo },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   const [imageUrl, setImageUrl] = useState<string>("");
 
