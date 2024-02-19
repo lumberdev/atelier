@@ -1,9 +1,9 @@
-import { useTheme } from "@/lib/hooks/store/useTheme";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import { currencyFormatter } from "@/lib/helper/currency";
 import Link from "next/link";
 import { FC } from "react";
 import getProductListing from "@/lib/campaign/getProductListing";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ProductCard: FC<{
   product: Awaited<

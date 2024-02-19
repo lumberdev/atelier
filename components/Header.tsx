@@ -1,11 +1,11 @@
 import LogoTitle from "./LogoTitle";
-import { useTheme } from "@/lib/hooks/store/useTheme";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 import AnnouncementBar from "./AnnouncementBar";
 import Container from "./general/Container";
 import classNames from "classnames";
 import { FC } from "react";
 import MiniCart from "./cart/MiniCart";
+import { useTheme } from "@/context/ThemeProvider";
 
 const Header: FC<{
   title: string;

@@ -9,13 +9,12 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { storeThemes } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 import { RequiredStorePageProps } from "@/lib/types";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import clientProvider from "@/utils/clientProvider";
+import { useTheme } from "@/context/ThemeProvider";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -23,7 +22,6 @@ interface PageProps extends RequiredStorePageProps {
   isActive: boolean;
   previewToken: string; // TODO: Draft mode validation should be moved to server-side
   announcement?: string;
-  defaultFavUrl?: string;
 }
 
 const CampaignPage: FC<PageProps> = ({
@@ -32,13 +30,13 @@ const CampaignPage: FC<PageProps> = ({
   isActive,
   previewToken,
   announcement,
-  defaultFavUrl,
   shop,
 }) => {
   // const router = useRouter();
   const {
+    theme: { favicon: defaultFavUrl },
     global: { favicon },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   useEffect(() => {
     const faviconElem = document.querySelector("head .favicon");
@@ -159,7 +157,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
-      defaultFavUrl: themeConfig.theme.favicon?.split("/").reverse()[0],
       shop: merchant.shop,
       storefrontAccessToken,
       themeConfig,

@@ -1,11 +1,10 @@
-import { storeThemes } from "@prisma/client";
+import { useTheme } from "@/context/ThemeProvider";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
-import { useTheme } from "@/lib/hooks/store/useTheme";
 
 const SecondaryButton = ({ children, ...props }) => {
   const {
     global: { secondaryColor, borderRadius },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   const backgroundColor = secondaryColor ? secondaryColor : "grey";
   const buttonTextColor = pickTextColorBasedOnBgColorAdvanced(

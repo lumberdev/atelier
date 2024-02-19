@@ -1,11 +1,10 @@
 import React, { useState, FC } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
-import { storeThemes } from "@prisma/client";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
-import { useTheme } from "@/lib/hooks/store/useTheme";
 import PrimaryButton from "@/components/PrimaryButton";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
@@ -15,7 +14,7 @@ const ProductPage: FC<{
 
   const {
     global: { backgroundColor },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
   const productTextColor = backgroundColor
     ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
     : "";

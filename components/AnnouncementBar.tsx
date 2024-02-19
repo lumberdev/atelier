@@ -1,11 +1,10 @@
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { storeThemes } from "@prisma/client";
+import { useTheme } from "@/context/ThemeProvider";
 import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
 
 const AnnouncementBar = ({ announcement, className = "" }) => {
   const {
     global: { secondaryColor },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   const announcementTextColor = secondaryColor
     ? pickTextColorBasedOnBgColorAdvanced(secondaryColor, "white", "black")
