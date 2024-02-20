@@ -9,12 +9,13 @@ import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import { getCampaignThemeOffline } from "@/lib/theme/getCampaignThemeConfig";
+import { getCampaignTheme } from "@/lib/theme/getCampaignThemeConfig";
 import { useTheme } from "@/lib/hooks/store/useTheme";
 import { storeThemes } from "@prisma/client";
 import { supabaseStorage } from "@/utils/supabase";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 import { RequiredStorePageProps } from "@/lib/types";
+import clientProvider from "@/utils/clientProvider";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -123,7 +124,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     pagination: {},
   });
 
-  const theme_config = await getCampaignThemeOffline({ shop: merchant.shop });
+  const { client } = await clientProvider.offline.restClient({ shop: merchant.shop });
+  const theme_config = await getCampaignTheme({ shop: merchant.shop, client });
   const faviconUrl = theme_config.current["favicon"]?.split("/").reverse()[0];
 
   // 5. Get storefront access token
