@@ -211,9 +211,3 @@ export type RequiredStorePageProps = {
   shop: string;
   storefrontAccessToken: string;
 };
-
-export type TagCategory = {
-  id: string;
-  name: string;
-  prodList?: string[]
-}
