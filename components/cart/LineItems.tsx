@@ -7,9 +7,11 @@ import { currencyFormatter } from "@/lib/helper/currency";
 import Image from "next/image";
 import { useCart } from "@/context/CartProvider";
 import classNames from "classnames";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
   const { removeItem, updateQuantity } = useCart();
+  const { cart: cartTheme } = useTheme();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const price = Number(item.cost.amountPerQuantity.amount);
@@ -19,7 +21,14 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
 
   return (
     <li className="flex items-stretch" key={item.id}>
-      <div className="relative mr-4 aspect-square h-20 w-20 bg-black/20">
+      <div
+        className={classNames(
+          "relative mr-4 aspect-square h-20 w-20 overflow-hidden bg-black/20",
+          {
+            "rounded-atelier": cartTheme.lineItemImageStyle === "round",
+          }
+        )}
+      >
         <Image
           src={
             item.merchandise.image.url ||
@@ -75,9 +84,12 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
           </div>
 
           <div
-            className={classNames("flex items-center bg-black text-white", {
-              "opacity-80": isLoading,
-            })}
+            className={classNames(
+              "rounded-atelier flex items-center bg-black text-white",
+              {
+                "opacity-80": isLoading,
+              }
+            )}
           >
             <button
               className="px-2 py-2 disabled:cursor-progress"
