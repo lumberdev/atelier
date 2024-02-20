@@ -1,13 +1,13 @@
-import clientProvider from "@/utils/clientProvider";
+import { GraphqlClient } from "@shopify/shopify-api/lib/clients/graphql/graphql_client";
 
 const getProductListing = async ({
-  shop,
   handle,
+  client,
   publicationId,
   pagination: { productsPerPage = 50, afterCursor, beforeCursor },
 }: {
-  shop: string;
   handle: string;
+  client: GraphqlClient;
   publicationId: string;
   pagination: {
     productsPerPage?: number;
@@ -15,8 +15,6 @@ const getProductListing = async ({
     beforeCursor?: string;
   };
 }) => {
-  const { client } = await clientProvider.offline.graphqlClient({ shop });
-
   const paginationQuery = {
     forward: afterCursor
       ? `first: ${productsPerPage}, after: "${afterCursor}"`

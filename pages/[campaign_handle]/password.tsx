@@ -1,6 +1,5 @@
 import prisma from "@/utils/prisma";
 import { supabaseStorage } from "@/utils/supabase";
-import { accessPageConfig, storeThemes } from "@prisma/client";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -13,35 +12,22 @@ import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
 import { RequiredStorePageProps } from "@/lib/types";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
+import clientProvider from "@/utils/clientProvider";
+import getThemeConfig from "@/lib/theme/getThemeConfig";
+import { useTheme } from "@/context/ThemeProvider";
 
 interface PageProps extends RequiredStorePageProps {
-  config: Pick<
-    accessPageConfig,
-    | "layout"
-    | "headline"
-    | "body"
-    | "backgroundColor"
-    | "backgroundImage"
-    | "ctaText"
-    | "ctaUrl"
-    | "passwordPlaceholder"
-  >;
-  theme: storeThemes;
-  isCampaignActive: boolean;
+  isActive: boolean;
   previewToken: string;
 }
 
-const CampaignPasswordPage = ({
-  config,
-  theme,
-  isCampaignActive,
-  previewToken,
-}: PageProps) => {
+const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
   const { query, replace } = useRouter();
+  const { global, accessPage } = useTheme();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
   const { showNotFoundPage } = useDraftCampaign({
-    isCampaignActive,
+    isCampaignActive: isActive,
     previewToken,
   });
 
@@ -61,18 +47,18 @@ const CampaignPasswordPage = ({
     signIn({ password: fields.password });
   });
 
-  const logo = theme.logo ? supabaseStorage.getPublicUrl(theme.logo) : null;
-  const layout = config.layout;
-  const backgroundColor = config.backgroundColor;
-  const backgroundImage = config.backgroundImage
-    ? supabaseStorage.getPublicUrl(config.backgroundImage)
+  const logo = global.logo ? supabaseStorage.getPublicUrl(global.logo) : null;
+  const layout = accessPage.layout;
+  const backgroundColor = accessPage.backgroundColor;
+  const backgroundImage = accessPage.backgroundImage
+    ? supabaseStorage.getPublicUrl(accessPage.backgroundImage)
     : null;
-  const headline = config.headline;
-  const body = config.body;
-  const placeholder = config.passwordPlaceholder;
+  const headline = accessPage.headline;
+  const body = accessPage.body;
+  const placeholder = accessPage.passwordPlaceholder;
   const cta = {
-    text: config.ctaText,
-    url: config.ctaUrl,
+    text: accessPage.ctaText,
+    url: accessPage.ctaUrl,
   };
 
   if (showNotFoundPage) return <NotFoundPage />;
@@ -201,42 +187,52 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     where: {
       identifier: subdomain,
     },
-    include: {
+    select: {
+      shop: true,
       campaigns: {
-        where: {
-          handle: campaign_handle as string,
+        where: { handle: campaign_handle as string },
+        select: {
+          isActive: true,
+          previewToken: true,
         },
       },
-      theme: true,
     },
   });
 
-  const theme = merchant.theme;
-  const [campaign] = merchant.campaigns;
+  const { client: graphqlClient } = await clientProvider.offline.graphqlClient({
+    shop: merchant.shop,
+  });
 
-  // 2. Get access control config
-  const configPromise = await prisma.accessPageConfig.findUnique({
-    where: { campaignId: campaign.id },
+  const { client: restClient } = await clientProvider.offline.restClient({
+    shop: merchant.shop,
+  });
+
+  // 2. Get theme configuration
+  const themePromise = getThemeConfig({
+    shop: merchant.shop,
+    handle: campaign_handle as string,
+    restClient,
   });
 
   // 3. Get storefront access token
   const storefrontAccessTokenPromise = getStorefrontAccessToken({
-    shop: merchant.shop,
+    client: graphqlClient,
   });
 
-  const [config, storefrontAccessToken] = await Promise.all([
-    configPromise,
+  const [storefrontAccessToken, themeConfig] = await Promise.all([
     storefrontAccessTokenPromise,
+    themePromise,
   ]);
+
+  const [campaign] = merchant.campaigns;
 
   return {
     props: {
-      config,
-      theme,
-      isCampaignActive: campaign.isActive,
-      previewToken: campaign.previewToken,
       shop: merchant.shop,
+      isActive: campaign.isActive,
+      previewToken: campaign.previewToken,
       storefrontAccessToken,
+      themeConfig,
     },
   };
 };
