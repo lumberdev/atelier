@@ -27,7 +27,7 @@ router.get(async (req, res) => {
     });
 
     const { client } = await clientProvider.restClient({ req, res, isOnline: true });
-    const theme_config = await getCampaignTheme({ shop, client });
+    const theme_config = await getCampaignTheme({ client });
 
     const updatedStore = await prisma.storeThemes.update({
         where: { storeId: shop },
