@@ -221,6 +221,8 @@ export type ShopifyThemeSettingsConfig = {
     colors_accent_1?: string;
     colors_accent_2?: string;
     colors_background_1?: string;
+    buttons_radius: number;
+    colors_text?: string;
     [key: string]: any;
   };
 };

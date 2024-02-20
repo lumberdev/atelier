@@ -10,8 +10,22 @@ const ThemeProvider: FC<{ theme: IThemeContext; children: ReactNode }> = ({
   theme,
   children,
 }) => {
+  if (!theme) return children;
+
   return (
-    <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={theme}>
+      <style jsx global>{`
+        :root {
+          --atelier-primary-color: ${theme.global.primaryColor};
+          --atelier-secondary-color: ${theme.global.secondaryColor};
+          --atelier-bg-color: ${theme.global.backgroundColor};
+          --atelier-text-color: ${theme.global.textColor};
+          --atelier-border-radius: ${theme.global.borderRadius}px;
+        }
+      `}</style>
+
+      <div className="bg-atelier text-base">{children}</div>
+    </ThemeContext.Provider>
   );
 };
 

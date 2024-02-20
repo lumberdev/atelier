@@ -56,7 +56,14 @@ const getThemeConfig = async ({
   });
 
   const {
-    current: { favicon, colors_accent_1, colors_accent_2, colors_background_1 },
+    current: {
+      favicon,
+      colors_accent_1,
+      colors_accent_2,
+      colors_background_1,
+      buttons_radius,
+      colors_text,
+    },
   } = merchantSettings;
   const { theme, campaigns } = merchant;
   const [campaign] = campaigns;
@@ -84,6 +91,8 @@ const getThemeConfig = async ({
       backgroundColor: theme.backgroundColor
         ? theme.backgroundColor
         : colors_background_1,
+      borderRadius: theme.borderRadius ?? buttons_radius,
+      textColor: colors_text,
     },
     announcement: campaign.announcement,
     cart: {
