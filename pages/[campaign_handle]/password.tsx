@@ -3,7 +3,7 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import NotFoundPage from "@/components/NotFoundPage";
@@ -16,12 +16,17 @@ import getThemeConfig from "@/lib/theme/getThemeConfig";
 import { useTheme } from "@/context/ThemeProvider";
 
 interface PageProps extends RequiredStorePageProps {
+  handle: string;
   isActive: boolean;
   previewToken: string;
 }
 
-const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
-  const { query, replace } = useRouter();
+const CampaignPasswordPage = ({
+  handle,
+  isActive,
+  previewToken,
+}: PageProps) => {
+  const { replace } = useRouter();
   const { global, accessPage } = useTheme();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
@@ -32,9 +37,9 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
 
   const { mutate: signIn } = useMutation<null, any, { password: string }>({
     mutationFn: ({ password }) =>
-      axios.post("/api/auth/password", { password, campaign: query.handle }),
+      axios.post("/api/auth/password", { password, campaign: handle }),
     onSuccess: () => {
-      replace(`/${query.handle}`);
+      replace(`/${handle}`);
     },
     onError: (error) => {
       const data = error.response.data;
@@ -220,6 +225,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   return {
     props: {
+      handle: campaign_handle as string,
       shop: merchant.shop,
       isActive: campaign.isActive,
       previewToken: campaign.previewToken,
