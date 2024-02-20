@@ -34,19 +34,13 @@ const CampaignPage: FC<PageProps> = ({
 }) => {
   // const router = useRouter();
   const {
-    theme: { favicon: defaultFavUrl },
     global: { favicon },
   } = useTheme();
 
   useEffect(() => {
     const faviconElem = document.querySelector("head .favicon");
-    if (favicon) {
-      const image = supabaseStorage.getPublicUrl(favicon);
-      faviconElem["href"] = image?.data.publicUrl || "";
-      return;
-    }
 
-    faviconElem["href"] = `https://${shop}/cdn/shop/files/${defaultFavUrl}`;
+    faviconElem["href"] = favicon;
   }, [favicon]);
 
   // TODO: Move this to server-side to avoid leaking the preview token

@@ -1,5 +1,4 @@
 import prisma from "@/utils/prisma";
-import { supabaseStorage } from "@/utils/supabase";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -47,12 +46,10 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
     signIn({ password: fields.password });
   });
 
-  const logo = global.logo ? supabaseStorage.getPublicUrl(global.logo) : null;
+  const logo = global.logo;
   const layout = accessPage.layout;
   const backgroundColor = accessPage.backgroundColor;
-  const backgroundImage = accessPage.backgroundImage
-    ? supabaseStorage.getPublicUrl(accessPage.backgroundImage)
-    : null;
+  const backgroundImage = accessPage.backgroundImage;
   const headline = accessPage.headline;
   const body = accessPage.body;
   const placeholder = accessPage.passwordPlaceholder;
@@ -69,7 +66,7 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
         {backgroundImage && (
           <div className="relative">
             <Image
-              src={backgroundImage.data.publicUrl}
+              src={backgroundImage}
               layout="fill"
               className="object-cover object-center"
               alt=""
@@ -81,7 +78,7 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
           {logo && (
             <div className="relative mb-8 h-8 w-32">
               <Image
-                src={logo.data.publicUrl}
+                src={logo}
                 layout="fill"
                 className="object-contain"
                 alt=""
@@ -125,7 +122,7 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
     >
       {backgroundImage && (
         <Image
-          src={backgroundImage.data.publicUrl}
+          src={backgroundImage}
           layout="fill"
           className="object-cover"
           alt=""
@@ -135,12 +132,7 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
       <div className="relative flex w-11/12 max-w-xl flex-col items-center bg-white px-4 py-12 text-black md:justify-center md:p-8">
         {logo && (
           <div className="relative mb-8 h-8 w-32">
-            <Image
-              src={logo.data.publicUrl}
-              layout="fill"
-              className="object-contain"
-              alt=""
-            />
+            <Image src={logo} layout="fill" className="object-contain" alt="" />
           </div>
         )}
 

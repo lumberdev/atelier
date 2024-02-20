@@ -1,6 +1,7 @@
 import prisma from "@/utils/prisma";
 import { RestClient } from "@shopify/shopify-api/lib/clients/rest/rest_client";
 import { getCampaignTheme } from "./getCampaignThemeConfig";
+import { supabaseStorage } from "@/utils/supabase";
 
 const getThemeConfig = async ({
   shop,
@@ -60,14 +61,30 @@ const getThemeConfig = async ({
   const { theme, campaigns } = merchant;
   const [campaign] = campaigns;
 
+  const campaignFaviconUrl = theme.favicon
+    ? supabaseStorage.getPublicUrl(favicon).data.publicUrl
+    : "";
+  const themeFaviconUrl = favicon
+    ? `https://${shop}/cdn/shop/files/${favicon.split("/").reverse()[0]}`
+    : "";
+
+  const campaignLogo = theme.logo
+    ? supabaseStorage.getPublicUrl(theme.logo).data.publicUrl
+    : "";
+
   return {
-    theme: {
-      favicon: favicon?.split("/").reverse()[0],
-      primaryColor: colors_accent_1,
-      secondaryColor: colors_accent_2,
-      backgroundColor: colors_background_1,
+    global: {
+      ...theme,
+      favicon: campaignFaviconUrl ? campaignFaviconUrl : themeFaviconUrl,
+      logo: campaignLogo,
+      primaryColor: theme.primaryColor ? theme.primaryColor : colors_accent_1,
+      secondaryColor: theme.secondaryColor
+        ? theme.secondaryColor
+        : colors_accent_2,
+      backgroundColor: theme.backgroundColor
+        ? theme.backgroundColor
+        : colors_background_1,
     },
-    global: theme,
     announcement: campaign.announcement,
     cart: {
       backgroundColor: campaign.cartBackgroundColor,
@@ -77,7 +94,14 @@ const getThemeConfig = async ({
       title: campaign.cartTitle,
       description: campaign.cartDescription,
     },
-    accessPage: campaign.accessPageConfig,
+    accessPage: {
+      ...campaign.accessPageConfig,
+      backgroundImage: campaign.accessPageConfig.backgroundImage
+        ? supabaseStorage.getPublicUrl(
+            campaign.accessPageConfig.backgroundImage
+          ).data.publicUrl
+        : "",
+    },
   };
 };
 
