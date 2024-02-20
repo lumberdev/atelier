@@ -8,6 +8,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "./context/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -33,6 +34,9 @@ const config = {
         "brand-1": "#2F2F2E",
         "brand-2": "#CDCDC3",
         "brand-3": "#F3F0EA",
+        "atelier-primary": "var(--atelier-primary-color)",
+        "atelier-secondary": "var(--atelier-secondary-color)",
+        "atelier-background": "var(--atelier-background-color)",
       },
       keyframes: {
         "accordion-down": {
@@ -47,6 +51,12 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundColor: {
+        atelier: "var(--atelier-bg-color, initial)",
+      },
+      borderRadius: {
+        atelier: "var(--atelier-border-radius)",
       },
     },
   },
