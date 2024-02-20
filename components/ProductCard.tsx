@@ -1,4 +1,4 @@
-import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import { getTextColor } from "@/lib/helper/colors";
 import { currencyFormatter } from "@/lib/helper/currency";
 import Link from "next/link";
 import { FC } from "react";
@@ -13,22 +13,17 @@ const ProductCard: FC<{
 }> = ({ product, handle }) => {
   const { global } = useTheme();
 
-  const backgroundColor = global.backgroundColor ?? "";
-
   const { maxVariantPrice } = product.priceRangeV2;
-
-  const cardTextColor = backgroundColor
-    ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
-    : "";
 
   const href = `/${handle}/${product.handle}`;
   const amount = Number(maxVariantPrice.amount);
+  const textColor = getTextColor(global.backgroundColor);
 
   return (
-    <div className="mx-auto w-fit w-full max-w-full overflow-hidden">
+    <div className="mx-auto w-full max-w-full overflow-hidden">
       <Link href={href} className="flex aspect-square h-fit w-full	">
         <img
-          className="h-48 h-full w-48 w-full max-w-full object-cover"
+          className="h-full w-full max-w-full object-cover"
           src={product.featuredImage?.url}
         />
       </Link>
@@ -36,8 +31,8 @@ const ProductCard: FC<{
       <div className="flex w-full flex-col pt-2 text-3xl sm:text-2xl md:text-xl">
         <Link href={href} className="no-underline">
           <h3
-            className="overflow-hidden truncate text-base font-bold text-black sm:text-xl"
-            style={{ color: cardTextColor }}
+            className="overflow-hidden truncate text-base font-bold sm:text-xl"
+            style={{ color: textColor }}
           >
             {product.title}
           </h3>
@@ -46,7 +41,7 @@ const ProductCard: FC<{
         <div className="flex flex-row pt-1">
           <p
             className="text-base font-bold sm:text-xl"
-            style={{ color: cardTextColor }}
+            style={{ color: textColor }}
           >
             {currencyFormatter({
               amount,

@@ -37,6 +37,7 @@ const config = {
         "atelier-primary": "var(--atelier-primary-color)",
         "atelier-secondary": "var(--atelier-secondary-color)",
         "atelier-background": "var(--atelier-background-color)",
+        "atelier-text": "var(--atelier-text-color)",
       },
       keyframes: {
         "accordion-down": {

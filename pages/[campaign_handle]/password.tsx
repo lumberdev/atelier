@@ -117,8 +117,8 @@ const CampaignPasswordPage = ({ isActive, previewToken }: PageProps) => {
 
   return (
     <div
-      className="relative flex h-screen w-screen flex-col items-center justify-center p-8"
-      style={{ backgroundColor: backgroundColor, color: "#ffffff" }}
+      className="bg-atelier relative flex h-screen w-screen flex-col items-center justify-center p-8"
+      style={{ "--atelier-bg-color": backgroundColor } as CSSProperties}
     >
       {backgroundImage && (
         <Image
