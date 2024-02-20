@@ -107,21 +107,21 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   if (authorization.notFound || authorization.redirect) return authorization;
 
-  const { client: graphql } = await clientProvider.offline.graphqlClient({
+  const { client: graphqlClient } = await clientProvider.offline.graphqlClient({
     shop: merchant.shop,
   });
 
   // 3. Get collection. This is static so server-render should be enough
   const collectionPromise = getCampaignCollection({
-    shop: merchant.shop,
+    client: graphqlClient,
     handle: handle as string,
     publicationId: merchant.publicationId,
   });
 
   // 4. Ger paginated product listing. This will change client-side so server-render only for the initial load
   const listingPromise = getProductListing({
+    client: graphqlClient,
     handle: handle as string,
-    shop: merchant.shop,
     publicationId: merchant.publicationId,
     pagination: {},
   });
@@ -139,7 +139,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   // 6. Get storefront access token
   const storefrontAccessTokenPromise = getStorefrontAccessToken({
-    shop: merchant.shop,
+    client: graphqlClient,
   });
 
   const [collection, listing, storefrontAccessToken, themeConfig] =

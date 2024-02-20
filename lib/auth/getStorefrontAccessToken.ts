@@ -1,8 +1,10 @@
-import clientProvider from "@/utils/clientProvider";
+import { GraphqlClient } from "@shopify/shopify-api/lib/clients/graphql/graphql_client";
 
-const getStorefrontAccessToken = async ({ shop }: { shop: string }) => {
-  const { client } = await clientProvider.offline.graphqlClient({ shop });
-
+const getStorefrontAccessToken = async ({
+  client,
+}: {
+  client: GraphqlClient;
+}) => {
   const response = await client.query<{
     data: {
       shop: {
