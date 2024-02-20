@@ -196,13 +196,17 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     },
   });
 
-  const { client: graphqlClient } = await clientProvider.offline.graphqlClient({
+  const graphqlClientPromise = clientProvider.offline.graphqlClient({
     shop: merchant.shop,
   });
 
-  const { client: restClient } = await clientProvider.offline.restClient({
+  const restClientPromise = clientProvider.offline.restClient({
     shop: merchant.shop,
   });
+
+  const [{ client: graphqlClient }, { client: restClient }] = await Promise.all(
+    [graphqlClientPromise, restClientPromise]
+  );
 
   // 2. Get theme configuration
   const themePromise = getThemeConfig({

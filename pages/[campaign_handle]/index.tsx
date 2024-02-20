@@ -101,9 +101,17 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   if (authorization.notFound || authorization.redirect) return authorization;
 
-  const { client: graphqlClient } = await clientProvider.offline.graphqlClient({
+  const graphqlClientPromise = clientProvider.offline.graphqlClient({
     shop: merchant.shop,
   });
+
+  const restClientPromise = clientProvider.offline.restClient({
+    shop: merchant.shop,
+  });
+
+  const [{ client: graphqlClient }, { client: restClient }] = await Promise.all(
+    [graphqlClientPromise, restClientPromise]
+  );
 
   // 3. Get collection. This is static so server-render should be enough
   const collectionPromise = getCampaignCollection({
@@ -118,10 +126,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     handle: handle as string,
     publicationId: merchant.publicationId,
     pagination: {},
-  });
-
-  const { client: restClient } = await clientProvider.offline.restClient({
-    shop: merchant.shop,
   });
 
   // 5. Get theme configuration
