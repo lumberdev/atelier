@@ -12,9 +12,9 @@ const getThemeConfig = async ({
   handle: string;
   restClient: RestClient;
 }) => {
-  const merchantSettings = await getCampaignTheme({ client: restClient });
+  const merchantSettingsPromise = getCampaignTheme({ client: restClient });
 
-  const merchant = await prisma.stores.findUnique({
+  const merchantPromise = prisma.stores.findUnique({
     where: { shop },
     select: {
       theme: {
@@ -54,6 +54,11 @@ const getThemeConfig = async ({
       },
     },
   });
+
+  const [merchantSettings, merchant] = await Promise.all([
+    merchantSettingsPromise,
+    merchantPromise,
+  ]);
 
   const {
     current: {
