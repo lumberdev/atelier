@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { storeThemes } from "@prisma/client";
+import useFetch from "@/components/hooks/useFetch";
 import { 
     Button,
     BlockStack
@@ -10,16 +10,16 @@ import { CampaignProduct } from "@/lib/types";
 import MultiselectTagComboboxExample from "@/components/VerticalCombobox";
 
 const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) => {
+    const fetch = useFetch();
     const { handleSubmit, setValue, watch } = useForm<{
         tags: string[];
     }>({ defaultValues: { tags: [...product.tags] } });
     const tags = watch("tags");
 
     const [originalTags, setOriginalTags] = useState<string[]>([...product.tags]);
-    const [loading, setLoading] = useState<boolean>(false);
     const [tagsChanged, setTagsChanged] = useState<boolean>(false);
 
-    const { mutate: updateProductTags } = useMutation<
+    const { mutate: updateProductTags, isLoading: isUpdatingProductTags } = useMutation<
       {
         product?: CampaignProduct;
         error?: { code: string; message: string };
@@ -28,27 +28,28 @@ const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) =
       { prod_id: string }
     >(
       (variables) =>
-        fetch(`/api/apps/product/prod_id}/updatetags`, {
+        fetch(`/api/apps/product/${variables.prod_id}/updatetags`, {
             method: "POST",
             body: JSON.stringify({
-                data: variables.prod_id
+                data: tags
             }),
         }).then((response) => response.json()),
       {
         onSuccess: (data) => {
-          console.log("API has been called successfully", data);
+          const updatedProdTags = data.product.tags || [];
+          setOriginalTags(updatedProdTags);
+          setTagsChanged(false);
         },
       }
     );
-    // const { data = { theme: {} } } = useQuery<{ theme: storeThemes }>({
-    //     queryKey: "theme",
-    //     queryFn: () =>
-    //         fetch(`/api/apps/campaigns/list`).then((response) => response.json()),
-    // })
 
     useEffect(() => {
         setTagsChanged(tagsAreNotEqual());
     }, [tags]);
+
+    useEffect(() => {
+        console.log("is updating product tags", isUpdatingProductTags);
+    }, [isUpdatingProductTags])
 
     function tagsAreNotEqual() {
         if(tags.length !== originalTags.length) return true;
@@ -75,21 +76,8 @@ const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) =
 
     const onSubmit = handleSubmit(async (fields: { tags: string[] }) => {
         const prod_id = product.id.split("/").reverse()[0];
-        console.log("on submitting");
         updateProductTags({ prod_id });
     });
-    // const onSubmit = handleSubmit((fields: { domain: string }) => {
-    //     updateStoreDomain(
-    //       { domain: fields.domain },
-    //       {
-    //         onSuccess: (response) => {
-    //           if (response.error) return;
-    //           triggerToast("Domain updated");
-    //           if (firstTimeSetup) setTimeout(() => router.push("/app"), 1500);
-    //         },
-    //       }
-    //     );
-    //   });
 
     return (
         <BlockStack gap="400" inlineAlign="end">
@@ -104,6 +92,7 @@ const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) =
                 variant="primary" 
                 onClick={onSubmit}
                 disabled={!tagsChanged}
+                loading={isUpdatingProductTags}
             >
                 Save Tags
             </Button>

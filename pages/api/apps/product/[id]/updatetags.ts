@@ -18,9 +18,37 @@ router.post(async (req, res) => {
     const shop = req.user_session.shop;
     const { id } = req.query;
 
-    console.log("router post", id, shop, req.body);
+    const prodId = `gid://shopify/Product/${id}`;
+    const body = JSON.parse(req.body);
+    const tags = body?.data;
 
-    return res.status(200).send("Hello World");
+    const data = await client.query({
+      data: `
+        mutation {
+          productUpdate(input: { id: "${prodId}", tags: "${tags.join(", ")}" }) {
+            product { 
+              id 
+              title
+              description
+              descriptionHtml
+              tags
+              priceRangeV2 {
+                minVariantPrice {
+                  amount
+                }
+                maxVariantPrice {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      `
+    });
+
+    const product: CampaignProduct = (data as any).body.data?.productUpdate;
+
+    return res.status(200).json(product);
 });
 
 
