@@ -7,10 +7,15 @@ import {
     Text,
     AutoSelection,
   } from '@shopify/polaris';
-  import {useState, useEffect, useCallback, useMemo} from 'react';
+  import {useState, FC, useCallback, useMemo} from 'react';
   
-  function MultiselectTagComboboxExample() {
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const MultiselectTagComboboxExample: FC<{ 
+    selectedTags: string[]; 
+    onChange: (selection: string) => void;
+  }> = ({ 
+    selectedTags,
+    onChange
+  }) => {
     const [value, setValue] = useState('');
     const [suggestion, setSuggestion] = useState('');
   
@@ -28,14 +33,15 @@ import {
     );
     const updateSelection = useCallback(
       (selected: string) => {
-        const nextSelectedTags = new Set([...selectedTags]);
+        onChange(selected);
+        // const nextSelectedTags = new Set([...selectedTags]);
   
-        if (nextSelectedTags.has(selected)) {
-          nextSelectedTags.delete(selected);
-        } else {
-          nextSelectedTags.add(selected);
-        }
-        setSelectedTags([...Array.from(nextSelectedTags)]);
+        // if (nextSelectedTags.has(selected)) {
+        //   nextSelectedTags.delete(selected);
+        // } else {
+        //   nextSelectedTags.add(selected);
+        // }
+        // setSelectedTags([...Array.from(nextSelectedTags)]);
         setValue('');
         setSuggestion('');
       },
@@ -152,7 +158,7 @@ import {
       ) : null;
   
     return (
-      <div className="pl-6" style={{height: 'auto', minHeight: '125px'}}>
+      <div className="flex-1">
         <Combobox
           allowMultiple
           activator={

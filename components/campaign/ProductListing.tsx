@@ -14,7 +14,7 @@ import {
 } from "@shopify/polaris";
 import { FC } from "react";
 import { ExternalIcon } from "@shopify/polaris-icons";
-import MultiselectTagComboboxExample from "@/components/VerticalCombobox";
+import CampaignProductTagForm from "@/components/campaign/CampaignProductTagForm";
 
 const ProductListing: FC<{
   totalProductCount: number;
@@ -151,8 +151,8 @@ const ProductListing: FC<{
                     </BlockStack>
                   </div>
 
-                  <div className="flex-1">
-                    <MultiselectTagComboboxExample />
+                  <div className="flex-1 pl-6" style={{height: 'auto', minHeight: '125px'}}>
+                    <CampaignProductTagForm product={product} />
                   </div>
                   
                 </InlineStack>
