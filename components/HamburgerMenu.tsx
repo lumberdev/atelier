@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { storeThemes } from "@prisma/client";
+import { useTheme } from "@/context/ThemeProvider";
 
 const HamburgerMenu = ({ children, className = "", color = "black" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const {
     global: { primaryColor },
-  } = useTheme() as { global: storeThemes };
+  } = useTheme();
 
   useEffect(() => {
     const closeMenu = (e) => {

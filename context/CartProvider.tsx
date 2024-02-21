@@ -22,6 +22,8 @@ import {
 
 interface ICartContext {
   isLoading: boolean;
+  miniCartOpen: boolean;
+  onMiniCartOpenChange: (open: boolean) => void;
   cart: StoreCart | null;
   updateQuantity: (props: {
     lineId: string;
@@ -36,6 +38,8 @@ interface ICartContext {
 
 const CartContext = createContext<ICartContext>({
   isLoading: true,
+  miniCartOpen: false,
+  onMiniCartOpenChange: () => {},
   cart: null,
   updateQuantity: ({}) => Promise.resolve(null),
   removeItem: ({}) => Promise.resolve(null),
@@ -63,6 +67,8 @@ const CartProvider: FC<{
   const shopClient = useRef<AxiosInstance>();
   const [isLoadingCart, setIsLoadingCart] = useState(true);
   const [cart, setCart] = useState<ICartContext["cart"]>();
+  const [miniCartOpen, setMiniCartOpen] =
+    useState<ICartContext["miniCartOpen"]>(false);
 
   useEffect(() => {
     // 1. Configure shopify client for the corresponding store
@@ -114,6 +120,7 @@ const CartProvider: FC<{
       });
 
       setCart(newCart);
+      setMiniCartOpen(true);
 
       return newCart;
     }
@@ -127,6 +134,7 @@ const CartProvider: FC<{
     });
 
     setCart(updatedCart);
+    setMiniCartOpen(true);
 
     return updatedCart;
   };
@@ -163,6 +171,8 @@ const CartProvider: FC<{
     <CartContext.Provider
       value={{
         isLoading: isLoadingCart,
+        miniCartOpen,
+        onMiniCartOpenChange: setMiniCartOpen,
         cart,
         addToCart: addOrCreateCart,
         removeItem,

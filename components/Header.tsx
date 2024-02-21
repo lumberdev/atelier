@@ -1,11 +1,11 @@
 import LogoTitle from "./LogoTitle";
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
+import { getTextColor } from "@/lib/helper/colors";
 import AnnouncementBar from "./AnnouncementBar";
 import Container from "./general/Container";
 import classNames from "classnames";
 import { FC } from "react";
 import MiniCart from "./cart/MiniCart";
+import { useTheme } from "@/context/ThemeProvider";
 
 const Header: FC<{
   title: string;
@@ -16,18 +16,16 @@ const Header: FC<{
     global: { primaryColor, logoPosition },
   } = useTheme();
 
-  const navTextIconColor = primaryColor
-    ? pickTextColorBasedOnBgColorAdvanced(primaryColor, "white", "black")
-    : "black";
+  const textColor = getTextColor(primaryColor);
 
   return (
     <div
       className="sticky left-0 top-0 z-10 lg:mb-4"
-      style={{ backgroundColor: primaryColor }}
+      style={{ backgroundColor: primaryColor, color: textColor }}
     >
       {announcement && <AnnouncementBar announcement={announcement} />}
 
-      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between	bg-white transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4">
+      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4">
         <div
           className={classNames({
             "col-start-1": logoPosition === "center",
@@ -42,7 +40,7 @@ const Header: FC<{
             "col-start-1 text-left": logoPosition !== "center",
             "col-start-2 justify-center text-center": logoPosition === "center",
           })}
-          color={navTextIconColor}
+          color={textColor}
         />
 
         <div className="col-start-3 flex h-[40px] items-center justify-end">

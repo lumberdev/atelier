@@ -8,6 +8,8 @@ import getProductDetails from "@/lib/campaign/getProductDetails";
 import Header from "@/components/Header";
 import { RequiredStorePageProps } from "@/lib/types";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
+import clientProvider from "@/utils/clientProvider";
+import getThemeConfig from "@/lib/theme/getThemeConfig";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -69,30 +71,51 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   if (authorization.notFound || authorization.redirect) return authorization;
 
-  // 3. Get collection. This is static so server-render should be enough
-  const collectionPromise = await getCampaignCollection({
+  const graphqlClientPromise = clientProvider.offline.graphqlClient({
     shop: merchant.shop,
+  });
+
+  const restClientPromise = clientProvider.offline.restClient({
+    shop: merchant.shop,
+  });
+
+  const [{ client: graphqlClient }, { client: restClient }] = await Promise.all(
+    [graphqlClientPromise, restClientPromise]
+  );
+
+  // 3. Get collection. This is static so server-render should be enough
+  const collectionPromise = getCampaignCollection({
+    client: graphqlClient,
     handle: handle as string,
     publicationId: merchant.publicationId,
   });
 
   // 4. Get product details. This is also static
-  const productPromise = await getProductDetails({
-    shop: merchant.shop,
+  const productPromise = getProductDetails({
+    client: graphqlClient,
     handle: productHandle as string,
     publicationId: merchant.publicationId,
   });
 
-  // 5. Get storefront access token
-  const storefrontAccessTokenPromise = getStorefrontAccessToken({
+  // 5. Get theme configuration
+  const themePromise = getThemeConfig({
     shop: merchant.shop,
+    handle: handle as string,
+    restClient,
   });
 
-  const [collection, product, storefrontAccessToken] = await Promise.all([
-    collectionPromise,
-    productPromise,
-    storefrontAccessTokenPromise,
-  ]);
+  // 6. Get storefront access token
+  const storefrontAccessTokenPromise = getStorefrontAccessToken({
+    client: graphqlClient,
+  });
+
+  const [collection, product, storefrontAccessToken, themeConfig] =
+    await Promise.all([
+      collectionPromise,
+      productPromise,
+      storefrontAccessTokenPromise,
+      themePromise,
+    ]);
 
   return {
     props: {
@@ -101,6 +124,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       announcement: campaign.announcement,
       shop: merchant.shop,
       storefrontAccessToken,
+      themeConfig,
     },
   };
 };

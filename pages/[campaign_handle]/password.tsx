@@ -1,11 +1,9 @@
 import prisma from "@/utils/prisma";
-import { supabaseStorage } from "@/utils/supabase";
-import { accessPageConfig, storeThemes } from "@prisma/client";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import NotFoundPage from "@/components/NotFoundPage";
@@ -13,43 +11,35 @@ import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
 import { RequiredStorePageProps } from "@/lib/types";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
+import clientProvider from "@/utils/clientProvider";
+import getThemeConfig from "@/lib/theme/getThemeConfig";
+import { useTheme } from "@/context/ThemeProvider";
 
 interface PageProps extends RequiredStorePageProps {
-  config: Pick<
-    accessPageConfig,
-    | "layout"
-    | "headline"
-    | "body"
-    | "backgroundColor"
-    | "backgroundImage"
-    | "ctaText"
-    | "ctaUrl"
-    | "passwordPlaceholder"
-  >;
-  theme: storeThemes;
-  isCampaignActive: boolean;
+  handle: string;
+  isActive: boolean;
   previewToken: string;
 }
 
 const CampaignPasswordPage = ({
-  config,
-  theme,
-  isCampaignActive,
+  handle,
+  isActive,
   previewToken,
 }: PageProps) => {
-  const { query, replace } = useRouter();
+  const { replace } = useRouter();
+  const { global, accessPage } = useTheme();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
   const { showNotFoundPage } = useDraftCampaign({
-    isCampaignActive,
+    isCampaignActive: isActive,
     previewToken,
   });
 
   const { mutate: signIn } = useMutation<null, any, { password: string }>({
     mutationFn: ({ password }) =>
-      axios.post("/api/auth/password", { password, campaign: query.handle }),
+      axios.post("/api/auth/password", { password, campaign: handle }),
     onSuccess: () => {
-      replace(`/${query.handle}`);
+      replace(`/${handle}`);
     },
     onError: (error) => {
       const data = error.response.data;
@@ -61,18 +51,16 @@ const CampaignPasswordPage = ({
     signIn({ password: fields.password });
   });
 
-  const logo = theme.logo ? supabaseStorage.getPublicUrl(theme.logo) : null;
-  const layout = config.layout;
-  const backgroundColor = config.backgroundColor;
-  const backgroundImage = config.backgroundImage
-    ? supabaseStorage.getPublicUrl(config.backgroundImage)
-    : null;
-  const headline = config.headline;
-  const body = config.body;
-  const placeholder = config.passwordPlaceholder;
+  const logo = global.logo;
+  const layout = accessPage.layout;
+  const backgroundColor = accessPage.backgroundColor;
+  const backgroundImage = accessPage.backgroundImage;
+  const headline = accessPage.headline;
+  const body = accessPage.body;
+  const placeholder = accessPage.passwordPlaceholder;
   const cta = {
-    text: config.ctaText,
-    url: config.ctaUrl,
+    text: accessPage.ctaText,
+    url: accessPage.ctaUrl,
   };
 
   if (showNotFoundPage) return <NotFoundPage />;
@@ -83,7 +71,7 @@ const CampaignPasswordPage = ({
         {backgroundImage && (
           <div className="relative">
             <Image
-              src={backgroundImage.data.publicUrl}
+              src={backgroundImage}
               layout="fill"
               className="object-cover object-center"
               alt=""
@@ -95,7 +83,7 @@ const CampaignPasswordPage = ({
           {logo && (
             <div className="relative mb-8 h-8 w-32">
               <Image
-                src={logo.data.publicUrl}
+                src={logo}
                 layout="fill"
                 className="object-contain"
                 alt=""
@@ -134,12 +122,12 @@ const CampaignPasswordPage = ({
 
   return (
     <div
-      className="relative flex h-screen w-screen flex-col items-center justify-center p-8"
-      style={{ backgroundColor: backgroundColor, color: "#ffffff" }}
+      className="bg-atelier relative flex h-screen w-screen flex-col items-center justify-center p-8"
+      style={{ "--atelier-bg-color": backgroundColor } as CSSProperties}
     >
       {backgroundImage && (
         <Image
-          src={backgroundImage.data.publicUrl}
+          src={backgroundImage}
           layout="fill"
           className="object-cover"
           alt=""
@@ -149,12 +137,7 @@ const CampaignPasswordPage = ({
       <div className="relative flex w-11/12 max-w-xl flex-col items-center bg-white px-4 py-12 text-black md:justify-center md:p-8">
         {logo && (
           <div className="relative mb-8 h-8 w-32">
-            <Image
-              src={logo.data.publicUrl}
-              layout="fill"
-              className="object-contain"
-              alt=""
-            />
+            <Image src={logo} layout="fill" className="object-contain" alt="" />
           </div>
         )}
 
@@ -201,42 +184,57 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     where: {
       identifier: subdomain,
     },
-    include: {
+    select: {
+      shop: true,
       campaigns: {
-        where: {
-          handle: campaign_handle as string,
+        where: { handle: campaign_handle as string },
+        select: {
+          isActive: true,
+          previewToken: true,
         },
       },
-      theme: true,
     },
   });
 
-  const theme = merchant.theme;
-  const [campaign] = merchant.campaigns;
+  const graphqlClientPromise = clientProvider.offline.graphqlClient({
+    shop: merchant.shop,
+  });
 
-  // 2. Get access control config
-  const configPromise = await prisma.accessPageConfig.findUnique({
-    where: { campaignId: campaign.id },
+  const restClientPromise = clientProvider.offline.restClient({
+    shop: merchant.shop,
+  });
+
+  const [{ client: graphqlClient }, { client: restClient }] = await Promise.all(
+    [graphqlClientPromise, restClientPromise]
+  );
+
+  // 2. Get theme configuration
+  const themePromise = getThemeConfig({
+    shop: merchant.shop,
+    handle: campaign_handle as string,
+    restClient,
   });
 
   // 3. Get storefront access token
   const storefrontAccessTokenPromise = getStorefrontAccessToken({
-    shop: merchant.shop,
+    client: graphqlClient,
   });
 
-  const [config, storefrontAccessToken] = await Promise.all([
-    configPromise,
+  const [storefrontAccessToken, themeConfig] = await Promise.all([
     storefrontAccessTokenPromise,
+    themePromise,
   ]);
+
+  const [campaign] = merchant.campaigns;
 
   return {
     props: {
-      config,
-      theme,
-      isCampaignActive: campaign.isActive,
-      previewToken: campaign.previewToken,
+      handle: campaign_handle as string,
       shop: merchant.shop,
+      isActive: campaign.isActive,
+      previewToken: campaign.previewToken,
       storefrontAccessToken,
+      themeConfig,
     },
   };
 };

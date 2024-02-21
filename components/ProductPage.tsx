@@ -1,11 +1,10 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, CSSProperties } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
-import { storeThemes } from "@prisma/client";
-import { pickTextColorBasedOnBgColorAdvanced } from "@/lib/helper/colors";
-import { useTheme } from "@/lib/hooks/store/useTheme";
+import { getTextColor } from "@/lib/helper/colors";
 import PrimaryButton from "@/components/PrimaryButton";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
@@ -15,10 +14,7 @@ const ProductPage: FC<{
 
   const {
     global: { backgroundColor },
-  } = useTheme() as { global: storeThemes };
-  const productTextColor = backgroundColor
-    ? pickTextColorBasedOnBgColorAdvanced(backgroundColor, "white", "black")
-    : "";
+  } = useTheme();
 
   const formChange = (e) => {
     const form = e.target.form;
@@ -74,17 +70,19 @@ const ProductPage: FC<{
             />
           ))}
         </div>
-        <div className="sticky top-20 h-fit">
-          <h1
-            className="mb-4 text-2xl font-semibold"
-            style={{ color: productTextColor }}
-          >
+        <div
+          className="sticky top-20 h-fit"
+          style={
+            {
+              "--atelier-text-color": getTextColor(backgroundColor),
+            } as CSSProperties
+          }
+        >
+          <h1 className="text-atelier-text mb-4 text-2xl font-semibold">
             {product.title}
           </h1>
-          <p className="text-l mb-4" style={{ color: productTextColor }}>
-            {product.description}
-          </p>
-          <p className="mb-2 text-lg" style={{ color: productTextColor }}>
+          <p className="text-l text-atelier-text mb-4">{product.description}</p>
+          <p className="text-atelier-text mb-2 text-lg">
             <span className="mr-1 line-through">
               {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
             </span>
@@ -92,6 +90,7 @@ const ProductPage: FC<{
               {currencyFormatter(product.priceRangeV2.minVariantPrice)}
             </span>
           </p>
+
           <form
             id="productForm"
             value-variant-id={product.variants.nodes[0].id}

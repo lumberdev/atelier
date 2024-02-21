@@ -1,33 +1,22 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useTheme } from "@/lib/hooks/store/useTheme";
-import { storeThemes } from "@prisma/client";
 import Image from "next/image";
-import { supabaseStorage } from "@/utils/supabase";
+import { useTheme } from "@/context/ThemeProvider";
 
 const LogoTitle = ({ title, handle, color = "black", className = "" }) => {
   const {
     global: { logo },
-  } = useTheme() as { global: storeThemes };
-
-  const [imageUrl, setImageUrl] = useState<string>("");
-
-  useEffect(() => {
-    if (!logo) return;
-    const image = supabaseStorage.getPublicUrl(logo);
-    setImageUrl(image?.data.publicUrl ?? "");
-  }, [logo]);
+  } = useTheme();
 
   return (
     <Link
       href={`/${handle}`}
       className={`flex items-center no-underline ${className}`}
     >
-      {imageUrl !== "" ? (
+      {logo ? (
         <Image
           width={100}
           height={100}
-          src={imageUrl}
+          src={logo}
           alt={title}
           className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
         />

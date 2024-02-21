@@ -4,8 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link class="favicon" rel="shortcut icon" href="" />
+        <link className="favicon" rel="shortcut icon" href="" />
       </Head>
+
       <body>
         <Main />
         <NextScript />

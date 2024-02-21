@@ -1,3 +1,5 @@
+import getThemeConfig from "./theme/getThemeConfig";
+
 export interface CampaignInput {
   id?: string;
   isActive: boolean;
@@ -149,7 +151,7 @@ export type CampaignCollection = {
   };
 };
 
-export type CampaignTheme = {
+export type ShopifyMerchantTheme = {
   id: string;
   created_at: string;
   name: string;
@@ -211,4 +213,17 @@ export type CampaignFlatFields = {
 export type RequiredStorePageProps = {
   shop: string;
   storefrontAccessToken: string;
+  themeConfig: Awaited<ReturnType<typeof getThemeConfig>>;
+};
+
+export type ShopifyThemeSettingsConfig = {
+  current: {
+    favicon?: string;
+    colors_accent_1?: string;
+    colors_accent_2?: string;
+    colors_background_1?: string;
+    buttons_radius: number;
+    colors_text?: string;
+    [key: string]: any;
+  };
 };
