@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
 import Header from "@/components/Header";
@@ -11,7 +11,7 @@ import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
 import { supabaseStorage } from "@/utils/supabase";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
-import { RequiredStorePageProps } from "@/lib/types";
+import { RequiredStorePageProps, CampaignProduct } from "@/lib/types";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import clientProvider from "@/utils/clientProvider";
 import { useTheme } from "@/context/ThemeProvider";
@@ -36,12 +36,27 @@ const CampaignPage: FC<PageProps> = ({
   const {
     global: { favicon },
   } = useTheme();
+  const [prodList, setProdList] = useState(listing.products.nodes || []);
+  const [prodCategories, setProdCategories] = useState<string[]>([]);
 
   useEffect(() => {
     const faviconElem = document.querySelector("head .favicon");
 
     faviconElem["href"] = favicon;
   }, [favicon]);
+
+  useEffect(() => {
+    if(!prodCategories || prodCategories.length <= 0) {
+      const allTags = prodList.reduce((tags, currentProd) => { 
+        return tags.concat([...currentProd.tags.filter((prodTag) => prodTag.includes("atelier:"))]);
+      }, []);
+      setProdCategories([...Array.from(new Set(allTags))])
+    }
+  }, [prodList]);
+
+  useEffect(() => {
+    console.log("these are prod categories", prodCategories);
+  }, [prodCategories])
 
   // TODO: Move this to server-side to avoid leaking the preview token
   const { showNotFoundPage } = useDraftCampaign({
@@ -57,11 +72,14 @@ const CampaignPage: FC<PageProps> = ({
         title={collection.title}
         campaignHandle={collection.handle}
         announcement={announcement}
+        products={prodList}
+        setProducts={setProdList}
+        categories={prodCategories}
       />
 
       <ProductGrid
         handle={collection.handle}
-        products={listing.products.nodes}
+        products={prodList}
       />
     </div>
   );

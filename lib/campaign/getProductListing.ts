@@ -56,6 +56,7 @@ const getProductListing = async ({
                 currencyCode: string;
               };
             };
+            tags?: string[];
           }[];
         };
       };
@@ -98,6 +99,7 @@ const getProductListing = async ({
                   currencyCode
                 }
               }
+              tags
             }
           }
         }
