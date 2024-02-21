@@ -23,6 +23,7 @@ const flattenCampaignFields = (
     acpCTAUrl: campaign.accessPageConfig.ctaUrl,
     acpBackgroundColor: campaign.accessPageConfig.backgroundColor,
     acpBackgroundImage: campaign.accessPageConfig.backgroundImage,
+    acpCsvFile: campaign.accessPageConfig.csvFile,
   };
 
   return fields;

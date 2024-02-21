@@ -34,6 +34,7 @@ const schema = yup
     acpCTAUrl: yup.string().optional(),
     acpBackgroundColor: yup.string().optional(),
     acpBackgroundImage: yup.string().optional(),
+    acpCsvFile: yup.string().optional(),
   })
   .required();
 
@@ -59,6 +60,16 @@ export const useCampaignForm = ({
   } = useStoreSettings();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Whitlisted Emails Csv file
+  const [didSelectCsvFile, setDidSelectCsvFile] = useState<boolean>(false);
+  const [csvFile, setCsvFile] = useState<File>();
+  const [csvFileName, setCsvFileName] = useState<string>(() => {
+    if (!initialValues) return "";
+
+    const file = supabaseStorage.getPublicUrl(initialValues.acpCsvFile);
+    return file?.data.publicUrl ?? "";
+  });
+
   // Background image
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>(() => {
@@ -94,6 +105,7 @@ export const useCampaignForm = ({
       acpCTAUrl: "",
       acpBackgroundColor: "",
       acpBackgroundImage: "",
+      acpCsvFile: "",
     },
   });
 
@@ -136,20 +148,44 @@ export const useCampaignForm = ({
   const onSubmit = handleSubmit(async (fields: CampaignFlatFields, event) => {
     setIsLoading(true);
 
-    if (imageFile) {
-      // 1. Upload image
-      const [shopId] = shop.split(".");
-      const fileName = `${handle}-access-page`;
-      const [fileExt] = imageFile.name.split(".").reverse();
+    if (imageFile || csvFile) {
+      let image = "";
+      let csv = "";
+      if (imageFile) {
+        // 1. Upload image
+        const [shopId] = shop.split(".");
+        const fileName = `${handle}-access-page`;
+        const [fileExt] = imageFile.name.split(".").reverse();
 
-      const storageResponse = await supabaseStorage.upload(
-        `${shopId}/${fileName}.${fileExt}`,
-        imageFile,
-        { upsert: true }
-      );
-      const image = storageResponse.data?.path ?? "";
+        const storageResponse = await supabaseStorage.upload(
+          `${shopId}/${fileName}.${fileExt}`,
+          imageFile,
+          { upsert: true }
+        );
+        image = storageResponse.data?.path ?? "";
+      }
+      if (csvFile) {
+        // 1. Upload Csv File
+        const [shopId] = shop.split(".");
+        const fileName = `${handle}-whitelisted-emails`;
+        const [fileExt] = csvFile.name.split(".").reverse();
 
-      upsertCampaign({ data: { ...fields, acpBackgroundImage: image } });
+        const storageResponse = await supabaseStorage.upload(
+          `${shopId}/${fileName}.${fileExt}`,
+          csvFile,
+          { upsert: true }
+        );
+        console.log(storageResponse);
+        csv = storageResponse.data?.path ?? "";
+      }
+      if (image && csv)
+        upsertCampaign({
+          data: { ...fields, acpCsvFile: csv, acpBackgroundImage: image },
+        });
+      if (csv && !image)
+        upsertCampaign({ data: { ...fields, acpCsvFile: csv } });
+      if (image && !csv)
+        upsertCampaign({ data: { ...fields, acpBackgroundImage: image } });
       return;
     }
 
@@ -169,6 +205,20 @@ export const useCampaignForm = ({
     }
   }, [imageFile]);
 
+  useEffect(() => {
+    if (!csvFile && didSelectCsvFile) {
+      setCsvFileName("");
+      form.setValue("acpCsvFile", "");
+      return;
+    }
+
+    if (csvFile) {
+      console.log(csvFile);
+      setCsvFileName(csvFile.name);
+      setDidSelectCsvFile(true);
+    }
+  }, [csvFile]);
+
   return {
     ...form,
     isLoading,
@@ -177,5 +227,9 @@ export const useCampaignForm = ({
     imageUrl,
     imageFile,
     setImageFile,
+    csvFile,
+    setCsvFile,
+    csvFileName,
+    didSelectCsvFile,
   };
 };

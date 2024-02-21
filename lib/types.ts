@@ -21,6 +21,7 @@ export interface CampaignInput {
   acpCTAUrl?: string;
   acpBackgroundColor?: string;
   acpBackgroundImage?: string;
+  acpCsvFile?: string;
 }
 
 export interface StoreThemeInput {
@@ -185,6 +186,7 @@ export type CampaignQueryFields = {
     ctaUrl: string;
     backgroundColor: string;
     backgroundImage: string;
+    csvFile: string;
   };
 };
 
@@ -208,6 +210,7 @@ export type CampaignFlatFields = {
   acpCTAUrl: string;
   acpBackgroundColor: string;
   acpBackgroundImage: string;
+  acpCsvFile: string;
 };
 
 export type RequiredStorePageProps = {

@@ -20,6 +20,9 @@ const CampaignAccessControlFormSlice = ({
   imageUrl,
   imageFile,
   setImageFile,
+  csvFile,
+  setCsvFile,
+  csvFileName,
   isLoading,
 }: {
   control: ReturnType<typeof useCampaignForm>["control"];
@@ -27,6 +30,9 @@ const CampaignAccessControlFormSlice = ({
   imageUrl: ReturnType<typeof useCampaignForm>["imageUrl"];
   imageFile: ReturnType<typeof useCampaignForm>["imageFile"];
   setImageFile: ReturnType<typeof useCampaignForm>["setImageFile"];
+  csvFile: ReturnType<typeof useCampaignForm>["csvFile"];
+  setCsvFile: ReturnType<typeof useCampaignForm>["setCsvFile"];
+  csvFileName: ReturnType<typeof useCampaignForm>["csvFileName"];
   isLoading: boolean;
 }) => {
   const [useCTA, setUseCTA] = useState<boolean>(false);
@@ -55,6 +61,37 @@ const CampaignAccessControlFormSlice = ({
             <TextField label="Password" autoComplete="false" {...field} />
           )}
         />
+
+        <BlockStack gap="300">
+          <Text as="h4" variant="headingSm">
+            Whitelisted Emails
+          </Text>
+          <Text as="p" variant="bodyMd">
+            Upload a csv file with a list of whitelisted emails.
+          </Text>
+          <DropZone
+            accept=".csv, application/vnd.ms-excel, text/csv"
+            type="file"
+            allowMultiple={false}
+            onDrop={(
+              _dropFiles: File[],
+              acceptedFiles: File[],
+              _rejectedFiles: File[]
+            ) => {
+              console.log(acceptedFiles[0]);
+              setCsvFile(acceptedFiles[0]);
+            }}
+            disabled={isLoading}
+          >
+            {csvFileName && (
+              <div className="flex h-full items-center justify-center">
+                Your csv file has been uploaded.
+              </div>
+            )}
+
+            {!csvFile && !csvFileName && <DropZone.FileUpload />}
+          </DropZone>
+        </BlockStack>
 
         {!!password && (
           <>

@@ -78,6 +78,7 @@ model accessPageConfig {
   ctaUrl              String?
   backgroundColor     String?
   backgroundImage     String?
+  csvFile             String?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 }

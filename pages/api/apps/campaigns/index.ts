@@ -46,6 +46,7 @@ router.post(async (req, res) => {
           ctaUrl: body.acpCTAUrl ?? "",
           backgroundColor: body.acpBackgroundColor ?? "",
           backgroundImage: body.acpBackgroundImage ?? "",
+          csvFile: body.acpCsvFile ?? "",
         },
       },
       store: {
@@ -76,6 +77,7 @@ router.post(async (req, res) => {
           ctaUrl: body.acpCTAUrl ?? "",
           backgroundColor: body.acpBackgroundColor ?? "",
           backgroundImage: body.acpBackgroundImage ?? "",
+          csvFile: body.acpCsvFile ?? "",
         },
       },
     },

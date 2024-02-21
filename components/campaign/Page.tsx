@@ -60,6 +60,10 @@ const CampaignPage: FC<{
     watch,
     setImageFile,
     didSelectImageFile,
+    csvFile,
+    setCsvFile,
+    csvFileName,
+    didSelectCsvFile,
   } = useCampaignForm({
     initialValues: campaign,
     handle: collection.handle,
@@ -83,7 +87,7 @@ const CampaignPage: FC<{
   return (
     <Frame>
       <ContextualSaveBar
-        visible={formState.isDirty || didSelectImageFile}
+        visible={formState.isDirty || didSelectImageFile || didSelectCsvFile}
         saveAction={{
           disabled: !formState.isValid,
           onAction: onSubmit,
@@ -221,6 +225,9 @@ const CampaignPage: FC<{
                 imageUrl={imageUrl}
                 imageFile={imageFile}
                 setImageFile={setImageFile}
+                csvFile={csvFile}
+                setCsvFile={setCsvFile}
+                csvFileName={csvFileName}
               />
             </Layout.AnnotatedSection>
 
