@@ -200,6 +200,7 @@ const CampaignPage: FC<{
                       hasNext: collection.products.pageInfo.hasNextPage,
                       onNext: goToNextPage,
                     }}
+                    triggerToast={triggerToast}
                   />
                 </BlockStack>
 

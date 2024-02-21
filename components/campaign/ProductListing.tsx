@@ -10,7 +10,6 @@ import {
   Thumbnail,
   BlockStack,
   EmptyState,
-  Icon,
 } from "@shopify/polaris";
 import { FC } from "react";
 import { ExternalIcon } from "@shopify/polaris-icons";
@@ -27,6 +26,7 @@ const ProductListing: FC<{
     hasNext: boolean;
     onNext: () => void;
   };
+  triggerToast: (msg: string) => void; 
 }> = ({
   totalProductCount,
   products,
@@ -38,6 +38,7 @@ const ProductListing: FC<{
     onPrevious = () => {},
     onNext = () => {},
   },
+  triggerToast = () => {}
 }) => {
   const {
     settings: { shop },
@@ -152,7 +153,7 @@ const ProductListing: FC<{
                   </div>
 
                   <div className="flex-1 pl-6" style={{height: 'auto', minHeight: '125px'}}>
-                    <CampaignProductTagForm product={product} />
+                    <CampaignProductTagForm product={product} triggerToast={triggerToast} />
                   </div>
                   
                 </InlineStack>

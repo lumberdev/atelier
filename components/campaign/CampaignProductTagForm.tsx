@@ -9,7 +9,13 @@ import {
 import { CampaignProduct } from "@/lib/types";
 import MultiselectTagComboboxExample from "@/components/VerticalCombobox";
 
-const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) => {
+const CampaignProductTagForm: FC<{ 
+    product: CampaignProduct;
+    triggerToast: (msg: string) => void
+}> = ({ 
+    product,
+    triggerToast = () => {}
+}) => {
     const fetch = useFetch();
     const { handleSubmit, setValue, watch } = useForm<{
         tags: string[];
@@ -39,6 +45,7 @@ const CampaignProductTagForm: FC<{ product: CampaignProduct }> = ({ product }) =
           const updatedProdTags = data.product.tags || [];
           setOriginalTags(updatedProdTags);
           setTagsChanged(false);
+          triggerToast("Product Tags Updated");
         },
       }
     );
