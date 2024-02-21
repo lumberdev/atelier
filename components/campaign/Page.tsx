@@ -111,7 +111,7 @@ const CampaignPage: FC<{
         <Form onSubmit={onSubmit}>
           <Layout>
             <Layout.Section>
-              <InlineGrid columns={{ xs: 1, md: "2fr 1fr" }} gap="400">
+              <InlineGrid columns={{ xs: 1, md: "1fr" }} gap="400">
                 {/* LEFT PANEL */}
                 <BlockStack gap="400">
                   {collection.descriptionHtml ? (
@@ -140,6 +140,55 @@ const CampaignPage: FC<{
                     </EmptyState>
                   )}
 
+                  {/* UPPER CONTROLS (STATUS & IMAGE) */}
+                  <InlineGrid columns={{ xs: 1, md: "1fr 1fr 1fr" }} gap="400">
+                    <Card>
+                      <BlockStack gap="400">
+                        <Text as="h2" variant="headingMd">
+                          Status
+                        </Text>
+
+                        <Controller
+                          control={control}
+                          name="isActive"
+                          render={({ field: { value, onChange, ...field } }) => (
+                            <Select
+                              label=""
+                              options={[
+                                { label: "Active", value: "true" },
+                                { label: "Draft", value: "false" },
+                              ]}
+                              value={String(value)}
+                              onChange={(value) => onChange(value === "true")}
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          )}
+                        />
+                      </BlockStack>
+                    </Card>
+
+                    <Card>
+                      <BlockStack gap="400">
+                        <Text as="h2" variant="headingMd">
+                          Image
+                        </Text>
+
+                        {collection.image ? (
+                          <img
+                            src={collection.image.url}
+                            alt={collection.image.altText}
+                            className="aspect-square w-full rounded-md object-cover"
+                          />
+                        ) : (
+                          <Text as="p" variant="bodySm">
+                            Configure the campaign image on the collection page
+                          </Text>
+                        )}
+                      </BlockStack>
+                    </Card>
+                  </InlineGrid>
+
                   <ProductListing
                     totalProductCount={collection.productsCount}
                     products={collection.products.edges.map(({ node }) => node)}
@@ -151,57 +200,11 @@ const CampaignPage: FC<{
                       hasNext: collection.products.pageInfo.hasNextPage,
                       onNext: goToNextPage,
                     }}
+                    triggerToast={triggerToast}
                   />
                 </BlockStack>
 
-                {/* RIGHT PANEL */}
-                <BlockStack gap="400">
-                  <Card>
-                    <BlockStack gap="400">
-                      <Text as="h2" variant="headingMd">
-                        Status
-                      </Text>
-
-                      <Controller
-                        control={control}
-                        name="isActive"
-                        render={({ field: { value, onChange, ...field } }) => (
-                          <Select
-                            label=""
-                            options={[
-                              { label: "Active", value: "true" },
-                              { label: "Draft", value: "false" },
-                            ]}
-                            value={String(value)}
-                            onChange={(value) => onChange(value === "true")}
-                            disabled={isLoading}
-                            {...field}
-                          />
-                        )}
-                      />
-                    </BlockStack>
-                  </Card>
-
-                  <Card>
-                    <BlockStack gap="400">
-                      <Text as="h2" variant="headingMd">
-                        Image
-                      </Text>
-
-                      {collection.image ? (
-                        <img
-                          src={collection.image.url}
-                          alt={collection.image.altText}
-                          className="aspect-square w-full rounded-md object-cover"
-                        />
-                      ) : (
-                        <Text as="p" variant="bodySm">
-                          Configure the campaign image on the collection page
-                        </Text>
-                      )}
-                    </BlockStack>
-                  </Card>
-                </BlockStack>
+                
               </InlineGrid>
 
               <div className="h-8" />

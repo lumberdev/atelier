@@ -10,10 +10,10 @@ import {
   Thumbnail,
   BlockStack,
   EmptyState,
-  Icon,
 } from "@shopify/polaris";
 import { FC } from "react";
 import { ExternalIcon } from "@shopify/polaris-icons";
+import CampaignProductTagForm from "@/components/campaign/CampaignProductTagForm";
 
 const ProductListing: FC<{
   totalProductCount: number;
@@ -26,6 +26,7 @@ const ProductListing: FC<{
     hasNext: boolean;
     onNext: () => void;
   };
+  triggerToast: (msg: string) => void; 
 }> = ({
   totalProductCount,
   products,
@@ -37,6 +38,7 @@ const ProductListing: FC<{
     onPrevious = () => {},
     onNext = () => {},
   },
+  triggerToast = () => {}
 }) => {
   const {
     settings: { shop },
@@ -89,8 +91,31 @@ const ProductListing: FC<{
             </EmptyState>
           }
         >
+          <IndexTable.Row id={"row-header"} position={0}>
+            <div className="px-5 py-4">
+              <InlineStack gap="400" blockAlign="start">
+                <Text as="h3" variant="headingMd">
+                  Product
+                </Text>
+                <div className="flex-1">
+                  <InlineStack align="end">
+                    <Text as="h3" variant="headingMd">
+                      Price
+                    </Text>
+                  </InlineStack>
+                </div>
+                <div className="flex-1">
+                  <InlineStack align="end">
+                    <Text as="h3" variant="headingMd">
+                      Category
+                    </Text>
+                  </InlineStack>
+                </div>
+              </InlineStack>
+            </div> 
+          </IndexTable.Row>
           {products.map((product, index) => (
-            <IndexTable.Row id={product.id} position={index} key={product.id}>
+            <IndexTable.Row id={product.id} position={index + 1} key={product.id}>
               <div className="px-5 py-4">
                 <InlineStack gap="400" blockAlign="start">
                   <Thumbnail
@@ -126,6 +151,11 @@ const ProductListing: FC<{
                       </div>
                     </BlockStack>
                   </div>
+
+                  <div className="flex-1 pl-6" style={{height: 'auto', minHeight: '125px'}}>
+                    <CampaignProductTagForm product={product} triggerToast={triggerToast} />
+                  </div>
+                  
                 </InlineStack>
               </div>
             </IndexTable.Row>

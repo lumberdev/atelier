@@ -120,6 +120,7 @@ export type CampaignProduct = {
     };
   };
   publishedOnPublication: boolean;
+  tags?: string[];
 };
 
 export type CampaignCollection = {

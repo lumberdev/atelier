@@ -93,6 +93,7 @@ router.get(async (req, res) => {
                   }
                 }
                 publishedOnPublication(publicationId: "${publication.id}")
+                tags
               }
             }
           }
