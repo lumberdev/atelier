@@ -14,10 +14,17 @@ const Header: FC<{
   title: string;
   campaignHandle: string;
   announcement?: string;
-  categories: string[];
-  products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
-  setProducts: (products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]) => void 
-}> = ({ campaignHandle, title, announcement, categories, products, setProducts }) => {
+  categories?: string[];
+  products?: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
+  setProducts?: (products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]) => void 
+}> = ({ 
+  campaignHandle, 
+  title, 
+  announcement, 
+  categories = [], 
+  products = [], 
+  setProducts = () => {} 
+}) => {
   const {
     global: { primaryColor, logoPosition },
   } = useTheme();
