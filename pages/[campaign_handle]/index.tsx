@@ -72,7 +72,7 @@ const CampaignPage: FC<PageProps> = ({
         title={collection.title}
         campaignHandle={collection.handle}
         announcement={announcement}
-        products={prodList}
+        allProducts={listing.products.nodes}
         setProducts={setProdList}
         categories={prodCategories}
       />

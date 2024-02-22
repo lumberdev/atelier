@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { MouseEvent } from "react";
 import LogoTitle from "./LogoTitle";
 import { getTextColor } from "@/lib/helper/colors";
 import AnnouncementBar from "./AnnouncementBar";
@@ -9,20 +9,21 @@ import MiniCart from "./cart/MiniCart";
 import getProductListing from "@/lib/campaign/getProductListing";
 import { useTheme } from "@/context/ThemeProvider";
 import { CampaignProduct } from "@/lib/types";
+import MobileNav from "@/components/navigation/MobileNav";
 
 const Header: FC<{
   title: string;
   campaignHandle: string;
   announcement?: string;
   categories?: string[];
-  products?: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
+  allProducts?: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
   setProducts?: (products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]) => void 
 }> = ({ 
   campaignHandle, 
   title, 
   announcement, 
   categories = [], 
-  products = [], 
+  allProducts = [], 
   setProducts = () => {} 
 }) => {
   const {
@@ -31,8 +32,10 @@ const Header: FC<{
 
   const textColor = getTextColor(primaryColor);
 
-  function filterProducts(category: string) {
-    setProducts(products.filter((prod) => prod.tags.includes(category)))
+  function filterProducts(event: MouseEvent<HTMLElement>, category: string = null) {
+    event.preventDefault();
+
+    category ? setProducts(allProducts.filter((prod) => prod.tags.includes(category))) : setProducts(allProducts);
   }
 
   return (
@@ -42,7 +45,7 @@ const Header: FC<{
     >
       {announcement && <AnnouncementBar announcement={announcement} />}
 
-      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:grid-cols-3 lg:px-16 lg:py-4">
+      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
         <div
           className={classNames({
             "col-start-1": logoPosition === "center",
@@ -53,20 +56,33 @@ const Header: FC<{
         <LogoTitle
           title={title}
           handle={campaignHandle}
-          className={classNames({
-            "col-start-1 text-left": logoPosition !== "center",
-            "col-start-2 justify-center text-center": logoPosition === "center",
-          })}
+          className={`row-start-1 col-start-2 justify-center ${classNames({
+            "lg:col-start-1 lg:justify-start text-left": logoPosition !== "center",
+            "lg:col-start-2 text-center": logoPosition === "center",
+          })}`}
           color={textColor}
         />
 
-        <ul>
-          {categories.map((category) => (
-            <li><a onClick={() => filterProducts(category)} href="#">{category.replace("atelier:", "")}</a></li>
-          ))}
-        </ul>
+        <div className="header-menu row-start-1 col-start-1 lg:col-start-2 items-center justify-end">
+          {/* Desktop Navigation */}
+          <ul className={`hidden lg:grid grid-cols-${(categories.length+1) > 4 ? "4" : categories.length+1} text-center`}>
+            <li>
+              <a className="cursor-pointer" onClick={(event) => filterProducts(event)}>All</a>
+            </li>
+            {categories.map((category) => (
+              <li>
+                <a className="cursor-pointer" onClick={(event) => filterProducts(event, category)}>{category.replace("atelier:", "")}</a>
+              </li>
+            ))}
+          </ul>
+          {/* Mobile Navigation */}
+          <div className="lg:hidden">
+            <MobileNav categories={categories} onClick={filterProducts} />
+          </div>
+        </div>
+        
 
-        <div className="col-start-3 flex h-[40px] items-center justify-end">
+        <div className="row-start-1 col-start-3 flex h-[40px] items-center justify-end">
           <MiniCart />
         </div>
       </Container>
