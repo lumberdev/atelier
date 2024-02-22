@@ -27,7 +27,7 @@ const schema = yup
     // ACCESS CONTROL
     acpLayout: yup.string().optional().oneOf(["DEFAULT", "STACKED"]),
     acpPassword: yup.string().optional(),
-    acpHeadline: yup.string().optional().required(),
+    acpHeadline: yup.string().optional(),
     acpBody: yup.string().optional(),
     acpPasswordPlaceholder: yup.string().optional(),
     acpCTAText: yup.string().optional(),
