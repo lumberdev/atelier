@@ -214,6 +214,7 @@ export type RequiredStorePageProps = {
   shop: string;
   storefrontAccessToken: string;
   themeConfig: Awaited<ReturnType<typeof getThemeConfig>>;
+  previewMode: boolean;
 };
 
 export type ShopifyThemeSettingsConfig = {

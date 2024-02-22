@@ -3,15 +3,12 @@ import { GetServerSideProps } from "next";
 import { FC } from "react";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
-import NotFoundPage from "@/components/NotFoundPage";
-import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import { supabaseStorage } from "@/utils/supabase";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
-import { RequiredStorePageProps, CampaignProduct } from "@/lib/types";
+import { RequiredStorePageProps } from "@/lib/types";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import clientProvider from "@/utils/clientProvider";
 import { useTheme } from "@/context/ThemeProvider";
@@ -19,19 +16,10 @@ import { useTheme } from "@/context/ThemeProvider";
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   listing: Awaited<ReturnType<typeof getProductListing>>;
-  isActive: boolean;
-  previewToken: string; // TODO: Draft mode validation should be moved to server-side
   announcement?: string;
 }
 
-const CampaignPage: FC<PageProps> = ({
-  collection,
-  listing,
-  isActive,
-  previewToken,
-  announcement,
-  shop,
-}) => {
+const CampaignPage: FC<PageProps> = ({ collection, listing, announcement }) => {
   // const router = useRouter();
   const {
     global: { favicon },
@@ -46,25 +34,15 @@ const CampaignPage: FC<PageProps> = ({
   }, [favicon]);
 
   useEffect(() => {
-    if(!prodCategories || prodCategories.length <= 0) {
-      const allTags = prodList.reduce((tags, currentProd) => { 
-        return tags.concat([...currentProd.tags.filter((prodTag) => prodTag.includes("atelier:"))]);
+    if (!prodCategories || prodCategories.length <= 0) {
+      const allTags = prodList.reduce((tags, currentProd) => {
+        return tags.concat([
+          ...currentProd.tags.filter((prodTag) => prodTag.includes("atelier:")),
+        ]);
       }, []);
-      setProdCategories([...Array.from(new Set(allTags))])
+      setProdCategories([...Array.from(new Set(allTags))]);
     }
   }, [prodList]);
-
-  useEffect(() => {
-    console.log("these are prod categories", prodCategories);
-  }, [prodCategories])
-
-  // TODO: Move this to server-side to avoid leaking the preview token
-  const { showNotFoundPage } = useDraftCampaign({
-    isCampaignActive: isActive,
-    previewToken: previewToken,
-  });
-
-  if (showNotFoundPage) return <NotFoundPage />;
 
   return (
     <div className="min-h-screen">
@@ -77,16 +55,14 @@ const CampaignPage: FC<PageProps> = ({
         categories={prodCategories}
       />
 
-      <ProductGrid
-        handle={collection.handle}
-        products={prodList}
-      />
+      <ProductGrid handle={collection.handle} products={prodList} />
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
+  res,
   query: { campaign_handle: handle },
 }) => {
   // 1. Get campaign associated with shop and handle
@@ -109,6 +85,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   // 2. Run access control
   const authorization = await verifyAccessPermission({
     req,
+    res,
     merchant,
     campaign: {
       handle: handle as string,
@@ -168,6 +145,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   return {
     props: {
+      previewMode: authorization.previewMode,
       collection,
       isActive: campaign.isActive,
       listing,
