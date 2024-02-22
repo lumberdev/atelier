@@ -6,34 +6,23 @@ import { useRouter } from "next/router";
 import { CSSProperties, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import NotFoundPage from "@/components/NotFoundPage";
-import useDraftCampaign from "@/lib/hooks/store/useDraftCampaign";
 import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
 import { RequiredStorePageProps } from "@/lib/types";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 import clientProvider from "@/utils/clientProvider";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import { useTheme } from "@/context/ThemeProvider";
+import { authorizePreviewModeRequest } from "@/lib/auth/preview-mode/authorizePreviewModeRequest";
 
 interface PageProps extends RequiredStorePageProps {
   handle: string;
-  isActive: boolean;
-  previewToken: string;
 }
 
-const CampaignPasswordPage = ({
-  handle,
-  isActive,
-  previewToken,
-}: PageProps) => {
+const CampaignPasswordPage = ({ handle }: PageProps) => {
   const { replace } = useRouter();
   const { global, accessPage } = useTheme();
   const { register, handleSubmit } = useForm<{ password: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
-  const { showNotFoundPage } = useDraftCampaign({
-    isCampaignActive: isActive,
-    previewToken,
-  });
 
   const { mutate: signIn } = useMutation<null, any, { password: string }>({
     mutationFn: ({ password }) =>
@@ -62,8 +51,6 @@ const CampaignPasswordPage = ({
     text: accessPage.ctaText,
     url: accessPage.ctaUrl,
   };
-
-  if (showNotFoundPage) return <NotFoundPage />;
 
   if (layout === "STACKED")
     return (
@@ -175,6 +162,7 @@ export default CampaignPasswordPage;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
+  res,
   query: { campaign_handle },
 }) => {
   const { url, subdomain } = getServerSideRequestUrl(req);
@@ -231,10 +219,16 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     props: {
       handle: campaign_handle as string,
       shop: merchant.shop,
-      isActive: campaign.isActive,
-      previewToken: campaign.previewToken,
       storefrontAccessToken,
       themeConfig,
+      previewMode:
+        !campaign.isActive &&
+        authorizePreviewModeRequest({
+          req,
+          res,
+          params: url.searchParams,
+          previewToken: campaign.previewToken,
+        }),
     },
   };
 };

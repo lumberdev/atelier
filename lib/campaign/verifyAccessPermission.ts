@@ -71,7 +71,7 @@ const verifyAccessPermission = ({
 
   // 3. Is campaign protected?
   // 3.a Not protected, continue
-  if (!campaign.password) return { authorized: true };
+  if (!campaign.password) return { authorized: true, previewMode: false };
 
   // 3.b Protected, verify password
   const authorized = authorizeRequest({

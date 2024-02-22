@@ -39,6 +39,7 @@ export default ProductDetailPage;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
+  res,
   query: { campaign_handle: handle, product_handle: productHandle },
 }) => {
   // 1. Get campaign associated with shop and handle
@@ -61,6 +62,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   // 2. Run access control
   const authorization = await verifyAccessPermission({
     req,
+    res,
     merchant,
     campaign: {
       handle: handle as string,
@@ -119,6 +121,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
   return {
     props: {
+      previewMode: authorization.previewMode,
       collection,
       product,
       announcement: campaign.announcement,
