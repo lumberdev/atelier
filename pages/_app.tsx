@@ -8,6 +8,7 @@ import BillingProvider from "@/context/BillingProvider";
 import Navigation from "@/components/Navigation";
 import CartProvider from "@/context/CartProvider";
 import ThemeProvider from "@/context/ThemeProvider";
+import PreviewModeBanner from "@/components/PreviewModeBanner";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -46,6 +47,8 @@ export default function App({ Component, pageProps }) {
           storefrontAccessToken={pageProps.storefrontAccessToken}
         >
           <Component {...pageProps} />
+
+          {pageProps.previewMode && <PreviewModeBanner />}
         </CartProvider>
       </ThemeProvider>
     </QueryClientProvider>
