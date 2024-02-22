@@ -1,4 +1,5 @@
 import React, { MouseEvent } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import LogoTitle from "./LogoTitle";
 import { getTextColor } from "@/lib/helper/colors";
 import AnnouncementBar from "./AnnouncementBar";
@@ -8,7 +9,6 @@ import { FC } from "react";
 import MiniCart from "./cart/MiniCart";
 import getProductListing from "@/lib/campaign/getProductListing";
 import { useTheme } from "@/context/ThemeProvider";
-import { CampaignProduct } from "@/lib/types";
 import MobileNav from "@/components/navigation/MobileNav";
 
 const Header: FC<{
@@ -29,13 +29,24 @@ const Header: FC<{
   const {
     global: { primaryColor, logoPosition },
   } = useTheme();
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const textColor = getTextColor(primaryColor);
 
   function filterProducts(event: MouseEvent<HTMLElement>, category: string = null) {
     event.preventDefault();
 
+    // Set products to display
     category ? setProducts(allProducts.filter((prod) => prod.tags.includes(category))) : setProducts(allProducts);
+
+    // Set query string
+    if(category) {
+      router.replace(`${pathname}?category=${category}`);
+    } else {
+      router.replace(pathname);
+    }
   }
 
   return (
