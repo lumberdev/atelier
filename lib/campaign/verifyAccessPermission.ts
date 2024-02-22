@@ -1,13 +1,16 @@
 import { GetServerSidePropsContext, Redirect } from "next";
 import { authorizeRequest } from "../auth/authorizeRequest";
+import { authorizePreviewModeRequest } from "../auth/preview-mode/authorizePreviewModeRequest";
 import getServerSideRequestUrl from "@/utils/getServerSideRequestUrl";
 
 const verifyAccessPermission = ({
   req,
+  res,
   merchant,
   campaign,
 }: {
   req: GetServerSidePropsContext["req"];
+  res: GetServerSidePropsContext["res"];
   merchant: {
     isActive: boolean;
     secret: string;
@@ -16,13 +19,28 @@ const verifyAccessPermission = ({
     handle: string;
     isActive: boolean;
     password?: string;
+    previewToken?: string;
   };
 }):
-  | { redirect: Redirect; notFound?: never; authorized?: never }
-  | { notFound: true; redirect?: never; authorized?: never }
-  | { authorized: true; redirect?: never; notFound?: never } => {
+  | {
+      redirect: Redirect;
+      notFound?: never;
+      authorized?: never;
+      previewMode?: never;
+    }
+  | {
+      notFound: true;
+      redirect?: never;
+      authorized?: never;
+      previewMode?: never;
+    }
+  | {
+      authorized: true;
+      previewMode: boolean;
+      redirect?: never;
+      notFound?: never;
+    } => {
   const { url } = getServerSideRequestUrl(req);
-  const queryPreviewToken = url.searchParams.get("preview_token");
 
   // 1. Is merchant active?
   if (!merchant.isActive)
@@ -30,11 +48,32 @@ const verifyAccessPermission = ({
       notFound: true,
     };
 
-  // 2. Is campaign protected?
-  // 2.a Not protected, continue
+  // 2. Is campaign in preview mode?
+  if (!campaign.isActive) {
+    const authorized = authorizePreviewModeRequest({
+      req,
+      res,
+      params: url.searchParams,
+      previewToken: campaign.previewToken,
+    });
+
+    if (!authorized) {
+      return {
+        redirect: {
+          destination: `/`,
+          permanent: false,
+        },
+      };
+    }
+
+    return { authorized: true, previewMode: true };
+  }
+
+  // 3. Is campaign protected?
+  // 3.a Not protected, continue
   if (!campaign.password) return { authorized: true };
 
-  // 2.b Protected, verify password
+  // 3.b Protected, verify password
   const authorized = authorizeRequest({
     req,
     merchantSecret: merchant.secret,
@@ -42,19 +81,15 @@ const verifyAccessPermission = ({
   });
 
   if (!authorized) {
-    const params = new URLSearchParams({ preview_token: queryPreviewToken });
-    const query =
-      !campaign.isActive && queryPreviewToken ? `?${params.toString()}` : "";
-
     return {
       redirect: {
-        destination: `/${campaign.handle}/password${query}`,
+        destination: `/${campaign.handle}/password`,
         permanent: false,
       },
     };
   }
 
-  return { authorized: true };
+  return { authorized: true, previewMode: false };
 };
 
 export default verifyAccessPermission;
