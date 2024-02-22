@@ -9,7 +9,7 @@ import {
   } from '@shopify/polaris';
   import {useState, FC, useCallback, useMemo} from 'react';
   
-  const MultiselectTagComboboxExample: FC<{ 
+  const MultiselectTagCombobox: FC<{ 
     selectedTags: string[]; 
     onChange: (selection: string) => void;
   }> = ({ 
@@ -181,4 +181,4 @@ import {
     );
   }
 
-  export default MultiselectTagComboboxExample;
+  export default MultiselectTagCombobox;

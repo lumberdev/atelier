@@ -7,7 +7,7 @@ import {
     BlockStack
 } from "@shopify/polaris";
 import { CampaignProduct } from "@/lib/types";
-import MultiselectTagComboboxExample from "@/components/VerticalCombobox";
+import MultiselectTagCombobox from "@/components/VerticalCombobox";
 
 const CampaignProductTagForm: FC<{ 
     product: CampaignProduct;
@@ -89,7 +89,7 @@ const CampaignProductTagForm: FC<{
     return (
         <BlockStack gap="400" inlineAlign="end">
             <div style={{ width: "100%" }}>
-                <MultiselectTagComboboxExample 
+                <MultiselectTagCombobox 
                     selectedTags={tags}
                     onChange={changeSelection}
                 />
