@@ -29,6 +29,11 @@ router.get(async (req, res) => {
     const { client } = await clientProvider.restClient({ req, res, isOnline: true });
     const theme_config = await getCampaignTheme({ client });
 
+    const theme_config_filtered = Object.entries(theme_config.current).filter(([key, value]) => {
+        if(value && typeof value === "string") 
+            return [key, value];
+    }).map(([key, value]) => { return { label: key, value } });
+
     const updatedStore = await prisma.storeThemes.update({
         where: { storeId: shop },
         data: {
@@ -39,7 +44,7 @@ router.get(async (req, res) => {
     })
 
 
-    res.status(200).json({ theme: updatedStore });
+    res.status(200).json({ theme: updatedStore, theme_config_filtered });
 });
 
 export default router.handler();

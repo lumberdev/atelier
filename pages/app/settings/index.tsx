@@ -3,6 +3,8 @@ import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
 import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
+import useFetch from "@/components/hooks/useFetch";
+import ThemeAutocomplete from "@/components/ThemeAutocomplete";
 import {
   Button,
   Card,
@@ -13,7 +15,6 @@ import {
   InlineGrid,
   InlineStack,
   Layout,
-  Modal,
   Page,
   Text,
   TextField,
@@ -33,6 +34,7 @@ const SettingsPage = () => {
   const { subscription, cancel } = useBilling();
 
   const {
+    data: themeData,
     logoUrl,
     imageFile,
     setImageFile,
@@ -237,6 +239,22 @@ const SettingsPage = () => {
                     )}
                   />
 
+                  <Controller 
+                    control={control}
+                    name="primaryColor"
+                    render={({ field }) => (
+                      <div>
+                        <ThemeAutocomplete 
+                          label="Primary Color"
+                          optionList={themeData["theme_config_filtered"]}
+                        />
+                        <Text variant="bodySm" as="span" tone="subdued">
+                          Enter a valid hex/rgb code
+                        </Text>
+                      </div>
+                    )}
+                  />
+
                   <Controller
                     control={control}
                     name="secondaryColor"
@@ -352,3 +370,14 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
+
+
+// export const getServerSideProps = async () => {
+//   const fetch = useFetch();
+//   const resp = await fetch("/api/apps/settings/themeconfig");
+
+//   console.log("theme comfig", resp);
+
+//   return {};
+// };
+

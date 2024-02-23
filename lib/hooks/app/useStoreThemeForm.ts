@@ -145,6 +145,7 @@ export const useStoreThemeForm = ({
   });
 
   return {
+    data,
     logoUrl,
     imageFile,
     setImageFile,
