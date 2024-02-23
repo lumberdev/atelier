@@ -48,6 +48,7 @@ const getThemeConfig = async ({
               ctaUrl: true,
               backgroundColor: true,
               backgroundImage: true,
+              csvFile: true,
             },
           },
         },
@@ -115,6 +116,11 @@ const getThemeConfig = async ({
             campaign.accessPageConfig.backgroundImage
           ).data.publicUrl
         : "",
+      csvFile: campaign.accessPageConfig.csvFile
+      ? supabaseStorage.getPublicUrl(
+          campaign.accessPageConfig.csvFile
+        ).data.publicUrl
+      : "",
     },
   };
 };

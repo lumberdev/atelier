@@ -21,34 +21,35 @@ interface PageProps extends RequiredStorePageProps {
   previewToken: string;
 }
 
-const CampaignPasswordPage = ({
+const CampaignSignupPage = ({
   handle,
   isActive,
   previewToken,
 }: PageProps) => {
-  const { replace, push } = useRouter();
+  const { replace } = useRouter();
   const { global, accessPage } = useTheme();
-  const { register, handleSubmit } = useForm<{ password: string }>();
+  const { register, handleSubmit } = useForm<{ email: string }>();
   const [error, setError] = useState<{ [key: string]: string }>({});
   const { showNotFoundPage } = useDraftCampaign({
     isCampaignActive: isActive,
     previewToken,
   });
 
-  const { mutate: signIn } = useMutation<null, any, { password: string }>({
-    mutationFn: ({ password }) =>
-      axios.post("/api/auth/password", { password, campaign: handle }),
+  const { mutate: signIn } = useMutation<null, any, { email: string }>({
+    mutationFn: ({ email }) =>
+      axios.post("/api/auth/whitelistCheck", { email, campaign: handle }),
     onSuccess: () => {
       replace(`/${handle}`);
     },
     onError: (error) => {
+      console.log(error);
       const data = error.response.data;
-      setError({ PASSWORD: data.message ?? "Invalid password" });
+      setError({ PASSWORD: "You will be notified soon" });
     },
   });
 
-  const onSubmit = handleSubmit((fields: { password: string }) => {
-    signIn({ password: fields.password });
+  const onSubmitEmail = handleSubmit((fields: { email: string }) => {
+    signIn({ email: fields.email });
   });
 
   const logo = global.logo;
@@ -91,32 +92,24 @@ const CampaignPasswordPage = ({
             </div>
           )}
 
-          <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
+          <h1 className="mb-2 text-2xl font-medium">Enter Email</h1>
           <p className="mb-8">{body}</p>
 
-          <form onSubmit={onSubmit} className="mb-8">
+          <form onSubmit={onSubmitEmail} className="mb-8">
             <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
               <input
                 className="bg-white px-2 py-2 text-black"
-                placeholder={placeholder}
-                type="password"
-                {...register("password")}
+                placeholder="Enter Email"
+                type="email"
+                {...register("email")}
                 required
               />
               <button className="bg-black px-2 text-white" type="submit">
                 Enter
               </button>
             </div>
-
             {error.PASSWORD && <p>{error.PASSWORD}</p>}
           </form>
-          <button
-            onClick={() => {
-              push(`/${handle}/signup`);
-            }}
-          >
-            Don't have password?
-          </button>
 
           {cta.text && cta.url && (
             <a className="text-sm underline" href={cta.url}>
@@ -148,16 +141,16 @@ const CampaignPasswordPage = ({
           </div>
         )}
 
-        <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
+        <h1 className="mb-2 text-2xl font-medium">Enter Email</h1>
         <p className="mb-8">{body}</p>
-
-        <form onSubmit={onSubmit} className="mb-8">
+        
+        <form onSubmit={onSubmitEmail} className="mb-8">
           <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
             <input
               className="bg-white px-2 py-2 text-black"
-              placeholder={placeholder}
-              type="password"
-              {...register("password")}
+              placeholder="Enter Email"
+              type="email"
+              {...register("email")}
               required
             />
             <button className="bg-black px-2 text-white" type="submit">
@@ -167,13 +160,6 @@ const CampaignPasswordPage = ({
 
           {error.PASSWORD && <p>{error.PASSWORD}</p>}
         </form>
-        <button
-            onClick={() => {
-              push(`/${handle}/signup`);
-            }}
-          >
-            Don't have password?
-          </button>
 
         {cta.text && cta.url && (
           <a className="text-sm underline" href={cta.url}>
@@ -185,7 +171,7 @@ const CampaignPasswordPage = ({
   );
 };
 
-export default CampaignPasswordPage;
+export default CampaignSignupPage;
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
