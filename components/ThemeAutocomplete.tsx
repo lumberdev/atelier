@@ -1,22 +1,40 @@
-import {Autocomplete, Icon} from '@shopify/polaris';
+import {Listbox, Combobox, Icon} from '@shopify/polaris';
 import {SearchIcon} from '@shopify/polaris-icons';
 import {useState, useCallback, useMemo, useEffect} from 'react';
 
-export default function ThemeAutocomplete({
+function ThemeAutocomplete({
     label = "Tags",
-    optionList = []
+    optionType = "color",
+    optionList = [],
+    onChangeOption = (selected: string) => {}
 }) {
   const deselectedOptions = useMemo(
-    () => optionList,
-    [],
+    () => {
+        switch(optionType) {
+            case "color":
+                return optionList.filter((option) => {
+                    if(option.value.charAt(0) === "#") return option;
+                });
+            default:
+                return [...optionList];
+        } 
+    },
+    [optionList],
   );
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const [selectedOption, setSelectedOption] = useState<string | undefined>();
   const [inputValue, setInputValue] = useState('');
-  const [options, setOptions] = useState(optionList);
+  const [options, setOptions] = useState(deselectedOptions);
 
   useEffect(() => {
-    console.log("state cdhanged", optionList);
-  }, [options])
+    const selectedColor = selectedOption?.split("::")[1] || "";
+    onChangeOption(selectedColor);
+  }, [selectedOption]);
+
+  const escapeSpecialRegExCharacters = useCallback(
+    (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+    [],
+  );
 
   const updateText = useCallback(
     (value: string) => {
@@ -27,49 +45,69 @@ export default function ThemeAutocomplete({
         return;
       }
 
-      const filterRegex = new RegExp(value, 'i');
+      const filterRegex = new RegExp(escapeSpecialRegExCharacters(value), 'i');
       const resultOptions = deselectedOptions.filter((option) =>
         option.label.match(filterRegex),
       );
       setOptions(resultOptions);
     },
-    [deselectedOptions],
+    [deselectedOptions, escapeSpecialRegExCharacters],
   );
 
   const updateSelection = useCallback(
-    (selected: string[]) => {
-      const selectedValue = selected.map((selectedItem) => {
-        const matchedOption = options.find((option) => {
-          return option.value.match(selectedItem);
-        });
-        return matchedOption && matchedOption.label;
+    (selected: string) => {
+      const matchedOption = options.find((option) => {
+        const selectedOptionLabel = selected.split("::")[0];
+        const selectedOptionValue = selected.split("::")[1];
+        return option.value.match(selectedOptionValue) && 
+                option.label.match(selectedOptionLabel);
       });
-
-      setSelectedOptions(selected);
-      setInputValue(selectedValue[0] || '');
+      console.log("selected", selected);
+      setSelectedOption(selected);
+      setInputValue((matchedOption && matchedOption.label) || '');
     },
     [options],
   );
 
-  const textField = (
-    <Autocomplete.TextField
-      onChange={updateText}
-      label={label}
-      value={inputValue}
-      prefix={<Icon source={SearchIcon} tone="base" />}
-      placeholder="Search"
-      autoComplete="off"
-    />
-  );
+  const optionsMarkup =
+    options.length > 0
+      ? options.map((option) => {
+          const {label, value} = option;
+
+          return (
+            <Listbox.Option
+              key={`${label}`}
+              value={`${label}::${value}`}
+              selected={selectedOption === `${label}::${value}`}
+              accessibilityLabel={label}
+            >
+              {label}
+            </Listbox.Option>
+          );
+        })
+      : null;
 
   return (
     <div>
-      <Autocomplete
-        options={options}
-        selected={selectedOptions}
-        onSelect={updateSelection}
-        textField={textField}
-      />
+      <Combobox
+        activator={
+          <Combobox.TextField
+            prefix={<Icon source={SearchIcon} />}
+            onChange={updateText}
+            label={label}
+            labelHidden
+            value={inputValue}
+            placeholder="Search tags"
+            autoComplete="off"
+          />
+        }
+      >
+        {options.length > 0 ? (
+          <Listbox onSelect={updateSelection}>{optionsMarkup}</Listbox>
+        ) : null}
+      </Combobox>
     </div>
   );
 }
+
+export default ThemeAutocomplete;
