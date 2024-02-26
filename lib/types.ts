@@ -186,6 +186,7 @@ export type CampaignQueryFields = {
     backgroundColor: string;
     backgroundImage: string;
   };
+  previewToken: string;
 };
 
 export type CampaignFlatFields = {
@@ -208,6 +209,7 @@ export type CampaignFlatFields = {
   acpCTAUrl: string;
   acpBackgroundColor: string;
   acpBackgroundImage: string;
+  previewToken: string;
 };
 
 export type RequiredStorePageProps = {

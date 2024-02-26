@@ -44,7 +44,7 @@ const CampaignPage: FC<{
 }) => {
   const router = useRouter();
   const {
-    settings: { shop },
+    settings: { shop, domain: identifier },
   } = useStoreSettings();
   const { id: publicationId } = usePublication();
 
@@ -80,6 +80,15 @@ const CampaignPage: FC<{
     publicationId
   )}.published_at&collection_id=${getIdFromGid(collection.id)}`;
 
+  const previewDomain =
+    process.env.NODE_ENV === "production"
+      ? `https://${identifier}.atelier.sale`
+      : `http://${identifier}.localhost:3000`;
+
+  const previewTokenQuery = new URLSearchParams({
+    preview_token: campaign?.previewToken,
+  });
+
   return (
     <Frame>
       <ContextualSaveBar
@@ -100,6 +109,14 @@ const CampaignPage: FC<{
       <Page
         title={collection.title}
         backAction={backAction}
+        primaryAction={{
+          content: "Preview",
+          external: true,
+          url: `${previewDomain}/${collection.handle}${
+            campaign?.isActive ? "" : `?${previewTokenQuery.toString()}`
+          }`,
+          disabled: !campaign,
+        }}
         secondaryActions={[
           {
             content: "Manage collection",
@@ -151,7 +168,9 @@ const CampaignPage: FC<{
                         <Controller
                           control={control}
                           name="isActive"
-                          render={({ field: { value, onChange, ...field } }) => (
+                          render={({
+                            field: { value, onChange, ...field },
+                          }) => (
                             <Select
                               label=""
                               options={[
@@ -203,8 +222,6 @@ const CampaignPage: FC<{
                     triggerToast={triggerToast}
                   />
                 </BlockStack>
-
-                
               </InlineGrid>
 
               <div className="h-8" />
