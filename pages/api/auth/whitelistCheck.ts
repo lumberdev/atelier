@@ -53,7 +53,7 @@ router.post(async (req, res) => {
     .publicUrl;
 
   const isWhitelistedEmail = await isWhiteListed(email, csvFile);
-  const redirectUrl = `http://localhost:3000/api/auth/authenticateStytchToken?store=${subdomain}&campaign=${campaignHandle}`;
+  const redirectUrl = `http://localhost:3000/authenticate?store=${subdomain}&campaign=${campaignHandle}`;
 
   // If the email is whitelisted, send out magic link
   // If not, handle signup

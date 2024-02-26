@@ -11,15 +11,11 @@ const router = createRouter<
   NextApiResponse
 >();
 
-router.get(async (req, res) => {
-  const {
-    token,
-    campaign: campaignHandle,
-    store: storeIdentifier,
-  } = req.query as {
+router.post(async (req, res) => {
+  const { token, campaignHandle, storeId } = req.body as {
     token: string;
-    campaign: string;
-    store: string;
+    campaignHandle: string;
+    storeId: string;
   };
   try {
     // 1. Validate token with Stytch
@@ -28,7 +24,7 @@ router.get(async (req, res) => {
     // 2. Create Auth token and set cookie
     if (response?.status_code !== 200) return null;
     const store = await prisma.stores.findUnique({
-      where: { identifier: storeIdentifier },
+      where: { identifier: storeId },
       include: {
         campaigns: {
           where: {
@@ -57,9 +53,9 @@ router.get(async (req, res) => {
 
     // 3. Redirect to campaign page
     const isProd = process.env.NODE_ENV === "production";
-    const redirectUrl = `${isProd ? "https" : "http"}://${storeIdentifier}.${isProd ? "atelier.sale" : "localhost:3000"}/${campaignHandle}`;
-
-    res.redirect(307, redirectUrl);
+    const redirectUrl = `${isProd ? "https" : "http"}://${storeId}.${isProd ? "atelier.sale" : "localhost:3000"}/${campaignHandle}`;
+    return res.status(200).json({ redirectUrl });
+    // res.redirect(307, redirectUrl);
   } catch (e) {
     const errorString = JSON.stringify(e);
     return res.status(404).json({ errorString });
