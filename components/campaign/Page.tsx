@@ -60,6 +60,7 @@ const CampaignPage: FC<{
     watch,
     setImageFile,
     didSelectImageFile,
+    setDidSelectImageFile,
   } = useCampaignForm({
     initialValues: campaign,
     handle: collection.handle,
@@ -238,6 +239,7 @@ const CampaignPage: FC<{
                 imageUrl={imageUrl}
                 imageFile={imageFile}
                 setImageFile={setImageFile}
+                setDidSelectImageFile={setDidSelectImageFile}
               />
             </Layout.AnnotatedSection>
 
