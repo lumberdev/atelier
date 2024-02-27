@@ -129,6 +129,7 @@ export const useCampaignForm = ({
 
         onUpdate();
         form.reset(campaign);
+        setDidSelectImageFile(false);
       },
     }
   );
@@ -177,5 +178,6 @@ export const useCampaignForm = ({
     imageUrl,
     imageFile,
     setImageFile,
+    setDidSelectImageFile
   };
 };

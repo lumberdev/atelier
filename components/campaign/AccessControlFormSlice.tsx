@@ -20,6 +20,7 @@ const CampaignAccessControlFormSlice = ({
   imageUrl,
   imageFile,
   setImageFile,
+  setDidSelectImageFile,
   isLoading,
 }: {
   control: ReturnType<typeof useCampaignForm>["control"];
@@ -27,6 +28,7 @@ const CampaignAccessControlFormSlice = ({
   imageUrl: ReturnType<typeof useCampaignForm>["imageUrl"];
   imageFile: ReturnType<typeof useCampaignForm>["imageFile"];
   setImageFile: ReturnType<typeof useCampaignForm>["setImageFile"];
+  setDidSelectImageFile: ReturnType<typeof useCampaignForm>["setDidSelectImageFile"];
   isLoading: boolean;
 }) => {
   const [useCTA, setUseCTA] = useState<boolean>(false);
@@ -40,6 +42,11 @@ const CampaignAccessControlFormSlice = ({
 
     setUseCTA(true);
   }, [ctaText]);
+
+  function removeImage() {
+    setImageFile(null);
+    setDidSelectImageFile(true);
+  }
 
   return (
     <Card>
@@ -123,7 +130,7 @@ const CampaignAccessControlFormSlice = ({
               render={({ field }) => (
                 <TextField
                   label="Field Placeholder"
-                  helpText="This will show when he password field is empty. ie Enter Password"
+                  helpText="This will show when the password field is empty. ie Enter Password"
                   autoComplete="false"
                   disabled={isLoading}
                   {...field}
@@ -153,7 +160,7 @@ const CampaignAccessControlFormSlice = ({
                 <Button
                   variant="plain"
                   tone="critical"
-                  onClick={() => setImageFile(null)}
+                  onClick={() => removeImage()}
                 >
                   Remove
                 </Button>
