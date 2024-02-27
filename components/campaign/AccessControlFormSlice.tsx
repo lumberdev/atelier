@@ -157,13 +157,13 @@ const CampaignAccessControlFormSlice = ({
                   {layout === "DEFAULT" ? "Background Image" : "Image"}
                 </Text>
 
-                <Button
+                {imageFile && <Button
                   variant="plain"
                   tone="critical"
                   onClick={() => removeImage()}
                 >
                   Remove
-                </Button>
+                </Button>}
               </InlineStack>
 
               <DropZone
