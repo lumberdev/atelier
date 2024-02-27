@@ -3,23 +3,19 @@ import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
 import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
-import ThemeAutocomplete from "@/components/ThemeAutocomplete";
+import ThemeColorDropdown from "@/components/ThemeColorDropdown";
+import ThemeColorPicker from "@/components/ThemeColorPicker";
 import {
   Button,
   Card,
   ChoiceList,
-  ColorPicker,
   DropZone,
   Form,
   FormLayout,
-  rgbToHsb,
-  hsbToHex,
-  hexToRgb,
   InlineGrid,
   InlineStack,
   Layout,
   Page,
-  Popover,
   Text,
   TextField,
   Toast,
@@ -37,41 +33,6 @@ const SettingsPage = () => {
   const router = useRouter();
   const { subscription, cancel } = useBilling();
 
-
-  const [color, setColor] = useState({
-    hue: 120,
-    brightness: 1,
-    saturation: 1,
-  });
-  const handleChangeColor = (newValue) => {
-    setColor(newValue);
-    setColorValue(hsbToHex(color));
-  };
-  const handleChangeColorOnOptionSelect = (selectedValue) => {
-    setColorValue(selectedValue);
-  }
-  const [popoverActive, setPopoverActive] = useState(false);
-  const togglePopoverActive = useCallback(
-    () => setPopoverActive((popoverActive) => !popoverActive),
-    []
-  );
-  const [colorValue, setColorValue] = useState<string>(
-    hsbToHex({
-      hue: 120,
-      brightness: 1,
-      saturation: 1,
-    })
-  );
-  const activator = (
-    <div
-      onClick={togglePopoverActive}
-      className="inline-block h-9 w-9 cursor-pointer rounded-md"
-      style={{
-        background: `${colorValue}`,
-      }}
-    ></div>
-  );
-
   const {
     logoUrl,
     imageFile,
@@ -79,7 +40,9 @@ const SettingsPage = () => {
     onSubmit: onSubmitTheme,
     control,
     isLoading,
-    merchantThemeSettings
+    merchantThemeSettings,
+    getValues: getStoreThemeValue,
+    setValue: setStoreThemeValue
   } = useStoreThemeForm({
     onUpsert: () => triggerToast("Store theme updated"),
   });
@@ -269,87 +232,51 @@ const SettingsPage = () => {
                     control={control}
                     name="primaryColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Primary Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="primaryColor"
+                        colorValue={getStoreThemeValue("primaryColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
-                  
-                  {/* <Controller 
-                    control={control}
-                    name="primaryColor"
-                    render={({ field }) => (
-                      <BlockStack gap="100">
-                        <Text variant="bodyMd" as="p">
-                          Primary Color
-                        </Text>
-                        <ThemeAutocomplete 
-                          label="Primary Color"
-                          optionType="color"
-                          optionList={merchantThemeSettings}
-                        />
-                      </BlockStack>
-                    )}
-                  /> */}
 
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Primary Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="primaryColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
+                </InlineGrid>
+
+                <InlineGrid columns={2} gap="400">
                   <Controller
                     control={control}
                     name="secondaryColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Secondary Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="secondaryColor"
+                        colorValue={getStoreThemeValue("secondaryColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
-                </InlineGrid>
 
-                <InlineGrid columns={2} gap="400">
-                    <BlockStack gap="100">
-                      <Text as="p">Primary Color</Text>
-                      <InlineStack gap="200">
-                        <Popover
-                          preferredPosition="above"
-                          preferredAlignment="left"
-                          active={popoverActive}
-                          activator={activator}
-                          autofocusTarget="first-node"
-                          onClose={togglePopoverActive}
-                        >
-                          <ColorPicker onChange={handleChangeColor} color={color} />
-                        </Popover>
-                        <div className="flex-1">
-                          <TextField
-                            label=""
-                            value={colorValue}
-                            onChange={(value) => {
-                              setColorValue(value);
-                              const hexRegex = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
-                              if (hexRegex.test(value)) {
-                                setColor(rgbToHsb(hexToRgb(value)));
-                              }
-                            }}
-                            autoComplete="off"
-                          />
-                        </div>
-                      </InlineStack>
-                    </BlockStack>
-
-                    <BlockStack gap="100">
-                      <Text as="p"><br/></Text>
-                      <ThemeAutocomplete 
-                        label="Primary Color"
-                        optionType="color"
-                        optionList={merchantThemeSettings}
-                        onChangeOption={setColorValue}
-                      />
-                    </BlockStack>
-                    
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Secondary Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="secondaryColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
@@ -357,14 +284,26 @@ const SettingsPage = () => {
                     control={control}
                     name="backgroundColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Background Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="backgroundColor"
+                        colorValue={getStoreThemeValue("backgroundColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
+
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Background Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="backgroundColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
+                    
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
