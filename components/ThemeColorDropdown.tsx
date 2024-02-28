@@ -1,23 +1,19 @@
-import {Listbox, Combobox, Icon} from '@shopify/polaris';
+import {Listbox, Combobox, Icon, InlineStack} from '@shopify/polaris';
 import {SearchIcon} from '@shopify/polaris-icons';
 import {useState, useCallback, useMemo, useEffect} from 'react';
+import classNames from "classnames";
 
-function ThemeAutocomplete({
+function ThemeColorDropdown({
     label = "Tags",
-    optionType = "color",
     optionList = [],
-    onChangeOption = (selected: string) => {}
+    fieldName = "",
+    onChangeOption = (field: string, selected: string) => {}
 }) {
   const deselectedOptions = useMemo(
     () => {
-        switch(optionType) {
-            case "color":
-                return optionList.filter((option) => {
-                    if(option.value.charAt(0) === "#") return option;
-                });
-            default:
-                return [...optionList];
-        } 
+      return optionList.filter((option) => {
+        if(option.value.charAt(0) === "#") return option;
+      })
     },
     [optionList],
   );
@@ -28,7 +24,7 @@ function ThemeAutocomplete({
 
   useEffect(() => {
     const selectedColor = selectedOption?.split("::")[1] || "";
-    onChangeOption(selectedColor);
+    onChangeOption(fieldName, selectedColor);
   }, [selectedOption]);
 
   const escapeSpecialRegExCharacters = useCallback(
@@ -69,20 +65,35 @@ function ThemeAutocomplete({
     [options],
   );
 
+  const optionLabel = ({ value }) => (
+    <span
+      className={`inline-block h-7 w-7 ml-2.5 cursor-pointer rounded-md ${classNames({
+        "border border-neutral-400 border-solid": value.toLowerCase().includes("#fff")
+      })}`}
+      style={{
+        background: `${value}`,
+      }}
+    ></span>
+  )
+
   const optionsMarkup =
     options.length > 0
       ? options.map((option) => {
           const {label, value} = option;
 
           return (
-            <Listbox.Option
-              key={`${label}`}
-              value={`${label}::${value}`}
-              selected={selectedOption === `${label}::${value}`}
-              accessibilityLabel={label}
-            >
-              {label}
-            </Listbox.Option>
+            <InlineStack blockAlign="center">
+              {optionLabel({ value })}
+              <Listbox.Option
+                key={`${label}`}
+                value={`${label}::${value}`}
+                selected={selectedOption === `${label}::${value}`}
+                accessibilityLabel={label}
+              >
+                {label}
+              </Listbox.Option>
+            </InlineStack>
+            
           );
         })
       : null;
@@ -110,4 +121,4 @@ function ThemeAutocomplete({
   );
 }
 
-export default ThemeAutocomplete;
+export default ThemeColorDropdown;
