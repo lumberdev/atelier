@@ -157,7 +157,7 @@ const CampaignAccessControlFormSlice = ({
                   {layout === "DEFAULT" ? "Background Image" : "Image"}
                 </Text>
 
-                {imageFile && <Button
+                {(imageFile || imageUrl) && <Button
                   variant="plain"
                   tone="critical"
                   onClick={() => removeImage()}
