@@ -1,4 +1,8 @@
-import {Listbox, Combobox, Icon, InlineStack} from '@shopify/polaris';
+import {
+  Listbox, 
+  Combobox, 
+  Icon,
+} from '@shopify/polaris';
 import {SearchIcon} from '@shopify/polaris-icons';
 import {useState, useCallback, useMemo, useEffect} from 'react';
 import classNames from "classnames";
@@ -67,7 +71,7 @@ function ThemeColorDropdown({
 
   const optionLabel = ({ value }) => (
     <span
-      className={`inline-block h-7 w-7 ml-2.5 cursor-pointer rounded-md ${classNames({
+      className={`inline-block h-7 w-7 mr-2.5 cursor-pointer rounded-md ${classNames({
         "border border-neutral-400 border-solid": value.toLowerCase().includes("#fff")
       })}`}
       style={{
@@ -82,18 +86,17 @@ function ThemeColorDropdown({
           const {label, value} = option;
 
           return (
-            <InlineStack blockAlign="center">
-              {optionLabel({ value })}
-              <Listbox.Option
-                key={`${label}`}
-                value={`${label}::${value}`}
-                selected={selectedOption === `${label}::${value}`}
-                accessibilityLabel={label}
-              >
-                {label}
-              </Listbox.Option>
-            </InlineStack>
-            
+            <Listbox.Option
+              key={`${label}`}
+              value={`${label}::${value}`}
+              selected={selectedOption === `${label}::${value}`}
+              accessibilityLabel={label}
+            >
+              <button className="Polaris-Button Polaris-Button--pressable Polaris-Button--variantTertiary Polaris-Button--sizeMedium Polaris-Button--fullWidth">
+                {optionLabel({ value })}
+                <p className="text-sm truncate">{label}</p>
+              </button>
+            </Listbox.Option>
           );
         })
       : null;
