@@ -3,6 +3,8 @@ import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
 import { useStoreThemeForm } from "@/lib/hooks/app/useStoreThemeForm";
 import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
+import ThemeColorDropdown from "@/components/ThemeColorDropdown";
+import ThemeColorPicker from "@/components/ThemeColorPicker";
 import {
   Button,
   Card,
@@ -13,14 +15,13 @@ import {
   InlineGrid,
   InlineStack,
   Layout,
-  Modal,
   Page,
   Text,
   TextField,
   Toast,
   BlockStack,
 } from "@shopify/polaris";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
@@ -39,6 +40,9 @@ const SettingsPage = () => {
     onSubmit: onSubmitTheme,
     control,
     isLoading,
+    merchantThemeSettings,
+    getValues: getStoreThemeValue,
+    setValue: setStoreThemeValue
   } = useStoreThemeForm({
     onUpsert: () => triggerToast("Store theme updated"),
   });
@@ -228,27 +232,51 @@ const SettingsPage = () => {
                     control={control}
                     name="primaryColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Primary Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="primaryColor"
+                        colorValue={getStoreThemeValue("primaryColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
 
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Primary Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="primaryColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
+                </InlineGrid>
+
+                <InlineGrid columns={2} gap="400">
                   <Controller
                     control={control}
                     name="secondaryColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Secondary Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="secondaryColor"
+                        colorValue={getStoreThemeValue("secondaryColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
+
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Secondary Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="secondaryColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
@@ -256,14 +284,26 @@ const SettingsPage = () => {
                     control={control}
                     name="backgroundColor"
                     render={({ field }) => (
-                      <TextField
+                      <ThemeColorPicker 
                         label="Background Color"
-                        autoComplete="false"
                         helpText="Enter a valid hex/rgb code"
-                        {...field}
+                        fieldName="backgroundColor"
+                        colorValue={getStoreThemeValue("backgroundColor")}
+                        setColorValue={setStoreThemeValue}
                       />
                     )}
                   />
+
+                  <BlockStack gap="100">
+                    <Text as="p"><br/></Text>
+                    <ThemeColorDropdown 
+                      label="Background Color"
+                      optionList={merchantThemeSettings}
+                      fieldName="backgroundColor"
+                      onChangeOption={setStoreThemeValue}
+                    />
+                  </BlockStack>
+                    
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
@@ -352,3 +392,4 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
+
