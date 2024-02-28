@@ -129,6 +129,7 @@ export const useCampaignForm = ({
 
         onUpdate();
         form.reset(campaign);
+        router.replace(router.asPath);
         setDidSelectImageFile(false);
       },
     }
