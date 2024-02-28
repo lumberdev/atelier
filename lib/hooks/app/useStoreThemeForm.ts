@@ -45,6 +45,7 @@ export const useStoreThemeForm = ({
 
   const [didSelectImageFile, setDidSelectImageFile] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<File>();
+  const [merchantThemeSettings, setMerchantThemeSettings] = useState([]);
 
   const { mutate: upsertTheme } = useMutation<
     { theme?: storeThemes; error?: { code: string; message: string } },
@@ -70,13 +71,14 @@ export const useStoreThemeForm = ({
     }
   );
 
-  const { data = { theme: {} } } = useQuery<{ theme: storeThemes }>({
+  const { data = { theme: {} } } = useQuery<{ theme: storeThemes, theme_config_filtered: object[] }>({
     queryKey: "theme",
     queryFn: () =>
       fetch("/api/apps/settings/themeconfig").then((response) => response.json()),
     onSuccess: (response) => {
       if (!response.theme?.id || form.getValues("id")) return;
       const theme = response.theme;
+      setMerchantThemeSettings(response.theme_config_filtered);
 
       form.setValue("id", theme.id);
       if (theme.primaryColor) form.setValue("primaryColor", theme.primaryColor);
@@ -150,6 +152,7 @@ export const useStoreThemeForm = ({
     setImageFile,
     onSubmit,
     isLoading,
+    merchantThemeSettings,
     ...form,
   };
 };
