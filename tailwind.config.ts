@@ -25,10 +25,16 @@ const config = {
         "3xl": "1920px",
       },
     },
+    fontSize: {
+      "base": "1rem",
+      "lg": "1.125rem",
+      "5xl": "3rem",
+    },
     extend: {
       fontFamily: {
         "brand-heading": ["var(--font-dmmono)"],
         "brand-body": ["var(--font-taviraj)"],
+        "assistant": "Assistant, sans-serif"
       },
       colors: {
         "brand-1": "#2F2F2E",
@@ -38,6 +44,7 @@ const config = {
         "atelier-secondary": "var(--atelier-secondary-color)",
         "atelier-background": "var(--atelier-background-color)",
         "atelier-text": "var(--atelier-text-color)",
+        "atelier-darkblue": "#15206B",
       },
       keyframes: {
         "accordion-down": {
@@ -55,6 +62,9 @@ const config = {
       },
       backgroundColor: {
         atelier: "var(--atelier-bg-color, initial)",
+      },
+      backgroundImage: {
+        atelier: "var(--atelier-bg-image)",
       },
       borderRadius: {
         atelier: "var(--atelier-border-radius)",
