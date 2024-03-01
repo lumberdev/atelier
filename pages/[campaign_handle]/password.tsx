@@ -13,6 +13,7 @@ import clientProvider from "@/utils/clientProvider";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import { useTheme } from "@/context/ThemeProvider";
 import { authorizePreviewModeRequest } from "@/lib/auth/preview-mode/authorizePreviewModeRequest";
+import RightArrow from "@/assets/icons/arrow-right.svg";
 
 interface PageProps extends RequiredStorePageProps {
   handle: string;
@@ -144,19 +145,19 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         )}
 
         <h1 className="mb-2 text-5xl font-semibold">{headline}</h1>
-        <p className="mb-8 text-base font-regular">{body}</p>
+        <p className="mb-8 text-base font-normal">{body}</p>
 
         <form onSubmit={onSubmit} className="mb-8 w-80 max-w-full">
           <div className="flex w-full items-stretch overflow-hidden rounded-md border border-solid border-atelier-darkblue">
             <input
-              className="px-2 py-2 flex-1 text-black text-base font-assistant font-regular"
+              className="py-3.5 px-5 flex-1 text-black text-base font-assistant font-regular"
               placeholder={placeholder}
               type="password"
               {...register("password")}
               required
             />
-            <button className="bg-black px-2 text-white" type="submit">
-              Enter
+            <button className="bg-white px-5 text-white" type="submit">
+              <RightArrow />
             </button>
           </div>
 
@@ -168,6 +169,12 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
             {cta.text}
           </a>
         )}
+      </div>
+
+      <div className="absolute p-2 w-full bottom-8">
+        <p className="text-sm text-atelier-darkblue text-center font-assistant font-normal">
+          powered by <span className="font-bold">Atelier</span>
+        </p>
       </div>
     </div>
   );
