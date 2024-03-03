@@ -6,7 +6,7 @@ import ScrollingBanner from "@/components/atelier-landing-page/Hero/ScrollingBan
 const Hero = () => {
   return (
     <div className="h-screen w-full bg-brand-3">
-      <div className="relative top-[-8rem] h-full w-full bg-brand-3">
+      <div className="relative h-full w-full bg-brand-3">
         <Image
           className="h-full w-full object-contain"
           src={AtelierHero}

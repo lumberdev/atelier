@@ -43,9 +43,8 @@ export default function NavbarComponent() {
   return (
     <>
       <Navbar
-        shouldHideOnScroll
         className={cn(
-          "z-10 p-8 transition-background lg:px-[2.5rem] lg:py-[1.875rem]",
+          "fixed z-10 px-6 py-6 transition-background lg:px-10 lg:py-[1.7rem]",
           isTop ? "bg-transparent" : "bg-brand-3/80"
         )}
       >
