@@ -20,11 +20,13 @@ import {
 import HamburgerIcon from "@/assets/icons/hamburger-menu.svg";
 import AtelierLogo from "@/assets/logos/atelier-brand-logo.svg";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import classNames from "classnames";
+import { usePathname } from "next/navigation";
 
 export default function NavbarComponent() {
   // State to track whether the page is at the top
   const [isTop, setIsTop] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => {
@@ -43,9 +45,10 @@ export default function NavbarComponent() {
   return (
     <>
       <Navbar
-        className={cn(
-          "fixed z-10 px-6 py-6 transition-background lg:px-10 lg:py-[1.7rem]",
-          isTop ? "bg-transparent" : "bg-brand-3/80"
+        className={classNames(
+          "z-10 px-6 py-6 transition-background lg:px-10 lg:py-[1.7rem]",
+          isTop ? "bg-transparent" : "bg-brand-3/80",
+          pathname === "/" ? "fixed" : "sticky"
         )}
       >
         <NavbarBrand>
