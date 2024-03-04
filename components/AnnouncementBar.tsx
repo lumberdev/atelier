@@ -11,7 +11,7 @@ const AnnouncementBar = ({ announcement, className = "" }) => {
 
   return (
     <div
-      className="bg-atelier-primary px-3 py-2 text-center"
+      className="bg-atelier-secondary px-3 py-2 text-center"
       style={
         {
           "--atelier-text-color": getTextColor(primaryColor),

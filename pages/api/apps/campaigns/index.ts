@@ -27,6 +27,7 @@ router.post(async (req, res) => {
       collectionId: body.collectionId ?? "",
       isActive: body.isActive ?? false,
       announcement: body.announcement ?? "",
+      announcementBgColor: body.announcementBgColor ?? "",
       pageTitle: body.pageTitle ?? "",
       pageDescription: body.pageDescription ?? "",
       cartTitle: body.cartTitle ?? "",
@@ -57,6 +58,7 @@ router.post(async (req, res) => {
     update: {
       isActive: body.isActive ?? false,
       announcement: body.announcement ?? "",
+      announcementBgColor: body.announcementBgColor ?? "",
       pageTitle: body.pageTitle ?? "",
       pageDescription: body.pageDescription ?? "",
       cartTitle: body.cartTitle ?? "",

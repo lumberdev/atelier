@@ -36,6 +36,7 @@ model campaigns {
   handle                  String
   isActive                Boolean           @default(false)
   announcement            String
+  announcementBgColor     String?
   accessPageConfig        accessPageConfig?
   createdAt               DateTime          @default(now())
   updatedAt               DateTime          @updatedAt

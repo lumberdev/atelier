@@ -26,6 +26,19 @@ const StoreCustomizationFormSlice: FC<{
           )}
         />
 
+        <Controller 
+          control={control}
+          name="announcementBgColor"
+          render={({ field }) => (
+            <TextField 
+              label="Announcement Bar Background Color"
+              autoComplete="off"
+              disabled={isLoading}
+              {...field}
+            />
+          )}
+        />
+
         <Controller
           control={control}
           name="pageTitle"
