@@ -70,10 +70,9 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
 
     let finalBgColor = bgColor || `#ffffff${opacity}`;
 
-    // return `linear-gradient(0deg, ${finalBgColor}, ${finalBgColor}), ${bgImg && `url("${bgImg}")`}`;
     return {
       "--atelier-bg-color": finalBgColor,
-      "--atelier-bg-image": `url("${bgImg}")`
+      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}")`
     }
   }
 
@@ -91,32 +90,29 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
           </div>
         )}
 
-        <div className="flex flex-col items-center px-4 pt-12 md:items-start md:justify-center md:p-8 md:px-24">
+        <div className="relative flex flex-col items-center bg-atelier px-4 pt-12 md:items-start md:justify-center md:p-8 md:px-24 font-assistant text-atelier-darkblue"
+             style={bgColorWithOpacity("B2") as CSSProperties}
+        >
           {logo && (
-            <div className="relative mb-8 h-8 w-32">
-              <Image
-                src={logo}
-                layout="fill"
-                className="object-contain"
-                alt=""
-              />
+            <div className="relative mb-8">
+              <img src={logo} />
             </div>
           )}
 
-          <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
-          <p className="mb-8">{body}</p>
+          <h1 className="mb-2 text-5xl font-semibold">{headline}</h1>
+          <p className="mb-8 text-base font-normal">{body}</p>
 
-          <form onSubmit={onSubmit} className="mb-8">
-            <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
+          <form onSubmit={onSubmit} className="mb-8 w-80 max-w-full">
+            <div className="flex w-full items-stretch overflow-hidden rounded-md border border-solid border-atelier-darkblue">
               <input
-                className="bg-white px-2 py-2 text-black"
+                className="py-3.5 px-5 flex-1 text-black text-base font-assistant font-regular"
                 placeholder={placeholder}
                 type="password"
                 {...register("password")}
                 required
               />
-              <button className="bg-black px-2 text-white" type="submit">
-                Enter
+              <button className="bg-white px-5 text-white" type="submit">
+                <RightArrow />
               </button>
             </div>
 
@@ -128,6 +124,13 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
               {cta.text}
             </a>
           )}
+
+
+          <div className="absolute p-2 bottom-8">
+            <p className="text-sm text-atelier-darkblue font-assistant font-normal">
+              powered by <span className="font-bold">Atelier</span>
+            </p>
+          </div>
         </div>
       </div>
     );
