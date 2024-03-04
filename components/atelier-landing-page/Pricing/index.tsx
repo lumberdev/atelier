@@ -37,7 +37,7 @@ const DummyPricingDetails = [
 
 const Pricing = () => {
   return (
-    <div className="flex items-stretch bg-brand-3">
+    <div id="pricing" className="flex items-stretch bg-brand-3">
       {DummyPricingDetails.map((pricingDetail) => (
         <PricingTier
           key={pricingDetail.id}

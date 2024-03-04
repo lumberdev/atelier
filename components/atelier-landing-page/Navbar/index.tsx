@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import NavDrawer from "@/components/atelier-landing-page/Navbar/NavDrawer";
+import Link from "next/link";
 
 export default function NavbarComponent() {
   // State to track whether the page is at the top
@@ -33,12 +34,14 @@ export default function NavbarComponent() {
         pathname === "/" ? "fixed" : "sticky"
       )}
     >
-      <div>
+      <Link href="/">
         <AtelierLogo width={120} height={40} />
-      </div>
+      </Link>
       <div className="flex justify-end gap-10">
         <Button variant="outline" className="rounded-none text-[0.875rem]">
-          DOWNLOAD IN SHOPIFY
+          <Link href="https://apps.shopify.com" target="_blank">
+            DOWNLOAD IN SHOPIFY
+          </Link>
         </Button>
         <NavDrawer />
       </div>
