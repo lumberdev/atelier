@@ -5,13 +5,13 @@ import VerticalScrollingBanner from "./VerticalScrollingBanner";
 
 const About = () => {
   return (
-    <div className="flex h-screen w-full bg-brand-1">
-      <div className="flex w-1/2 items-center justify-center px-20 text-brand-2">
-        <div className="flex max-w-[37.6rem] flex-col gap-5">
-          <h3 className="font-brand-heading self-start text-[1.125rem] font-medium uppercase">
+    <div className="flex md:h-screen w-full flex-col bg-brand-1 md:flex-row">
+      <div className="flex items-center justify-center px-10 pb-16 pt-20 text-brand-2 md:w-1/2 md:px-20 md:py-0">
+        <div className="flex max-w-[37.6rem] flex-col gap-5 ">
+          <h3 className="self-start font-brand-heading text-sm font-medium uppercase md:text-lg">
             Launch password protected mini-stores in a few clicks
           </h3>
-          <div className="font-brand-body flex flex-col gap-[1.875rem] text-[1.75rem]">
+          <div className="flex flex-col gap-[1.875rem] font-brand-body text-2xl lg:text-[1.75rem]">
             <p className="font-light">
               Select any items or collections from your store (even draft
               products) and showcase them in an exclusive, password protected
@@ -24,7 +24,7 @@ const About = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-1/2 items-center justify-center overflow-hidden">
+      <div className="flex items-center justify-center overflow-hidden px-5 md:w-1/2 md:px-0">
         <VerticalScrollingBanner />
       </div>
     </div>

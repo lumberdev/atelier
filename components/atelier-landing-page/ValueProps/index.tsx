@@ -34,7 +34,7 @@ const DummyValueProps = [
 
 const ValueProps = () => {
   return (
-    <div className="w-full">
+    <div id="features" className="w-full">
       {DummyValueProps.map((valueProp) => (
         <ValuePropItem
           key={valueProp.id}
