@@ -95,15 +95,15 @@ const CampaignAccessControlFormSlice = ({
                   title="Page Layout"
                   choices={[
                     {
-                      label: "Background",
+                      label: "Text Overlay",
                       value: "DEFAULT",
-                      helpText: "Use a background color or image.",
+                      helpText: "Overlay password fields onto chosen background image or colour",
                     },
                     {
-                      label: "Stacked Layout",
+                      label: "Split Layout",
                       value: "STACKED",
                       helpText:
-                        "Display an image on top of the page content on mobile and side by side on desktop.",
+                        "Display an image deside password fields on chosen background colour",
                     },
                   ]}
                   selected={[value]}
