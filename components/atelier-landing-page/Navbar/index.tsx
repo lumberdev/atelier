@@ -38,7 +38,10 @@ export default function NavbarComponent() {
         <AtelierLogo width={120} height={40} />
       </Link>
       <div className="flex justify-end gap-10">
-        <Button variant="outline" className="rounded-none text-[0.875rem]">
+        <Button
+          variant="outline"
+          className="hidden items-center rounded-none text-[0.875rem] md:flex"
+        >
           <Link href="https://apps.shopify.com" target="_blank">
             DOWNLOAD IN SHOPIFY
           </Link>
