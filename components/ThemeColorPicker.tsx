@@ -17,7 +17,7 @@ const ThemeColorPicker = ({
     fieldName = "",
     helpText = "",
     colorValue = "",
-    setColorValue = (field: string, color: string) => {}
+    onChangeField = (value: string, label: string) => {}
 }) => {
     const [color, setColor] = useState({
         hue: 120,
@@ -26,7 +26,9 @@ const ThemeColorPicker = ({
     });
     const handleChangeColor = (newValue) => {
         setColor(newValue);
-        setColorValue(fieldName, hsbToHex(newValue));
+
+        // change textfield prop as well
+        onChangeField(hsbToHex(newValue), fieldName);
     };
     const [popoverActive, setPopoverActive] = useState(false);
     const togglePopoverActive = useCallback(
@@ -66,16 +68,15 @@ const ThemeColorPicker = ({
                         label=""
                         value={colorValue}
                         onChange={(value) => {
-                            console.log("value of the textfield");
-                            setColorValue(fieldName, value);
                             const hexRegex = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
                             if (hexRegex.test(value)) {
                                 setColor(rgbToHsb(hexToRgb(value)));
                             }
+
+                            onChangeField(value, fieldName);
                         }}
                         autoComplete="off"
                         helpText={helpText}
-
                     />
                 </div>
             </InlineStack>

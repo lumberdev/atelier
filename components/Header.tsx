@@ -76,7 +76,10 @@ const Header: FC<{
 
         <div className="header-menu row-start-1 col-start-1 lg:col-start-2 items-center justify-end">
           {/* Desktop Navigation */}
-          <ul className={`hidden lg:grid grid-cols-${(categories.length+1) > 4 ? "4" : categories.length+1} text-center`}>
+          <ul className={`hidden lg:grid text-center ${classNames({
+            "grid-cols-4": categories.length >= 3,
+            "grid-cols-3": categories.length < 3,
+          })}`}>
             <li>
               <a className="cursor-pointer" onClick={(event) => filterProducts(event)}>All</a>
             </li>

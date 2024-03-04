@@ -11,7 +11,7 @@ function ThemeColorDropdown({
     label = "Tags",
     optionList = [],
     fieldName = "",
-    onChangeOption = (field: string, selected: string) => {}
+    onChangeOption = (selected: string, field: string, ) => {}
 }) {
   const deselectedOptions = useMemo(
     () => {
@@ -28,7 +28,8 @@ function ThemeColorDropdown({
 
   useEffect(() => {
     const selectedColor = selectedOption?.split("::")[1] || "";
-    onChangeOption(fieldName, selectedColor);
+
+    onChangeOption(selectedColor, fieldName);
   }, [selectedOption]);
 
   const escapeSpecialRegExCharacters = useCallback(

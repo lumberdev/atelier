@@ -13,6 +13,7 @@ import {
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+import ThemeColorPicker from "@/components/ThemeColorPicker";
 
 const CampaignAccessControlFormSlice = ({
   control,
@@ -74,21 +75,35 @@ const CampaignAccessControlFormSlice = ({
 
             <Controller
               control={control}
+              name="acpPasswordPlaceholder"
+              render={({ field }) => (
+                <TextField
+                  label="Field Placeholder"
+                  helpText="This will show when the password field is empty. ie Enter Password"
+                  autoComplete="false"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
               name="acpLayout"
               render={({ field: { value, onChange, ...field } }) => (
                 <ChoiceList
                   title="Page Layout"
                   choices={[
                     {
-                      label: "Background",
+                      label: "Text Overlay",
                       value: "DEFAULT",
-                      helpText: "Use a background color or image.",
+                      helpText: "Overlay password fields onto chosen background image or colour",
                     },
                     {
-                      label: "Stacked Layout",
+                      label: "Split Layout",
                       value: "STACKED",
                       helpText:
-                        "Display an image on top of the page content on mobile and side by side on desktop.",
+                        "Display an image deside password fields on chosen background colour",
                     },
                   ]}
                   selected={[value]}
@@ -124,29 +139,16 @@ const CampaignAccessControlFormSlice = ({
               )}
             />
 
-            <Controller
-              control={control}
-              name="acpPasswordPlaceholder"
-              render={({ field }) => (
-                <TextField
-                  label="Field Placeholder"
-                  helpText="This will show when the password field is empty. ie Enter Password"
-                  autoComplete="false"
-                  disabled={isLoading}
-                  {...field}
-                />
-              )}
-            />
-
-            <Controller
+            <Controller 
               control={control}
               name="acpBackgroundColor"
-              render={({ field }) => (
-                <TextField
+              render={({ field: { onChange, name, value } }) => (
+                <ThemeColorPicker 
                   label="Background Color"
-                  autoComplete="false"
-                  disabled={isLoading}
-                  {...field}
+                  helpText="Empty field will default to white color (#FFFFFF)"
+                  onChangeField={onChange}
+                  fieldName={name}
+                  colorValue={value}
                 />
               )}
             />
@@ -192,7 +194,7 @@ const CampaignAccessControlFormSlice = ({
               </DropZone>
 
               {layout === "DEFAULT"
-                ? "Setting an image will override the background color."
+                ? "The image will lie underneath the background color."
                 : ""}
             </BlockStack>
 

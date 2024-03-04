@@ -13,6 +13,7 @@ import clientProvider from "@/utils/clientProvider";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import { useTheme } from "@/context/ThemeProvider";
 import { authorizePreviewModeRequest } from "@/lib/auth/preview-mode/authorizePreviewModeRequest";
+import RightArrow from "@/assets/icons/arrow-right.svg";
 
 interface PageProps extends RequiredStorePageProps {
   handle: string;
@@ -52,6 +53,29 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
     url: accessPage.ctaUrl,
   };
 
+  const bgColorWithOpacity = (opacity: string) => {
+    const bgImg = backgroundImage.replace(/\s/g, "");
+    // bgColor case: #XXX or #XXXXXX => 4 or 7 letters
+    let bgColor = "";
+    if(backgroundColor.length === 4) {
+      for(let char of backgroundColor) {
+        if(char === "#") bgColor += "#";
+        else bgColor += char.repeat(2);
+      }
+      // Append opacity level at the end
+      bgColor += opacity;
+    } else if(backgroundColor.length === 7) {
+      bgColor += backgroundColor + opacity;
+    }
+
+    let finalBgColor = bgColor || `#ffffff${opacity}`;
+
+    return {
+      "--atelier-bg-color": finalBgColor,
+      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}")`
+    }
+  }
+
   if (layout === "STACKED")
     return (
       <div className="grid-rows-[25rem, 1fr] grid min-h-screen w-screen md:grid-cols-2 md:grid-rows-none">
@@ -66,32 +90,29 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
           </div>
         )}
 
-        <div className="flex flex-col items-center px-4 pt-12 md:items-start md:justify-center md:p-8 md:px-24">
+        <div className="relative flex flex-col items-center bg-atelier px-4 pt-12 md:items-start md:justify-center md:p-8 md:px-24 font-assistant text-atelier-darkblue"
+             style={bgColorWithOpacity("B2") as CSSProperties}
+        >
           {logo && (
-            <div className="relative mb-8 h-8 w-32">
-              <Image
-                src={logo}
-                layout="fill"
-                className="object-contain"
-                alt=""
-              />
+            <div className="relative mb-8">
+              <img src={logo} />
             </div>
           )}
 
-          <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
-          <p className="mb-8">{body}</p>
+          <h1 className="mb-2 text-5xl font-semibold">{headline}</h1>
+          <p className="mb-8 text-base font-normal">{body}</p>
 
-          <form onSubmit={onSubmit} className="mb-8">
-            <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
+          <form onSubmit={onSubmit} className="mb-8 w-80 max-w-full">
+            <div className="flex w-full items-stretch overflow-hidden rounded-md border border-solid border-atelier-darkblue">
               <input
-                className="bg-white px-2 py-2 text-black"
+                className="py-3.5 px-5 flex-1 text-black text-base font-assistant font-regular"
                 placeholder={placeholder}
                 type="password"
                 {...register("password")}
                 required
               />
-              <button className="bg-black px-2 text-white" type="submit">
-                Enter
+              <button className="bg-white px-5 text-white" type="submit">
+                <RightArrow />
               </button>
             </div>
 
@@ -103,45 +124,43 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
               {cta.text}
             </a>
           )}
+
+
+          <div className="absolute p-2 bottom-8">
+            <p className="text-sm text-atelier-darkblue font-assistant font-normal">
+              powered by <span className="font-bold">Atelier</span>
+            </p>
+          </div>
         </div>
       </div>
     );
 
   return (
     <div
-      className="bg-atelier relative flex h-screen w-screen flex-col items-center justify-center p-8"
-      style={{ "--atelier-bg-color": backgroundColor } as CSSProperties}
+      className="bg-atelier bg-blend-overlay bg-cover bg-center relative flex h-screen w-screen flex-col items-center justify-center p-8"
+      style={bgColorWithOpacity("B2") as CSSProperties}
     >
-      {backgroundImage && (
-        <Image
-          src={backgroundImage}
-          layout="fill"
-          className="object-cover"
-          alt=""
-        />
-      )}
-
-      <div className="relative flex w-11/12 max-w-xl flex-col items-center bg-white px-4 py-12 text-black md:justify-center md:p-8">
+      <div className="relative flex w-11/12 max-w-xl flex-col items-center px-4 py-12 font-assistant text-atelier-darkblue text-center md:justify-center md:p-8">
         {logo && (
-          <div className="relative mb-8 h-8 w-32">
-            <Image src={logo} layout="fill" className="object-contain" alt="" />
+          <div className="relative mb-8">
+            <img src={logo} />
           </div>
         )}
 
-        <h1 className="mb-2 text-2xl font-medium">{headline}</h1>
-        <p className="mb-8">{body}</p>
+        <h1 className="mb-2 text-5xl font-semibold">{headline}</h1>
+        <p className="mb-8 text-base font-normal">{body}</p>
 
-        <form onSubmit={onSubmit} className="mb-8">
-          <div className="flex w-max items-stretch overflow-hidden rounded-md border-2 border-solid border-black">
+        <form onSubmit={onSubmit} className="mb-8 w-80 max-w-full">
+          <div className="flex w-full items-stretch overflow-hidden rounded-md border border-solid border-atelier-darkblue">
             <input
-              className="bg-white px-2 py-2 text-black"
+              className="py-3.5 px-5 flex-1 text-black text-base font-assistant font-regular"
               placeholder={placeholder}
               type="password"
               {...register("password")}
               required
             />
-            <button className="bg-black px-2 text-white" type="submit">
-              Enter
+            <button className="bg-white px-5 text-white" type="submit">
+              <RightArrow />
             </button>
           </div>
 
@@ -153,6 +172,12 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
             {cta.text}
           </a>
         )}
+      </div>
+
+      <div className="absolute p-2 w-full bottom-8">
+        <p className="text-sm text-atelier-darkblue text-center font-assistant font-normal">
+          powered by <span className="font-bold">Atelier</span>
+        </p>
       </div>
     </div>
   );

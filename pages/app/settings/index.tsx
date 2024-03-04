@@ -228,82 +228,87 @@ const SettingsPage = () => {
                 </DropZone>
 
                 <InlineGrid columns={2} gap="400">
-                  <Controller
+                  <Controller 
                     control={control}
                     name="primaryColor"
-                    render={({ field }) => (
-                      <ThemeColorPicker 
-                        label="Primary Color"
-                        helpText="Enter a valid hex/rgb code"
-                        fieldName="primaryColor"
-                        colorValue={getStoreThemeValue("primaryColor")}
-                        setColorValue={setStoreThemeValue}
-                      />
+                    render={({ field: { onChange, name, value } }) => (
+                      <>
+                        <ThemeColorPicker 
+                          label="Primary Color"
+                          helpText="Enter a valid hex/rgb code"
+                          fieldName={name}
+                          colorValue={value}
+                          onChangeField={onChange}
+                        />
+
+                        <BlockStack gap="100">
+                          <Text as="p"><br/></Text>
+                          <ThemeColorDropdown 
+                            label="Primary Color"
+                            optionList={merchantThemeSettings}
+                            fieldName={name}
+                            onChangeOption={onChange}
+                          />
+                        </BlockStack>
+                      </>
                     )}
                   />
-
-                  <BlockStack gap="100">
-                    <Text as="p"><br/></Text>
-                    <ThemeColorDropdown 
-                      label="Primary Color"
-                      optionList={merchantThemeSettings}
-                      fieldName="primaryColor"
-                      onChangeOption={setStoreThemeValue}
-                    />
-                  </BlockStack>
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
-                  <Controller
+                  <Controller 
                     control={control}
                     name="secondaryColor"
-                    render={({ field }) => (
-                      <ThemeColorPicker 
-                        label="Secondary Color"
-                        helpText="Enter a valid hex/rgb code"
-                        fieldName="secondaryColor"
-                        colorValue={getStoreThemeValue("secondaryColor")}
-                        setColorValue={setStoreThemeValue}
-                      />
+                    render={({ field: { onChange, name, value } }) => (
+                      <>
+                        <ThemeColorPicker 
+                          label="Secondary Color"
+                          helpText="Enter a valid hex/rgb code"
+                          fieldName={name}
+                          colorValue={value}
+                          onChangeField={onChange}
+                        />
+
+                        <BlockStack gap="100">
+                          <Text as="p"><br/></Text>
+                          <ThemeColorDropdown 
+                            label="Secondary Color"
+                            optionList={merchantThemeSettings}
+                            fieldName={name}
+                            onChangeOption={onChange}
+                          />
+                        </BlockStack>
+                      </>
                     )}
                   />
-
-                  <BlockStack gap="100">
-                    <Text as="p"><br/></Text>
-                    <ThemeColorDropdown 
-                      label="Secondary Color"
-                      optionList={merchantThemeSettings}
-                      fieldName="secondaryColor"
-                      onChangeOption={setStoreThemeValue}
-                    />
-                  </BlockStack>
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
-                  <Controller
+                  <Controller 
                     control={control}
                     name="backgroundColor"
-                    render={({ field }) => (
-                      <ThemeColorPicker 
-                        label="Background Color"
-                        helpText="Enter a valid hex/rgb code"
-                        fieldName="backgroundColor"
-                        colorValue={getStoreThemeValue("backgroundColor")}
-                        setColorValue={setStoreThemeValue}
-                      />
-                    )}
-                  />
+                    render={({ field: { onChange, name, value } }) => (
+                      <>
+                        <ThemeColorPicker 
+                          label="Background Color"
+                          helpText="Enter a valid hex/rgb code"
+                          fieldName={name}
+                          colorValue={value}
+                          onChangeField={onChange}
+                        />
 
-                  <BlockStack gap="100">
-                    <Text as="p"><br/></Text>
-                    <ThemeColorDropdown 
-                      label="Background Color"
-                      optionList={merchantThemeSettings}
-                      fieldName="backgroundColor"
-                      onChangeOption={setStoreThemeValue}
-                    />
-                  </BlockStack>
-                    
+                        <BlockStack gap="100">
+                          <Text as="p"><br/></Text>
+                          <ThemeColorDropdown 
+                            label="Background Color"
+                            optionList={merchantThemeSettings}
+                            fieldName={name}
+                            onChangeOption={onChange}
+                          />
+                        </BlockStack>
+                      </>
+                    )}
+                  />             
                 </InlineGrid>
 
                 <InlineGrid columns={2} gap="400">
