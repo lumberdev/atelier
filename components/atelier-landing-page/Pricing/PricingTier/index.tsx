@@ -53,7 +53,7 @@ const PricingTier = ({
         href="https://apps.shopify.com"
         target="_blank"
         className={classNames(
-          "flex h-[5rem] w-full items-center justify-center gap-5 border-brand-3 bg-brand-1 text-center font-brand-heading text-base text-brand-3 md:h-[6.25rem] md:border-r lg:text-[1.125rem]",
+          "flex h-[5rem] w-full items-center justify-center gap-5 border-brand-3 bg-brand-1 text-center font-brand-heading text-base text-brand-3 md:h-[6.25rem] md:border-b md:border-r lg:text-[1.125rem]",
           isLastItem && "md:border-r-0"
         )}
       >
