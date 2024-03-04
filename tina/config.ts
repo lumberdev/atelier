@@ -25,27 +25,120 @@ export default defineConfig({
   schema: {
     collections: [
       {
-        name: "post",
-        label: "Posts",
-        path: "content/posts",
+        name: "page",
+        label: "Pages",
+        path: "content/pages",
+        format: "json",
         fields: [
           {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
+            label: "Hero",
+            name: "hero",
+            type: "object",
+            fields: [
+              {
+                name: "marquee_text_1",
+                label: "Marquee Text 1",
+                type: "string",
+              },
+              {
+                name: "marquee_text_2",
+                label: "Marquee Text 2",
+                type: "string",
+              },
+            ],
           },
           {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            isBody: true,
+            label: "About",
+            name: "about",
+            type: "object",
+            fields: [
+              {
+                type: "string",
+                name: "title",
+                label: "Title",
+                isTitle: true,
+                required: true,
+              },
+              {
+                label: "Body",
+                name: "body",
+                isBody: true,
+                type: "rich-text",
+              },
+              {
+                label: "Use Cases",
+                name: "useCases",
+                type: "string",
+                list: true,
+              },
+            ],
+          },
+          {
+            label: "Value Props",
+            name: "valueProps",
+            type: "object",
+            fields: [
+              {
+                label: "Value Prop",
+                name: "valueProps",
+                type: "object",
+                list: true,
+                fields: [
+                  {
+                    type: "string",
+                    name: "title",
+                    label: "Title",
+                    isTitle: true,
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "subtitle",
+                    label: "Subtitle",
+                    isTitle: true,
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            label: "Pricings",
+            name: "pricings",
+            type: "object",
+            fields: [
+              {
+                label: "Pricing",
+                name: "pricing",
+                type: "object",
+                list: true,
+                fields: [
+                  {
+                    type: "string",
+                    name: "title",
+                    label: "Title",
+                    isTitle: true,
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "rate",
+                    label: "Rate",
+                    required: true,
+                  },
+                  {
+                    label: "Features",
+                    name: "features",
+                    type: "string",
+                    list: true,
+                  },
+                ],
+              },
+            ],
           },
         ],
         ui: {
-          // This is an DEMO router. You can remove this to fit your site
-          router: ({ document }) => `/demo/blog/${document._sys.filename}`,
+          router: () => "/",
         },
       },
     ],

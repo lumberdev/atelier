@@ -1,51 +1,22 @@
 import React from "react";
 import PricingTier from "./PricingTier";
+import { PagePricings } from "@/tina/__generated__/types";
 
-const DummyPricingDetails = [
-  {
-    id: 1,
-    title: "FREE TRIAL",
-    pricingDescription: "30-DAY FREE TRIAL",
-    features: ["Lorem ipsum dolor", "Lorem ipsum dolor", "Lorem ipsum dolor"],
-    url: "/",
-  },
-  {
-    id: 2,
-    title: "STARTER",
-    pricingDescription: "30-DAY FREE TRIAL",
-    features: [
-      "Create up to 3 mini stores",
-      "Basic customization options",
-      "Atelier Logo in the footer",
-    ],
-    url: "/",
-  },
-  {
-    id: 3,
-    title: "PRO",
-    pricingDescription: "30-DAY FREE TRIAL",
-    features: [
-      "Unlimited mini stores",
-      "Unlimited mini stores",
-      "Remove Atelier logo",
-      "Access to exclusive templates",
-      "Enhanced analytics for in-depth insights",
-    ],
-    url: "/",
-  },
-];
+export interface PricingProps {
+  data: PagePricings;
+}
 
-const Pricing = () => {
+const Pricing = ({ data }: PricingProps) => {
   return (
     <div
       id="pricing"
       className="flex flex-col items-stretch gap-10 bg-brand-3 px-10 py-16 md:flex-row md:gap-0 md:p-0"
     >
-      {DummyPricingDetails.map((pricingDetail) => (
+      {data?.pricing?.map((pricingDetail, idx) => (
         <PricingTier
-          key={pricingDetail.id}
+          key={pricingDetail.title}
           pricingDetail={pricingDetail}
-          isLastItem={pricingDetail.id === DummyPricingDetails.length}
+          isLastItem={idx === data.pricing.length - 1}
         />
       ))}
     </div>

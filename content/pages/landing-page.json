@@ -1,0 +1,76 @@
+{
+  "marquee_text_1": "private sales",
+  "marquee_text_2": "for shopify stores",
+  "subtitle": "testing",
+  "hero": {
+    "marquee_text_1": "private sales",
+    "marquee_text_2": "for shopify stores"
+  },
+  "about": {
+    "title": "Launch password protected mini-stores in a few clicks",
+    "body": "Select any items or collections from your store (even draft products) and showcase them in an exclusive, password protected shopping experience separate from your main site.\n\nRetain full control over access, pricing, and promotions, and run as many sales simultaneously as you like.\n",
+    "useCases": [
+      "sample sales",
+      "early access",
+      "limited editions",
+      "beta launches",
+      "influencer stores",
+      "brand collaborations",
+      "merch stores",
+      "employee stores"
+    ]
+  },
+  "valueProps": {
+    "valueProps": [
+      {
+        "title": "INSTANTLY EXCLUSIVE",
+        "subtitle": "Atelier empowers you to create private, invite-only shopping experiences. Control access and turn every visit into a VIP affair."
+      },
+      {
+        "title": "EFFORTLESS SETUP",
+        "subtitle": "No coding, no headaches. Craft your mini store with a few clicks, choosing from stunning templates that reflect your brand's essence."
+      },
+      {
+        "title": "BOOST SALES AND LOYALTY",
+        "subtitle": "Drive demand by offering exclusive deals to selected customers. Foster a sense of exclusivity that keeps them coming back for more."
+      },
+      {
+        "title": "SEAMLESS INTEGRATION",
+        "subtitle": "Atelier seamlessly integrates with your Shopify store, preserving your existing setup while adding a touch of exclusivity."
+      }
+    ]
+  },
+  "pricings": {
+    "pricing": [
+      {
+        "title": "FREE TRIAL",
+        "rate": "30-DAY FREE TRIAL",
+        "features": [
+          "Lorem ipsum dolor",
+          "Lorem ipsum dolor",
+          "Lorem ipsum dolor"
+        ]
+      },
+      {
+        "title": "STARTER",
+        "rate": "$19 / month + $0.08 per transaction",
+        "features": [
+          "Create up to 3 mini stores",
+          "Atelier Logo in the footer",
+          "Basic customization options"
+        ]
+      },
+      {
+        "title": "STARTER",
+        "rate": "$19 / month + $0.08 per transaction",
+        "features": [
+          "Unlimited mini stores",
+          "Unlimited mini stores",
+          "Remove Atelier logo",
+          "Access to exclusive templates",
+          "Enhanced analytics for in-depth insights"
+        ]
+      }
+    ]
+  }
+}
