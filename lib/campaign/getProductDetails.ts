@@ -34,16 +34,6 @@ const getProductDetails = async ({
             currencyCode: string;
           };
         };
-        compareAtPriceRange: {
-          maxVariantCompareAtPrice: {
-            amount: string;
-            currencyCode: string;
-          };
-          minVariantCompareAtPrice: {
-            amount: string;
-            currencyCode: string;
-          };
-        };
         hasOnlyDefaultVariant: boolean;
         mediaCount: number;
         options: {
@@ -107,16 +97,6 @@ const getProductDetails = async ({
             }
 
             minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          compareAtPriceRange {
-            maxVariantCompareAtPrice {
-              amount
-              currencyCode
-            }
-            minVariantCompareAtPrice {
               amount
               currencyCode
             }
