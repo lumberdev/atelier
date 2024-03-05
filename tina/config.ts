@@ -165,6 +165,56 @@ export default defineConfig({
           router: () => "/pages/faq",
         },
       },
+      {
+        name: "privacy",
+        label: "Privacy Policy",
+        path: "content/privacy",
+        format: "json",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            label: "Body",
+            name: "body",
+            isBody: true,
+            type: "rich-text",
+          },
+        ],
+        ui: {
+          router: () => "/pages/privacy",
+        },
+      },
+      {
+        name: "terms",
+        label: "Terms and Conditions",
+        path: "content/terms",
+        format: "json",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            label: "Body",
+            name: "body",
+            isBody: true,
+            type: "rich-text",
+          },
+        ],
+        ui: {
+          router: () => "/pages/terms",
+        },
+      },
     ],
   },
 });
+
+
