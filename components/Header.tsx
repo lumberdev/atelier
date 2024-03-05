@@ -16,33 +16,42 @@ const Header: FC<{
   campaignHandle: string;
   announcement?: string;
   categories?: string[];
-  allProducts?: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"];
-  setProducts?: (products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]) => void 
-}> = ({ 
-  campaignHandle, 
-  title, 
-  announcement, 
-  categories = [], 
-  allProducts = [], 
-  setProducts = () => {} 
+  allProducts?: Awaited<
+    ReturnType<typeof getProductListing>
+  >["products"]["nodes"];
+  setProducts?: (
+    products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]
+  ) => void;
+}> = ({
+  campaignHandle,
+  title,
+  announcement,
+  categories = [],
+  allProducts = [],
+  setProducts = () => {},
 }) => {
   const {
     global: { primaryColor, logoPosition },
   } = useTheme();
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const textColor = getTextColor(primaryColor);
 
-  function filterProducts(event: MouseEvent<HTMLElement>, category: string = null) {
+  function filterProducts(
+    event: MouseEvent<HTMLElement>,
+    category: string = null
+  ) {
     event.preventDefault();
 
     // Set products to display
-    category ? setProducts(allProducts.filter((prod) => prod.tags.includes(category))) : setProducts(allProducts);
+    category
+      ? setProducts(allProducts.filter((prod) => prod.tags.includes(category)))
+      : setProducts(allProducts);
 
     // Set query string
-    if(category) {
+    if (category) {
       router.replace(`${pathname}?category=${category}`);
     } else {
       router.replace(pathname);
@@ -67,25 +76,35 @@ const Header: FC<{
         <LogoTitle
           title={title}
           handle={campaignHandle}
-          className={`row-start-1 col-start-2 justify-center ${classNames({
-            "lg:col-start-1 lg:justify-start text-left": logoPosition !== "center",
-            "lg:col-start-2 text-center": logoPosition === "center",
+          className={`col-start-2 row-start-1 justify-center ${classNames({
+            "text-left lg:col-start-1 lg:justify-start":
+              logoPosition !== "center",
+            "text-center lg:col-start-2": logoPosition === "center",
           })}`}
           color={textColor}
         />
 
-        <div className="header-menu row-start-1 col-start-1 lg:col-start-2 items-center justify-end">
+        <div className="header-menu col-start-1 row-start-1 items-center justify-end lg:col-start-2">
           {/* Desktop Navigation */}
-          <ul className={`hidden lg:grid text-center ${classNames({
-            "grid-cols-4": categories.length >= 3,
-            "grid-cols-3": categories.length < 3,
-          })}`}>
+          <ul
+            className={`hidden items-center justify-center gap-12 text-center lg:flex`}
+          >
             <li>
-              <a className="cursor-pointer" onClick={(event) => filterProducts(event)}>All</a>
+              <a
+                className="cursor-pointer"
+                onClick={(event) => filterProducts(event)}
+              >
+                All
+              </a>
             </li>
             {categories.map((category) => (
               <li>
-                <a className="cursor-pointer" onClick={(event) => filterProducts(event, category)}>{category.replace("atelier:", "")}</a>
+                <a
+                  className="cursor-pointer"
+                  onClick={(event) => filterProducts(event, category)}
+                >
+                  {category.replace("atelier:", "")}
+                </a>
               </li>
             ))}
           </ul>
@@ -94,9 +113,8 @@ const Header: FC<{
             <MobileNav categories={categories} onClick={filterProducts} />
           </div>
         </div>
-        
 
-        <div className="row-start-1 col-start-3 flex h-[40px] items-center justify-end">
+        <div className="col-start-3 row-start-1 flex h-[40px] items-center justify-end">
           <MiniCart />
         </div>
       </Container>
