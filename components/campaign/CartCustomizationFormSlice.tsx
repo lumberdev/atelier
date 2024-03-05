@@ -1,55 +1,20 @@
-import { useState, useCallback } from "react";
 import {
   Card,
   ChoiceList,
   Text,
   TextField,
   BlockStack,
-  InlineStack,
-  hsbToHex,
-  hexToRgb,
-  rgbToHsb,
-  ColorPicker,
-  Popover,
 } from "@shopify/polaris";
 
 import { FC } from "react";
 import { Control, Controller, FieldValues } from "react-hook-form";
+import ThemeColorPicker from "@/components/ThemeColorPicker";
 
 const CartCustomizationFormSlice: FC<{
   control: Control<FieldValues>;
   isLoading: boolean;
 }> = ({ control, isLoading }) => {
-  const [color, setColor] = useState({
-    hue: 120,
-    brightness: 1,
-    saturation: 1,
-  });
-  const handleChangeColor = (newValue) => {
-    setColor(newValue);
-    setColorValue(hsbToHex(color));
-  };
-  const [popoverActive, setPopoverActive] = useState(true);
-  const togglePopoverActive = useCallback(
-    () => setPopoverActive((popoverActive) => !popoverActive),
-    []
-  );
-  const [colorValue, setColorValue] = useState<string>(
-    hsbToHex({
-      hue: 120,
-      brightness: 1,
-      saturation: 1,
-    })
-  );
-  const activator = (
-    <div
-      onClick={togglePopoverActive}
-      className="inline-block h-9 w-9 cursor-pointer rounded-md"
-      style={{
-        background: `${colorValue}`,
-      }}
-    ></div>
-  );
+
   return (
     <Card>
       <BlockStack gap="400">
@@ -69,44 +34,16 @@ const CartCustomizationFormSlice: FC<{
             />
           )}
         />
-        <BlockStack gap="100">
-          <Text as="p">Background Color</Text>
-          <InlineStack gap="200">
-            <Popover
-              preferredPosition="above"
-              preferredAlignment="left"
-              active={popoverActive}
-              activator={activator}
-              autofocusTarget="first-node"
-              onClose={togglePopoverActive}
-            >
-              <ColorPicker onChange={handleChangeColor} color={color} />
-            </Popover>
-            <div className="flex-1">
-              <TextField
-                label=""
-                value={colorValue}
-                onChange={(value) => {
-                  setColorValue(value);
-                  const hexRegex = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
-                  if (hexRegex.test(value)) {
-                    setColor(rgbToHsb(hexToRgb(value)));
-                  }
-                }}
-                autoComplete="off"
-              />
-            </div>
-          </InlineStack>
-        </BlockStack>
         <Controller
           control={control}
           name="cartBackgroundColor"
-          render={({ field }) => (
-            <TextField
+          render={({ field: { onChange, name, value } }) => (
+            <ThemeColorPicker
               label="Background Color"
-              autoComplete="off"
-              disabled={isLoading}
-              {...field}
+              helpText="Empty field will default to white color (#FFFFFF)"
+              onChangeField={onChange}
+              fieldName={name}
+              colorValue={value}
             />
           )}
         />
