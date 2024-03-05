@@ -192,7 +192,7 @@ const SettingsPage = () => {
                     Logo
                   </Text>
 
-                  {imageFile && (
+                  {(imageFile || logoUrl) && (
                     <Button
                       tone="critical"
                       variant="plain"
@@ -224,7 +224,7 @@ const SettingsPage = () => {
                     </InlineStack>
                   )}
 
-                  {!imageFile && <DropZone.FileUpload />}
+                  {!imageFile && !logoUrl && <DropZone.FileUpload />}
                 </DropZone>
 
                 <InlineGrid columns={2} gap="400">
