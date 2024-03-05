@@ -39,7 +39,7 @@ const NavDrawer = () => {
         >
           <header className="flex items-center justify-end">
             <Drawer.Close>
-              <CloseIcon class="u-icon-stroke--white" />
+              <CloseIcon className="u-icon-stroke--white" />
             </Drawer.Close>
           </header>
           <div className="my-10 flex flex-col gap-10 font-brand-heading text-[1.75rem] uppercase text-brand-3">

@@ -52,7 +52,7 @@ const MobileNav = ({
         >
           <header className="flex items-center px-6">
             <Drawer.Close>
-              <CloseIcon class="u-icon-stroke--black" />
+              <CloseIcon className="u-icon-stroke--black" />
             </Drawer.Close>
           </header>
 

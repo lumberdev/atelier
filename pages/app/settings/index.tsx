@@ -37,6 +37,7 @@ const SettingsPage = () => {
     logoUrl,
     imageFile,
     setImageFile,
+    setLogoUrl,
     onSubmit: onSubmitTheme,
     control,
     isLoading,
@@ -56,6 +57,11 @@ const SettingsPage = () => {
   } = useStoreMetadataForm({
     onUpsert: () => triggerToast("Store metadata updated"),
   })
+
+  const removeImage = () => {
+    setImageFile(null);
+    setLogoUrl("");
+  }
 
   const { handleSubmit, setValue, watch } = useForm<{
     domain: string;
@@ -196,7 +202,7 @@ const SettingsPage = () => {
                     <Button
                       tone="critical"
                       variant="plain"
-                      onClick={() => setImageFile(null)}
+                      onClick={() => removeImage()}
                     >
                       Remove
                     </Button>
