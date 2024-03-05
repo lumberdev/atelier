@@ -5,8 +5,8 @@
   "hero": {
     "marquee_text_1": "private sales",
     "marquee_text_2": "for shopify stores",
-    "hero_image_desktop": "/uploads/atelier-hero--desktop.png",
-    "hero_image_mobile": "/uploads/atelier-hero--mobile.png"
+    "hero_image_desktop": "/uploads/uploads/atelier-hero--desktop.png",
+    "hero_image_mobile": "/uploads/uploads/atelier-hero--mobile.png"
   },
   "about": {
     "title": "Launch password protected mini-stores in a few clicks",
