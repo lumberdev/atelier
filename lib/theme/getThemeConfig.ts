@@ -38,6 +38,8 @@ const getThemeConfig = async ({
           cartTextColor: true,
           cartTitle: true,
           cartDescription: true,
+          pageTitle: true,
+          pageDescription: true,
           accessPageConfig: {
             select: {
               layout: true,

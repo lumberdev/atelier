@@ -81,9 +81,8 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
       <div className="grid-rows-[25rem, 1fr] grid min-h-screen w-screen md:grid-cols-2 md:grid-rows-none">
         {backgroundImage && (
           <div className="relative">
-            <Image
+            <img
               src={backgroundImage}
-              layout="fill"
               className="object-cover object-center"
               alt=""
             />

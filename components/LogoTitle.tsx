@@ -1,33 +1,33 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "@/context/ThemeProvider";
 
-const LogoTitle = ({ title, handle, color = "black", className = "" }) => {
-  const {
-    global: { logo },
-  } = useTheme();
+interface LogoTitleProps {
+  title: string;
+  handle: string;
+  logo: string;
+  className?: string;
+}
 
+const LogoTitle: React.FC<LogoTitleProps> = ({
+  title,
+  handle,
+  logo,
+  className = "",
+}) => {
   return (
     <Link
       href={`/${handle}`}
       className={`flex items-center no-underline ${className}`}
     >
-      {logo ? (
-        <Image
-          width={100}
-          height={100}
-          src={logo}
-          alt={title}
-          className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
-        />
-      ) : (
-        <h1
-          className="mx-1 py-0 text-xl text-black lg:py-4 lg:text-3xl"
-          style={{ color: color }}
-        >
-          {title}
-        </h1>
-      )}
+      {/* Switching to img tag, Next/Image caching and showing stale images since image url stays the same when logo is updated */}
+      <img
+        src={logo}
+        alt={title}
+        width="auto"
+        height={48}
+        className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
+      />
     </Link>
   );
 };
