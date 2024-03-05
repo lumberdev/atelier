@@ -20,11 +20,12 @@ const LogoTitle: React.FC<LogoTitleProps> = ({
       href={`/${handle}`}
       className={`flex items-center no-underline ${className}`}
     >
-      <Image
-        width={100}
-        height={100}
+      {/* Switching to img tag, Next/Image caching and showing stale images since image url stays the same when logo is updated */}
+      <img
         src={logo}
         alt={title}
+        width="auto"
+        height={48}
         className="mx-auto h-[3rem] w-auto py-2 lg:mx-0"
       />
     </Link>
