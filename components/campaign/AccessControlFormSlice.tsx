@@ -64,6 +64,20 @@ const CampaignAccessControlFormSlice = ({
           )}
         />
 
+        <Controller
+          control={control}
+          name="acpPasswordPlaceholder"
+          render={({ field }) => (
+            <TextField
+              label="Field Placeholder"
+              helpText="This will show when the password field is empty. ie Enter Password"
+              autoComplete="false"
+              disabled={isLoading}
+              {...field}
+            />
+          )}
+        />
+
         {!!password && (
           <>
             <Text as="h4" variant="headingSm">
@@ -75,27 +89,13 @@ const CampaignAccessControlFormSlice = ({
 
             <Controller
               control={control}
-              name="acpPasswordPlaceholder"
-              render={({ field }) => (
-                <TextField
-                  label="Field Placeholder"
-                  helpText="This will show when the password field is empty. ie Enter Password"
-                  autoComplete="false"
-                  disabled={isLoading}
-                  {...field}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
               name="acpLayout"
               render={({ field: { value, onChange, ...field } }) => (
                 <ChoiceList
                   title="Page Layout"
                   choices={[
                     {
-                      label: "Text Overlay",
+                      label: "Full Screen Layout",
                       value: "DEFAULT",
                       helpText: "Overlay password fields onto chosen background image or colour",
                     },
@@ -103,7 +103,7 @@ const CampaignAccessControlFormSlice = ({
                       label: "Split Layout",
                       value: "STACKED",
                       helpText:
-                        "Display an image deside password fields on chosen background colour",
+                        "Display an image beside password fields on chosen background colour",
                     },
                   ]}
                   selected={[value]}
