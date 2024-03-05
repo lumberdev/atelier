@@ -4,14 +4,20 @@ import About from "@/components/atelier-landing-page/About";
 import ValueProps from "@/components/atelier-landing-page/ValueProps";
 import Pricing from "@/components/atelier-landing-page/Pricing";
 import Layout from "@/components/atelier-landing-page/general/Layout";
+import { Page } from "@/tina/__generated__/types";
 
-const AtelierLandingPage = () => {
+interface AtelierLandingPageProps {
+  data?: Page;
+}
+
+const AtelierLandingPage = ({ data }: AtelierLandingPageProps) => {
+  const { hero, about, valueProps, pricings } = data || {};
   return (
     <Layout>
-      <Hero />
-      <About />
-      <ValueProps />
-      <Pricing />
+      <Hero data={hero} />
+      <About data={about} />
+      <ValueProps data={valueProps} />
+      <Pricing data={pricings} />
     </Layout>
   );
 };

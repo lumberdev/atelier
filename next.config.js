@@ -14,6 +14,7 @@ const nextConfig = {
     CONFIG_SHOPIFY_APP_URL: process.env.SHOPIFY_APP_URL,
   },
   images: {
+    domains: ['assets.tina.io'],
     remotePatterns: [
       {
         protocol: "https",

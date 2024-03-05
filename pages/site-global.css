@@ -59,7 +59,7 @@ body {
 }
 
 .vertical-marquee-content {
-  animation: vertical-marquee 30s linear infinite; /* Adjust timing as needed */
+  animation: vertical-marquee 60s linear infinite; /* Adjust timing as needed */
 }
 
 /* Define the keyframes for the vertical scrolling */
