@@ -17,7 +17,7 @@ export default defineConfig({
   },
   media: {
     tina: {
-      mediaRoot: "",
+      mediaRoot: "uploads",
       publicFolder: "public",
     },
   },
@@ -45,6 +45,16 @@ export default defineConfig({
                 label: "Marquee Text 2",
                 type: "string",
               },
+              {
+                name: "hero_image_desktop",
+                type: "image",
+                label: "Hero Image Desktop",
+              },
+              {
+                name: "hero_image_mobile",
+                type: "image",
+                label: "Hero Image Mobile",
+              },
             ],
           },
           {
@@ -64,6 +74,11 @@ export default defineConfig({
                 name: "body",
                 isBody: true,
                 type: "rich-text",
+              },
+              {
+                name: "background_image",
+                type: "image",
+                label: "Background Image",
               },
               {
                 label: "Use Cases",
@@ -216,5 +231,3 @@ export default defineConfig({
     ],
   },
 });
-
-
