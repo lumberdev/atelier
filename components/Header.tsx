@@ -31,7 +31,7 @@ const Header: FC<{
   setProducts = () => {},
 }) => {
   const {
-    global: { primaryColor, logoPosition },
+    global: { primaryColor, logoPosition, logo },
   } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
@@ -73,21 +73,33 @@ const Header: FC<{
           })}
         />
 
-        <LogoTitle
-          title={title}
-          handle={campaignHandle}
-          className={`col-start-2 row-start-1 justify-center ${classNames({
-            "text-left lg:col-start-1 lg:justify-start":
-              logoPosition !== "center",
-            "text-center lg:col-start-2": logoPosition === "center",
-          })}`}
-          color={textColor}
-        />
+        {!!logo && (
+          <LogoTitle
+            title={title}
+            handle={campaignHandle}
+            className={`col-start-2 row-start-1 justify-center ${classNames({
+              "text-left lg:col-start-1 lg:justify-start":
+                logoPosition !== "center",
+              "text-center lg:col-start-2": logoPosition === "center",
+            })}`}
+            logo={logo}
+          />
+        )}
 
-        <div className="header-menu col-start-1 row-start-1 items-center justify-end lg:col-start-2">
+        <div
+          className={`header-menu col-start-1 row-start-1 items-center justify-end
+            ${classNames({
+              "lg:col-start-2": logoPosition !== "center",
+              "lg:col-start-1": logoPosition === "center" || !logo,
+            })}`}
+        >
           {/* Desktop Navigation */}
           <ul
-            className={`hidden items-center justify-center gap-12 text-center lg:flex`}
+            className={`hidden items-center justify-center gap-12 text-center lg:flex ${classNames(
+              {
+                "lg:justify-start": logoPosition === "center" || !logo,
+              }
+            )}`}
           >
             <li>
               <a
