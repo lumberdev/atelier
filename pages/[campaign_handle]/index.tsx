@@ -12,14 +12,23 @@ import { RequiredStorePageProps } from "@/lib/types";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 import clientProvider from "@/utils/clientProvider";
 import { useTheme } from "@/context/ThemeProvider";
+import CampaignHeader from "@/components/CampaignHeader";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   listing: Awaited<ReturnType<typeof getProductListing>>;
   announcement?: string;
+  campaignTitle?: string;
+  campaignDescription?: string;
 }
 
-const CampaignPage: FC<PageProps> = ({ collection, listing, announcement }) => {
+const CampaignPage: FC<PageProps> = ({
+  collection,
+  listing,
+  announcement,
+  campaignTitle,
+  campaignDescription,
+}) => {
   // const router = useRouter();
   const {
     global: { favicon },
@@ -53,6 +62,10 @@ const CampaignPage: FC<PageProps> = ({ collection, listing, announcement }) => {
         allProducts={listing.products.nodes}
         setProducts={setProdList}
         categories={prodCategories}
+      />
+      <CampaignHeader
+        campaignTitle={campaignTitle}
+        campaignDescription={campaignDescription}
       />
 
       <ProductGrid handle={collection.handle} products={prodList} />
@@ -151,6 +164,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
+      campaignTitle: campaign.pageTitle,
+      campaignDescription: campaign.pageDescription,
       shop: merchant.shop,
       storefrontAccessToken,
       themeConfig,
