@@ -25,7 +25,6 @@ export function middleware(request) {
   const shop = params.shop || "*.myshopify.com";
 
   const res = NextResponse.next();
-  console.log(pathname)
 
   // Exclude "/admin/index.html" and "/", this causes tinacms admin panel and live preview to crash 
   if (!(pathname.includes("/admin/index.html") || pathname === "/")) {

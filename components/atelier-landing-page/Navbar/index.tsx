@@ -11,27 +11,30 @@ export default function NavbarComponent() {
   // State to track whether the page is at the top
   const [isTop, setIsTop] = useState(true);
   const pathname = usePathname();
+  const isLandingPage = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => {
-      // Check if the scroll position is at the top of the page
       const scrollPosition = window.scrollY;
       setIsTop(scrollPosition < 100);
     };
 
-    // Add the event listener for the scroll event
     window.addEventListener("scroll", onScroll);
 
-    // Clean up the event listener when the component unmounts
     return () => window.removeEventListener("scroll", onScroll);
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []); 
 
   return (
     <div
       className={classNames(
-        "z-10 flex w-full items-center justify-between px-6 py-6  transition-background lg:px-10 lg:py-[1.7rem] ",
-        isTop ? "bg-transparent" : "bg-brand-3/70 backdrop-blur-md",
-        pathname === "/" ? "fixed" : "sticky"
+        "transition-background z-10 flex w-full items-center justify-between px-6  py-6 lg:px-10 lg:py-[1.7rem] ",
+        isTop && isLandingPage
+          ? "bg-transparent"
+          : "bg-brand-3/70 backdrop-blur-md",
+        isTop && !isLandingPage
+          ? "bg-brand-3"
+          : "bg-brand-3/70 backdrop-blur-md",
+        isLandingPage ? "fixed" : "sticky left-0 top-0"
       )}
     >
       <Link href="/">

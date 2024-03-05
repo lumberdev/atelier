@@ -6,15 +6,17 @@ import Footer from "@/components/atelier-landing-page/Footer";
 
 interface LayoutProps {
   children: ReactNode;
+  className?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   return (
     <div
       className={classNames(
         dmMonoFont.variable,
         tavirajFont.variable,
-        "relative"
+        "relative",
+        className
       )}
     >
       <Navbar />

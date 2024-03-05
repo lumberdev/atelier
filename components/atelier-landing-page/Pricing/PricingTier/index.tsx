@@ -9,15 +9,14 @@ interface PricingTierProps {
   isLastItem: boolean;
   pricingDetail: {
     title: string;
-    pricingDescription: string;
-    features: string[];
-    url: string;
+    rate: string;
+    features?: string[];
   };
 }
 
 const PricingTier = ({
   isLastItem,
-  pricingDetail: { title, pricingDescription, features, url },
+  pricingDetail: { title, rate, features },
 }: PricingTierProps) => {
   return (
     <div className="flex flex-1 flex-col justify-between border border-brand-1 bg-brand-3 md:rounded-none md:border-0 md:bg-transparent">
@@ -31,11 +30,11 @@ const PricingTier = ({
           {title}
         </h3>
         <div className="my-5 rounded-full border border-brand-1 px-2 py-[0.625rem] text-center font-brand-heading text-[0.875rem] font-medium">
-          {pricingDescription}
+          {rate}
         </div>
         <div>
           <ul>
-            {features.map((feature) => (
+            {features?.map((feature) => (
               <li
                 key={nanoid()}
                 className="my-10 flex items-center gap-[0.625rem]"
