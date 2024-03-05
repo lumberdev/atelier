@@ -141,6 +141,30 @@ export default defineConfig({
           router: () => "/",
         },
       },
+      {
+        name: "faq",
+        label: "Faq",
+        path: "content/faq",
+        format: "json",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            label: "Body",
+            name: "body",
+            isBody: true,
+            type: "rich-text",
+          },
+        ],
+        ui: {
+          router: () => "/pages/faq",
+        },
+      },
     ],
   },
 });
