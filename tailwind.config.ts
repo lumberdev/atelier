@@ -63,6 +63,7 @@ const config = {
       },
       backgroundColor: {
         atelier: "var(--atelier-bg-color, initial)",
+        "atelier-announcement": "var(--atelier-bg-color, initial)",
       },
       backgroundImage: {
         atelier: "var(--atelier-bg-image)",
