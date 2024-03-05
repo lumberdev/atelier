@@ -14,7 +14,6 @@ const CartCustomizationFormSlice: FC<{
   control: Control<FieldValues>;
   isLoading: boolean;
 }> = ({ control, isLoading }) => {
-
   return (
     <Card>
       <BlockStack gap="400">
@@ -50,12 +49,12 @@ const CartCustomizationFormSlice: FC<{
         <Controller
           control={control}
           name="cartTextColor"
-          render={({ field }) => (
-            <TextField
+          render={({ field: { onChange, name, value } }) => (
+            <ThemeColorPicker
               label="Text Color"
-              autoComplete="off"
-              disabled={isLoading}
-              {...field}
+              onChangeField={onChange}
+              fieldName={name}
+              colorValue={value}
             />
           )}
         />
