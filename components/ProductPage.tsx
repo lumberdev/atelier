@@ -11,6 +11,7 @@ const ProductPage: FC<{
 }> = ({ product }) => {
   const { addToCart } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(() => product.variants.nodes[0].inventoryQuantity > 0);
+  const [selectedVariant, setSelectedVariant] = useState(() => product.variants.nodes[0]);
 
   const {
     global: { backgroundColor },
@@ -31,6 +32,7 @@ const ProductPage: FC<{
     });
     form.setAttribute("value-variant-id", variant.id);
     setAddToCartBtnEnabled(variant.inventoryQuantity > 0);
+    setSelectedVariant(variant);
   };
 
   const onSubmit = (e) => {
@@ -72,31 +74,36 @@ const ProductPage: FC<{
           ))}
         </div>
         <div
-          className="sticky top-40 h-fit px-8"
+          className="sticky top-40 h-fit w-96 px-8 font-assistant"
           style={
             {
               "--atelier-text-color": getTextColor(backgroundColor),
             } as CSSProperties
           }
         >
-          <h1 className="text-atelier-text mb-4 text-2xl font-semibold">
+          <h1 className="text-atelier-text text-xl mb-1 font-normal">
             {product.title}
           </h1>
-          <p className="text-l text-atelier-text mb-4">{product.description}</p>
-          <p className="text-atelier-text mb-2 text-lg">
-            <span className="mr-1 line-through">
-              {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
-            </span>
+          <p className="text-atelier-text">
+            {
+              selectedVariant.compareAtPrice && (
+                <span className="mr-1 line-through">
+                  ${selectedVariant.compareAtPrice}
+                </span>
+              )
+            }
             <span className="font-semibold">
-              {currencyFormatter(product.priceRangeV2.minVariantPrice)}
+              {/* {currencyFormatter(product.priceRangeV2.minVariantPrice)} */}
+              ${selectedVariant.price}
             </span>
           </p>
+          
 
           <form
             id="productForm"
             value-variant-id={product.variants.nodes[0].id}
             value-quantity={1}
-            className="mb-4 flex w-48 flex-col"
+            className="my-4 flex w-48 flex-col w-full"
             onChange={formChange}
           >
             {product.options.map((option, index) =>
@@ -104,7 +111,7 @@ const ProductPage: FC<{
                 <React.Fragment key={index}>
                   <label
                     htmlFor={option.name}
-                    className="mb-2 block"
+                    className="block"
                     key={`label${index}`}
                   >
                     {option.name}:
@@ -112,9 +119,10 @@ const ProductPage: FC<{
                   <select
                     name={option.name}
                     id={option.name}
-                    className="rounded border p-2 "
+                    className="border border-stroke-1 px-3 py-2 bg-white"
                     key={`select${index}`}
                   >
+                    <option value="" disabled selected></option>
                     {option.values.map((value, index) => (
                       <option value={value} key={index}>
                         {value}
@@ -128,6 +136,8 @@ const ProductPage: FC<{
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </PrimaryButton>
           </form>
+
+          <p className="text-atelier-text text-sm font-normal mb-4">{product.description}</p>
         </div>
       </div>
     </div>

@@ -79,3 +79,16 @@ body {
 .u-icon-stroke--white path {
   @apply stroke-white;
 }
+
+
+/* Product Form */
+#productForm select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+
+  background-image: url("../assets/icons/chevron-down.svg");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.25rem;
+}
