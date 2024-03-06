@@ -48,7 +48,11 @@ export default function App({ Component, pageProps }) {
         >
           <Component {...pageProps} />
 
-          {pageProps.previewMode && <PreviewModeBanner />}
+          {pageProps.previewMode && (
+            <PreviewModeBanner
+              canPreviewAccessPage={pageProps.canPreviewAccessPage}
+            />
+          )}
         </CartProvider>
       </ThemeProvider>
     </QueryClientProvider>
