@@ -2,7 +2,12 @@ import { useTheme } from "@/context/ThemeProvider";
 import { getTextColor } from "@/lib/helper/colors";
 import { CSSProperties } from "react";
 
-const AnnouncementBar = ({ announcement, className = "" }) => {
+const AnnouncementBar = ({ 
+  announcement, 
+  announcementBgColor, 
+  announcementTextColor,
+  className = "" 
+}) => {
   const {
     global: { primaryColor },
   } = useTheme();
@@ -11,10 +16,13 @@ const AnnouncementBar = ({ announcement, className = "" }) => {
 
   return (
     <div
-      className="bg-atelier-primary px-3 py-2 text-center"
+      className={`px-3 py-2 text-center ${
+        announcementBgColor ? "bg-atelier-announcement" : "bg-atelier-secondary"
+      }`}
       style={
         {
-          "--atelier-text-color": getTextColor(primaryColor),
+          "--atelier-text-color": announcementTextColor || getTextColor(primaryColor),
+          "--atelier-bg-color": announcementBgColor,
         } as CSSProperties
       }
     >

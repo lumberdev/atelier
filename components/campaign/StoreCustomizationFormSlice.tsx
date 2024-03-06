@@ -1,6 +1,7 @@
 import { Card, Text, TextField, BlockStack } from "@shopify/polaris";
 import { FC } from "react";
 import { Control, Controller, FieldValues } from "react-hook-form";
+import ThemeColorPicker from "@/components/ThemeColorPicker";
 
 const StoreCustomizationFormSlice: FC<{
   control: Control<FieldValues>;
@@ -22,6 +23,34 @@ const StoreCustomizationFormSlice: FC<{
               autoComplete="off"
               disabled={isLoading}
               {...field}
+            />
+          )}
+        />
+
+        <Controller 
+          control={control}
+          name="announcementBgColor"
+          render={({ field: { onChange, name, value } }) => (
+            <ThemeColorPicker 
+              label="Announcement Bar Background Color"
+              helpText="This will override the secondary color property in theme settings"
+              fieldName={name}
+              colorValue={value}
+              onChangeField={onChange}
+            />
+          )}
+        />
+
+        <Controller 
+          control={control}
+          name="announcementTextColor"
+          render={({ field: { onChange, name, value } }) => (
+            <ThemeColorPicker 
+              label="Announcement Bar Text Color"
+              helpText="This will override the text color property in theme settings"
+              fieldName={name}
+              colorValue={value}
+              onChangeField={onChange}
             />
           )}
         />
