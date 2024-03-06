@@ -24,13 +24,6 @@ const config = {
         "3xl": "1920px",
       },
     },
-    fontSize: {
-      "xs": "0.75rem",
-      "sm": "0.875rem",
-      "base": "1rem",
-      "lg": "1.125rem",
-      "5xl": "3rem",
-    },
     extend: {
       fontFamily: {
         "brand-heading": ["var(--font-dmmono)"],
