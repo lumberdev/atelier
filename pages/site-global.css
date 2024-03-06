@@ -79,3 +79,9 @@ body {
 .u-icon-stroke--white path {
   @apply stroke-white;
 }
+
+.c-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+}
