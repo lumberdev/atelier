@@ -10,7 +10,7 @@ const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
 }> = ({ product }) => {
   const { addToCart } = useCart();
-  const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(true);
+  const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(() => product.variants.nodes[0].inventoryQuantity > 0);
 
   const {
     global: { backgroundColor },
@@ -30,6 +30,7 @@ const ProductPage: FC<{
       });
     });
     form.setAttribute("value-variant-id", variant.id);
+    setAddToCartBtnEnabled(variant.inventoryQuantity > 0);
   };
 
   const onSubmit = (e) => {
@@ -123,7 +124,7 @@ const ProductPage: FC<{
                 </React.Fragment>
               ) : null
             )}
-            <PrimaryButton type="submit" onClick={onSubmit}>
+            <PrimaryButton type="submit" onClick={onSubmit} disabled={!addToCartBtnEnabled}>
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </PrimaryButton>
           </form>
