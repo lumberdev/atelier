@@ -41,7 +41,7 @@ const StoreCustomizationFormSlice: FC<{
           )}
         />
 
-        {/* <Controller 
+        <Controller 
           control={control}
           name="announcementTextColor"
           render={({ field: { onChange, name, value } }) => (
@@ -53,7 +53,7 @@ const StoreCustomizationFormSlice: FC<{
               onChangeField={onChange}
             />
           )}
-        /> */}
+        />
 
         <Controller
           control={control}

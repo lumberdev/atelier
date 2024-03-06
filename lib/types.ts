@@ -5,6 +5,7 @@ export interface CampaignInput {
   isActive: boolean;
   announcement?: string;
   announcementBgColor?: string;
+  announcementTextColor?: string;
   pageTitle?: string;
   pageDescription?: string;
   cartTitle?: string;
@@ -170,6 +171,7 @@ export type CampaignQueryFields = {
   isActive: boolean;
   announcement: string;
   announcementBgColor: string;
+  announcementTextColor: string;
   pageTitle: string;
   pageDescription: string;
   cartTitle: string;
@@ -196,6 +198,7 @@ export type CampaignFlatFields = {
   isActive: boolean;
   announcement: string;
   announcementBgColor: string;
+  announcementTextColor: string;
   pageTitle: string;
   pageDescription: string;
   cartTitle: string;

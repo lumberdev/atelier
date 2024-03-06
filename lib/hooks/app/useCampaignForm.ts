@@ -17,6 +17,7 @@ const schema = yup
     // STORE CUSTOMIZATION
     announcement: yup.string().optional(),
     announcementBgColor: yup.string().optional(),
+    announcementTextColor: yup.string().optional(),
     pageTitle: yup.string().optional(),
     pageDescription: yup.string().optional(),
     // CART CUSTOMIZATION
@@ -80,6 +81,7 @@ export const useCampaignForm = ({
       isActive: false,
       announcement: "",
       announcementBgColor: "",
+      announcementTextColor: "",
       pageTitle: "",
       pageDescription: "",
       cartTitle: "",

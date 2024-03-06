@@ -16,6 +16,7 @@ const Header: FC<{
   campaignHandle: string;
   announcement?: string;
   announcementBgColor?: string;
+  announcementTextColor?: string;
   categories?: string[];
   allProducts?: Awaited<
     ReturnType<typeof getProductListing>
@@ -28,6 +29,7 @@ const Header: FC<{
   title,
   announcement,
   announcementBgColor,
+  announcementTextColor,
   categories = [],
   allProducts = [],
   setProducts = () => {},
@@ -65,7 +67,14 @@ const Header: FC<{
       className="sticky left-0 top-0 z-10 lg:mb-4"
       style={{ backgroundColor: primaryColor, color: textColor }}
     >
-      {announcement && <AnnouncementBar announcement={announcement} announcementBgColor={announcementBgColor} />}
+      {
+        announcement && 
+        <AnnouncementBar 
+          announcement={announcement} 
+          announcementBgColor={announcementBgColor} 
+          announcementTextColor={announcementTextColor}
+        />
+      }
 
       <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
         <div
