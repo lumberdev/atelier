@@ -58,9 +58,9 @@ const ProductPage: FC<{
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-8">
       <div className="xs:gap-16 relative grid grid-cols-1 gap-0 md:grid-cols-2">
-        <div className="">
+        <div className="px-8">
           {product.images.nodes.map((image, index) => (
             <img
               src={image.url}
@@ -71,7 +71,7 @@ const ProductPage: FC<{
           ))}
         </div>
         <div
-          className="sticky top-20 h-fit"
+          className="sticky top-40 h-fit px-8"
           style={
             {
               "--atelier-text-color": getTextColor(backgroundColor),

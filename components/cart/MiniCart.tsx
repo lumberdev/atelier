@@ -55,7 +55,7 @@ const MiniCart = () => {
         >
           <header className="flex items-center px-6">
             <Drawer.Close>
-              <CloseIcon class="u-icon-stroke--black" />
+              <CloseIcon className="u-icon-stroke--black" />
             </Drawer.Close>
 
             <h1 className="ml-4 text-lg">{cartTheme.title}</h1>

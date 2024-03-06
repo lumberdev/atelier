@@ -150,6 +150,7 @@ export const useStoreThemeForm = ({
     logoUrl,
     imageFile,
     setImageFile,
+    setLogoUrl,
     onSubmit,
     isLoading,
     merchantThemeSettings,
