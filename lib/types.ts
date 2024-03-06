@@ -223,6 +223,7 @@ export type RequiredStorePageProps = {
   storefrontAccessToken: string;
   themeConfig: Awaited<ReturnType<typeof getThemeConfig>>;
   previewMode: boolean;
+  canPreviewAccessPage?: boolean;
 };
 
 export type ShopifyThemeSettingsConfig = {

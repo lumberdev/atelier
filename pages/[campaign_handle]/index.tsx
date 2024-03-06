@@ -177,6 +177,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       shop: merchant.shop,
       storefrontAccessToken,
       themeConfig,
+      canPreviewAccessPage: !!config.password,
     },
   };
 };

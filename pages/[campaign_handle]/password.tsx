@@ -253,6 +253,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
           params: url.searchParams,
           previewToken: campaign.previewToken,
         }),
+      canPreviewAccessPage: true,
     },
   };
 };

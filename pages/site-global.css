@@ -80,6 +80,11 @@ body {
   @apply stroke-white;
 }
 
+.c-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+}
 
 /* Product Form */
 #productForm select {

@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import Container from "./general/Container";
 import { useRouter } from "next/router";
+import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 
-const PreviewModeBanner = () => {
+const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
+  canPreviewAccessPage = false,
+}) => {
   const router = useRouter();
 
   const closePreview = () => {
@@ -18,12 +21,36 @@ const PreviewModeBanner = () => {
   return (
     <aside className="fixed bottom-0 left-0 right-0 bg-brand-3 shadow-md">
       <Container className="flex flex-col px-4 py-4 md:flex-row md:items-center md:justify-between md:px-8 md:py-8">
-        <p className="mb-2 font-semibold md:mb-0">
-          You're previewing this campaign
-        </p>
+        <div className="mb-4 flex items-center justify-center font-semibold md:mb-0 md:justify-start">
+          {canPreviewAccessPage
+            ? `You're previewing:`
+            : `You're previewing the campaign page`}
+
+          {canPreviewAccessPage && (
+            <div className="relative">
+              <select
+                defaultValue={
+                  router.asPath.includes("/password") ? "password" : "campaign"
+                }
+                onChange={({ target: { value } }) => {
+                  if (value === "password")
+                    return router.push(router.asPath + "/password");
+
+                  router.push(router.asPath.split("/password")[0]);
+                }}
+                className="c-select ml-2 inline border-2 border-black/40 bg-transparent py-1 pl-2 pr-8 text-left align-middle"
+              >
+                <option value="campaign">Campaign Page</option>
+                <option value="password">Password Page</option>
+              </select>
+
+              <ChevronDownIcon className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />
+            </div>
+          )}
+        </div>
 
         <button
-          className="w-max bg-black px-4 py-2 font-bold text-white"
+          className="w-full bg-black px-4 py-2 font-bold text-white md:w-max"
           onClick={closePreview}
         >
           Close Preview
