@@ -18,6 +18,8 @@ interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   listing: Awaited<ReturnType<typeof getProductListing>>;
   announcement?: string;
+  announcementBgColor?: string;
+  announcementTextColor?: string;
   campaignTitle?: string;
   campaignDescription?: string;
 }
@@ -26,6 +28,8 @@ const CampaignPage: FC<PageProps> = ({
   collection,
   listing,
   announcement,
+  announcementBgColor,
+  announcementTextColor,
   campaignTitle,
   campaignDescription,
 }) => {
@@ -59,6 +63,8 @@ const CampaignPage: FC<PageProps> = ({
         title={collection.title}
         campaignHandle={collection.handle}
         announcement={announcement}
+        announcementBgColor={announcementBgColor}
+        announcementTextColor={announcementTextColor}
         allProducts={listing.products.nodes}
         setProducts={setProdList}
         categories={prodCategories}
@@ -164,6 +170,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       listing,
       previewToken: campaign.previewToken,
       announcement: campaign.announcement,
+      announcementBgColor: campaign.announcementBgColor,
+      announcementTextColor: campaign.announcementTextColor,
       campaignTitle: campaign.pageTitle,
       campaignDescription: campaign.pageDescription,
       shop: merchant.shop,

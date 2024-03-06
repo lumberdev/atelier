@@ -40,7 +40,7 @@ const ThemeColorPicker = ({
         <div
             onClick={togglePopoverActive}
             className={`inline-block h-9 w-9 cursor-pointer rounded-md ${classNames({
-                "border border-neutral-400 border-solid": colorValue.toLowerCase().includes("#fff")
+                "border border-neutral-400 border-solid": colorValue?.toLowerCase().includes("#fff")
             })}`}
             style={{
                 background: `${colorValue}`,
