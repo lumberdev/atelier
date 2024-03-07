@@ -83,7 +83,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
           <div className="relative">
             <img
               src={backgroundImage}
-              className="object-cover object-center"
+              className="object-cover object-center w-full h-full"
               alt=""
             />
           </div>
