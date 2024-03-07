@@ -34,11 +34,13 @@ const config = {
         "brand-1": "#2F2F2E",
         "brand-2": "#CDCDC3",
         "brand-3": "#F3F0EA",
+        "stroke-1": "#7D7D7D",
         "atelier-primary": "var(--atelier-primary-color)",
         "atelier-secondary": "var(--atelier-secondary-color)",
         "atelier-background": "var(--atelier-background-color)",
         "atelier-text": "var(--atelier-text-color)",
         "atelier-darkblue": "#15206B",
+        "dropdown-empty": "#121212"
       },
       keyframes: {
         "accordion-down": {

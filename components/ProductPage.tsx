@@ -2,15 +2,18 @@ import React, { useState, FC, CSSProperties } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { getTextColor } from "@/lib/helper/colors";
 import PrimaryButton from "@/components/PrimaryButton";
+import PDPDropdown from "@/components/PDPDropdown";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
 import { useTheme } from "@/context/ThemeProvider";
+import { checkTargetForNewValues } from "framer-motion";
 
 const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
 }> = ({ product }) => {
   const { addToCart } = useCart();
   const [addToCartBtnEnabled, setAddToCartBtnEnabled] = useState(() => product.variants.nodes[0].inventoryQuantity > 0);
+  const [selectedVariant, setSelectedVariant] = useState(() => product.variants.nodes[0]);
 
   const {
     global: { backgroundColor },
@@ -31,6 +34,7 @@ const ProductPage: FC<{
     });
     form.setAttribute("value-variant-id", variant.id);
     setAddToCartBtnEnabled(variant.inventoryQuantity > 0);
+    setSelectedVariant(variant);
   };
 
   const onSubmit = (e) => {
@@ -58,6 +62,8 @@ const ProductPage: FC<{
     addToCart({ variantId: variant.id, quantity: 1 });
   };
 
+
+
   return (
     <div className="container mx-auto p-8">
       <div className="xs:gap-16 relative grid grid-cols-1 gap-0 md:grid-cols-2">
@@ -72,55 +78,49 @@ const ProductPage: FC<{
           ))}
         </div>
         <div
-          className="sticky top-40 h-fit px-8"
+          className="sticky top-40 h-fit w-96 px-8 font-assistant"
           style={
             {
               "--atelier-text-color": getTextColor(backgroundColor),
             } as CSSProperties
           }
         >
-          <h1 className="text-atelier-text mb-4 text-2xl font-semibold">
+          <h1 className="text-atelier-text text-xl mb-1 font-normal">
             {product.title}
           </h1>
-          <p className="text-l text-atelier-text mb-4">{product.description}</p>
-          <p className="text-atelier-text mb-2 text-lg">
-            <span className="mr-1 line-through">
-              {currencyFormatter(product.priceRangeV2.maxVariantPrice)}
-            </span>
+          <p className="text-atelier-text">
+            {
+              selectedVariant.compareAtPrice && (
+                <span className="mr-1 line-through">
+                  ${selectedVariant.compareAtPrice}
+                </span>
+              )
+            }
             <span className="font-semibold">
-              {currencyFormatter(product.priceRangeV2.minVariantPrice)}
+              {/* {currencyFormatter(product.priceRangeV2.minVariantPrice)} */}
+              ${selectedVariant.price}
             </span>
           </p>
+          
 
           <form
             id="productForm"
             value-variant-id={product.variants.nodes[0].id}
             value-quantity={1}
-            className="mb-4 flex w-48 flex-col"
+            className="my-4 flex w-48 flex-col w-full"
             onChange={formChange}
           >
             {product.options.map((option, index) =>
               option.name !== "Title" ? (
                 <React.Fragment key={index}>
-                  <label
+                  {/* <label
                     htmlFor={option.name}
-                    className="mb-2 block"
+                    className="block"
                     key={`label${index}`}
                   >
                     {option.name}:
-                  </label>
-                  <select
-                    name={option.name}
-                    id={option.name}
-                    className="rounded border p-2 "
-                    key={`select${index}`}
-                  >
-                    {option.values.map((value, index) => (
-                      <option value={value} key={index}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
+                  </label> */}
+                  <PDPDropdown key={`select${index}`} option={option} />
                 </React.Fragment>
               ) : null
             )}
@@ -128,6 +128,8 @@ const ProductPage: FC<{
               {addToCartBtnEnabled ? "Add to Cart" : "Out of Stock"}
             </PrimaryButton>
           </form>
+
+          <p className="text-atelier-text text-sm font-normal mb-4">{product.description}</p>
         </div>
       </div>
     </div>
