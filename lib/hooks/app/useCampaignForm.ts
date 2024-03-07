@@ -12,30 +12,30 @@ import { supabaseStorage } from "@/utils/supabase";
 const schema = yup
   .object({
     // CAMPAIGN DETAILS
-    id: yup.string().optional(),
+    id: yup.string().nullable(),
     isActive: yup.boolean().default(false),
     // STORE CUSTOMIZATION
-    announcement: yup.string().optional(),
-    announcementBgColor: yup.string().optional(),
-    announcementTextColor: yup.string().optional(),
-    pageTitle: yup.string().optional(),
-    pageDescription: yup.string().optional(),
+    announcement: yup.string().nullable(),
+    announcementBgColor: yup.string().nullable(),
+    announcementTextColor: yup.string().nullable(),
+    pageTitle: yup.string().nullable(),
+    pageDescription: yup.string().nullable(),
     // CART CUSTOMIZATION
-    cartTitle: yup.string().optional(),
-    cartDescription: yup.string().optional(),
-    cartItemsImageStyle: yup.string().optional().oneOf(["round", "square"]),
-    cartBackgroundColor: yup.string().optional(),
-    cartTextColor: yup.string().optional(),
+    cartTitle: yup.string().nullable(),
+    cartDescription: yup.string().nullable(),
+    cartItemsImageStyle: yup.string().nullable().oneOf(["round", "square"]),
+    cartBackgroundColor: yup.string().nullable(),
+    cartTextColor: yup.string().nullable(),
     // ACCESS CONTROL
-    acpLayout: yup.string().optional().oneOf(["DEFAULT", "STACKED"]),
-    acpPassword: yup.string().optional(),
-    acpHeadline: yup.string().optional(),
-    acpBody: yup.string().optional(),
-    acpPasswordPlaceholder: yup.string().optional(),
-    acpCTAText: yup.string().optional(),
-    acpCTAUrl: yup.string().optional(),
-    acpBackgroundColor: yup.string().optional(),
-    acpBackgroundImage: yup.string().optional(),
+    acpLayout: yup.string().nullable().oneOf(["DEFAULT", "STACKED"]),
+    acpPassword: yup.string().nullable(),
+    acpHeadline: yup.string().nullable(),
+    acpBody: yup.string().nullable(),
+    acpPasswordPlaceholder: yup.string().nullable(),
+    acpCTAText: yup.string().nullable(),
+    acpCTAUrl: yup.string().nullable(),
+    acpBackgroundColor: yup.string().nullable(),
+    acpBackgroundImage: yup.string().nullable(),
   })
   .required();
 
