@@ -16,16 +16,16 @@ const schema = yup
     isActive: yup.boolean().default(false),
     // STORE CUSTOMIZATION
     announcement: yup.string().optional(),
-    announcementBgColor: yup.string().optional(),
-    announcementTextColor: yup.string().optional(),
+    announcementBgColor: yup.string().nullable(),
+    announcementTextColor: yup.string().nullable(),
     pageTitle: yup.string().optional(),
     pageDescription: yup.string().optional(),
     // CART CUSTOMIZATION
     cartTitle: yup.string().optional(),
     cartDescription: yup.string().optional(),
     cartItemsImageStyle: yup.string().optional().oneOf(["round", "square"]),
-    cartBackgroundColor: yup.string().optional(),
-    cartTextColor: yup.string().optional(),
+    cartBackgroundColor: yup.string().nullable(),
+    cartTextColor: yup.string().nullable(),
     // ACCESS CONTROL
     acpLayout: yup.string().optional().oneOf(["DEFAULT", "STACKED"]),
     acpPassword: yup.string().optional(),
