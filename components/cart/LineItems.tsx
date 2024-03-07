@@ -25,7 +25,10 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
         className={classNames(
           "relative mr-4 aspect-square h-20 w-20 overflow-hidden bg-black/20",
           {
-            "rounded-atelier": cartTheme.lineItemImageStyle === "round",
+            "rounded-atelier": cartTheme.lineItemImageStyle !== "round",
+          },
+          {
+            "rounded-full": cartTheme.lineItemImageStyle === "round",
           }
         )}
       >
@@ -85,7 +88,7 @@ const ItemCard: FC<{ item: StoreCart["lines"]["nodes"][0] }> = ({ item }) => {
 
           <div
             className={classNames(
-              "rounded-atelier flex items-center bg-black text-white",
+              "flex items-center rounded-atelier bg-black text-white",
               {
                 "opacity-80": isLoading,
               }
