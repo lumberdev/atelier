@@ -40,6 +40,7 @@ const config = {
         "atelier-background": "var(--atelier-background-color)",
         "atelier-text": "var(--atelier-text-color)",
         "atelier-darkblue": "#15206B",
+        "dropdown-empty": "#121212"
       },
       keyframes: {
         "accordion-down": {

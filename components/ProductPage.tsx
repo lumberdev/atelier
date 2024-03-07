@@ -2,6 +2,7 @@ import React, { useState, FC, CSSProperties } from "react";
 import { currencyFormatter } from "@/lib/helper/currency";
 import { getTextColor } from "@/lib/helper/colors";
 import PrimaryButton from "@/components/PrimaryButton";
+import PDPDropdown from "@/components/PDPDropdown";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
 import { useTheme } from "@/context/ThemeProvider";
@@ -61,9 +62,7 @@ const ProductPage: FC<{
     addToCart({ variantId: variant.id, quantity: 1 });
   };
 
-  const changeValue = (e) => {
-    // if
-  }
+
 
   return (
     <div className="container mx-auto p-8">
@@ -114,27 +113,14 @@ const ProductPage: FC<{
             {product.options.map((option, index) =>
               option.name !== "Title" ? (
                 <React.Fragment key={index}>
-                  <label
+                  {/* <label
                     htmlFor={option.name}
                     className="block"
                     key={`label${index}`}
                   >
                     {option.name}:
-                  </label>
-                  <select
-                    name={option.name}
-                    id={option.name}
-                    className="border border-stroke-1 px-3 py-2 bg-white"
-                    key={`select${index}`}
-                    onChange={changeValue}
-                  >
-                    <option value="" disabled selected>{option.name}</option>
-                    {option.values.map((value, index) => (
-                      <option value={value} key={index}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
+                  </label> */}
+                  <PDPDropdown key={`select${index}`} option={option} />
                 </React.Fragment>
               ) : null
             )}
