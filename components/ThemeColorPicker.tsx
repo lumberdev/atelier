@@ -36,15 +36,25 @@ const ThemeColorPicker = ({
         []
     );
 
+    const activatorBorder = () => {
+        const colorRGB = hexToRgb(colorValue);
+        const colorValueTotal = Object.values(colorRGB).reduce((accum, current) => accum + current, 0);
+        return colorValueTotal >= 720;
+    }
+
+    const activatorBackground = colorValue ? { background: `${colorValue}` } : {
+        backgroundImage: `linear-gradient(45deg,var(--p-color-text-inverse) 25%,#0000 25%,#0000 75%,var(--p-color-text-inverse) 75%,var(--p-color-text-inverse) 100%),linear-gradient(45deg,var(--p-color-text-inverse) 25%,#fff 25%,#fff 75%,var(--p-color-text-inverse) 75%,var(--p-color-text-inverse) 100%)`,
+        backgroundPosition: "0 0,.375rem .375rem",
+        backgroundSize: ".75rem .75rem",
+    }
+
     const activator = (
         <div
             onClick={togglePopoverActive}
             className={`inline-block h-9 w-9 cursor-pointer rounded-md ${classNames({
-                "border border-neutral-400 border-solid": colorValue?.toLowerCase().includes("#fff")
+                "border border-neutral-400 border-solid": activatorBorder()
             })}`}
-            style={{
-                background: `${colorValue}`,
-            }}
+            style={activatorBackground}
         ></div>
     );
 
