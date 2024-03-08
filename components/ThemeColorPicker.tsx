@@ -37,9 +37,12 @@ const ThemeColorPicker = ({
     );
 
     const activatorBorder = () => {
-        const colorRGB = hexToRgb(colorValue);
-        const colorValueTotal = Object.values(colorRGB).reduce((accum, current) => accum + current, 0);
-        return colorValueTotal >= 720;
+        if(colorValue) {
+            const colorRGB = hexToRgb(colorValue);
+            const colorValueTotal = Object.values(colorRGB).reduce((accum, current) => accum + current, 0);
+            return colorValueTotal >= 720;
+        }
+        return false;
     }
 
     const activatorBackground = colorValue ? { background: `${colorValue}` } : {
