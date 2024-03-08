@@ -29,7 +29,8 @@ const ProductDetailPage: FC<PageProps> = ({
   product,
   announcement,
   announcementBgColor,
-  announcementTextColor
+  announcementTextColor,
+  campaignTitle,
 }) => {
   const [prodList, setProdList] = useState(listing.products.nodes || []);
   const [prodCategories, setProdCategories] = useState<string[]>([]);
@@ -47,7 +48,7 @@ const ProductDetailPage: FC<PageProps> = ({
   return (
     <div className="min-h-screen">
       <Header
-        title={collection.handle} // this is just for logo alt text
+        title={campaignTitle}
         campaignHandle={collection.handle}
         announcement={announcement}
         announcementBgColor={announcementBgColor}
@@ -163,6 +164,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       announcement: campaign.announcement,
       announcementBgColor: campaign.announcementBgColor,
       announcementTextColor: campaign.announcementTextColor,
+      campaignTitle: campaign.pageTitle,
       shop: merchant.shop,
       storefrontAccessToken,
       themeConfig,

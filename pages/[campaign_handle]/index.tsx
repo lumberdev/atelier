@@ -60,7 +60,7 @@ const CampaignPage: FC<PageProps> = ({
   return (
     <div className="min-h-screen">
       <Header
-        title={collection.title}
+        title={campaignTitle}
         campaignHandle={collection.handle}
         announcement={announcement}
         announcementBgColor={announcementBgColor}
