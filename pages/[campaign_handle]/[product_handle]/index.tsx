@@ -1,7 +1,8 @@
 import ProductPage from "@/components/ProductPage";
 import { GetServerSideProps } from "next";
 import getCampaignCollection from "@/lib/campaign/getCampaignCollection";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import getProductListing from "@/lib/campaign/getProductListing";
 import getCampaignForRequest from "@/lib/campaign/getCampaignForRequest";
 import verifyAccessPermission from "@/lib/campaign/verifyAccessPermission";
 import getProductDetails from "@/lib/campaign/getProductDetails";
@@ -12,6 +13,7 @@ import clientProvider from "@/utils/clientProvider";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
 
 interface PageProps extends RequiredStorePageProps {
+  listing: Awaited<ReturnType<typeof getProductListing>>;
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
   product: Awaited<ReturnType<typeof getProductDetails>>;
   announcement?: string;
@@ -22,6 +24,7 @@ interface PageProps extends RequiredStorePageProps {
 }
 
 const ProductDetailPage: FC<PageProps> = ({
+  listing,
   collection,
   product,
   announcement,
@@ -29,6 +32,19 @@ const ProductDetailPage: FC<PageProps> = ({
   announcementTextColor,
   campaignTitle,
 }) => {
+  const [prodList, setProdList] = useState(listing.products.nodes || []);
+  const [prodCategories, setProdCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!prodCategories || prodCategories.length <= 0) {
+      const allTags = prodList.reduce((tags, currentProd) => {
+        return tags.concat([
+          ...currentProd.tags.filter((prodTag) => prodTag.includes("atelier:")),
+        ]);
+      }, []);
+      setProdCategories([...Array.from(new Set(allTags))]);
+    }
+  }, [prodList]);
   return (
     <div className="min-h-screen">
       <Header
@@ -37,6 +53,9 @@ const ProductDetailPage: FC<PageProps> = ({
         announcement={announcement}
         announcementBgColor={announcementBgColor}
         announcementTextColor={announcementTextColor}
+        allProducts={listing.products.nodes}
+        setProducts={setProdList}
+        categories={prodCategories}
       />
 
       <ProductPage product={product} />
@@ -108,6 +127,13 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     publicationId: merchant.publicationId,
   });
 
+  const listingPromise = getProductListing({
+    client: graphqlClient,
+    handle: handle as string,
+    publicationId: merchant.publicationId,
+    pagination: {},
+  });
+
   // 5. Get theme configuration
   const themePromise = getThemeConfig({
     shop: merchant.shop,
@@ -120,9 +146,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     client: graphqlClient,
   });
 
-  const [collection, product, storefrontAccessToken, themeConfig] =
+  const [collection, listing, product, storefrontAccessToken, themeConfig] =
     await Promise.all([
       collectionPromise,
+      listingPromise,
       productPromise,
       storefrontAccessTokenPromise,
       themePromise,
@@ -132,6 +159,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     props: {
       previewMode: authorization.previewMode,
       collection,
+      listing,
       product,
       announcement: campaign.announcement,
       announcementBgColor: campaign.announcementBgColor,

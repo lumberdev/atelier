@@ -75,8 +75,9 @@ const CartCustomizationFormSlice: FC<{
             />
           )}
         />
-
-        <Controller
+        {/* Commenting this out for now */}
+        {/* TODO: enable this once the description component is added to cart */}
+        {/* <Controller
           control={control}
           name="cartDescription"
           render={({ field }) => (
@@ -88,7 +89,7 @@ const CartCustomizationFormSlice: FC<{
               {...field}
             />
           )}
-        />
+        /> */}
       </BlockStack>
     </Card>
   );
