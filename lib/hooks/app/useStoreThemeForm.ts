@@ -36,6 +36,7 @@ export const useStoreThemeForm = ({
   } = useStoreSettings();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [logoPath, setLogoPath] = useState<string>("");
   const [logoUrl, setLogoUrl] = useState<string>(() => {
     if (!logo) return "";
     const image = supabaseStorage.getPublicUrl(logo);
@@ -92,6 +93,7 @@ export const useStoreThemeForm = ({
 
       if (theme.logo) {
         const url = supabaseStorage.getPublicUrl(theme.logo);
+        setLogoPath(theme.logo);
         setLogoUrl(url.data.publicUrl ?? "");
       }
     },
@@ -142,7 +144,11 @@ export const useStoreThemeForm = ({
     }
 
     upsertTheme({
-      data: { ...fields, borderRadius: Number(fields.borderRadius) || 0 },
+      data: { 
+        ...fields, 
+        logo: logoUrl ? logoPath : "", 
+        borderRadius: Number(fields.borderRadius) || 0 
+      },
     });
   });
 

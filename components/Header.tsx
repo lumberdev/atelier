@@ -85,7 +85,7 @@ const Header: FC<{
           })}
         />
 
-        {!!logo && (
+
           <LogoTitle
             title={title}
             handle={campaignHandle}
@@ -96,7 +96,7 @@ const Header: FC<{
             })}`}
             logo={logo}
           />
-        )}
+
 
         <div
           className={`header-menu col-start-1 row-start-1 items-center justify-end

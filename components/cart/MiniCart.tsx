@@ -51,6 +51,7 @@ const MiniCart = () => {
           className="fixed bottom-0 right-0 top-0 z-20 flex h-screen w-full flex-col items-stretch pt-8 md:max-w-sm"
           style={{
             backgroundColor: cartTheme.backgroundColor || global.secondaryColor,
+            color: cartTheme.textColor || global.primaryColor,
           }}
         >
           <header className="flex items-center px-6">
