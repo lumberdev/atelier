@@ -26,12 +26,13 @@ const ProductDetailPage: FC<PageProps> = ({
   product,
   announcement,
   announcementBgColor,
-  announcementTextColor
+  announcementTextColor,
+  campaignTitle,
 }) => {
   return (
     <div className="min-h-screen">
       <Header
-        title={product.title}
+        title={campaignTitle}
         campaignHandle={collection.handle}
         announcement={announcement}
         announcementBgColor={announcementBgColor}
@@ -135,6 +136,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
       announcement: campaign.announcement,
       announcementBgColor: campaign.announcementBgColor,
       announcementTextColor: campaign.announcementTextColor,
+      campaignTitle: campaign.pageTitle,
       shop: merchant.shop,
       storefrontAccessToken,
       themeConfig,
