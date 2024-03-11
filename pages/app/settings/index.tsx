@@ -296,7 +296,7 @@ const SettingsPage = () => {
                     render={({ field: { onChange, name, value } }) => (
                       <>
                         <ThemeColorPicker 
-                          label="Background Color"
+                          label="Background and Navigation Color"
                           helpText="Enter a valid hex/rgb code"
                           fieldName={name}
                           colorValue={value}
@@ -306,7 +306,7 @@ const SettingsPage = () => {
                         <BlockStack gap="100">
                           <Text as="p"><br/></Text>
                           <ThemeColorDropdown 
-                            label="Background and Navigation Color"
+                            label="Background Color"
                             optionList={merchantThemeSettings}
                             fieldName={name}
                             onChangeOption={onChange}
