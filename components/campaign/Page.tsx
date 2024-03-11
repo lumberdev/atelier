@@ -188,7 +188,8 @@ const CampaignPage: FC<{
                       </BlockStack>
                     </Card>
 
-                    <Card>
+                    {/** REMOVED FOR EARLY PRODUCTION */}
+                    {/* <Card>
                       <BlockStack gap="400">
                         <Text as="h2" variant="headingMd">
                           Image
@@ -206,7 +207,7 @@ const CampaignPage: FC<{
                           </Text>
                         )}
                       </BlockStack>
-                    </Card>
+                    </Card> */}
                   </InlineGrid>
 
                   <ProductListing

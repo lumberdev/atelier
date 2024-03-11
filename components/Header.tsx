@@ -35,7 +35,7 @@ const Header: FC<{
   setProducts = () => {},
 }) => {
   const {
-    global: { primaryColor, logoPosition, logo },
+    global: { backgroundColor, logoPosition, logo },
   } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
@@ -43,7 +43,7 @@ const Header: FC<{
   const baseCampaignPath =
     pathname === "/" ? "/" : "/" + pathname.split("/")[1];
 
-  const textColor = getTextColor(primaryColor);
+  const textColor = getTextColor(backgroundColor);
 
   function filterProducts(
     event: MouseEvent<HTMLElement>,
@@ -67,7 +67,7 @@ const Header: FC<{
   return (
     <div
       className="sticky left-0 top-0 z-10 lg:mb-4"
-      style={{ backgroundColor: primaryColor, color: textColor }}
+      style={{ color: textColor }}
     >
       {announcement && (
         <AnnouncementBar

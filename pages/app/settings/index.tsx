@@ -296,7 +296,7 @@ const SettingsPage = () => {
                     render={({ field: { onChange, name, value } }) => (
                       <>
                         <ThemeColorPicker 
-                          label="Background Color"
+                          label="Background and Navigation Color"
                           helpText="Enter a valid hex/rgb code"
                           fieldName={name}
                           colorValue={value}
@@ -326,13 +326,14 @@ const SettingsPage = () => {
                         type="number"
                         label="Border Radius"
                         autoComplete="false"
+                        helpText="The border radius adjusts the corner curvature of all buttons and the in-cart image"
                         {...field}
                       />
                     )}
                   />
                 </InlineGrid>
 
-                <InlineGrid columns={2} gap="400">
+                {(imageFile || logoUrl) && (<InlineGrid columns={2} gap="400">
                   {" "}
                   <Controller
                     control={control}
@@ -351,7 +352,7 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </InlineGrid>
+                </InlineGrid>)}
 
                 <InlineGrid alignItems="center">
                   <Button variant="primary" submit loading={isLoading}>
