@@ -306,7 +306,7 @@ const SettingsPage = () => {
                         <BlockStack gap="100">
                           <Text as="p"><br/></Text>
                           <ThemeColorDropdown 
-                            label="Background Color"
+                            label="Background and Navigation Color"
                             optionList={merchantThemeSettings}
                             fieldName={name}
                             onChangeOption={onChange}
@@ -326,13 +326,14 @@ const SettingsPage = () => {
                         type="number"
                         label="Border Radius"
                         autoComplete="false"
+                        helpText="The border radius adjusts the corner curvature of all buttons and the in-cart image"
                         {...field}
                       />
                     )}
                   />
                 </InlineGrid>
 
-                <InlineGrid columns={2} gap="400">
+                {(imageFile || logoUrl) && (<InlineGrid columns={2} gap="400">
                   {" "}
                   <Controller
                     control={control}
@@ -351,7 +352,7 @@ const SettingsPage = () => {
                       />
                     )}
                   />
-                </InlineGrid>
+                </InlineGrid>)}
 
                 <InlineGrid alignItems="center">
                   <Button variant="primary" submit loading={isLoading}>
