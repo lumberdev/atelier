@@ -7,6 +7,8 @@ const handler = async (req, res) => {
   const { body } = req;
   const shop = req.body.shop_domain;
   console.log("gdpr/customers_redact", body, shop);
+
+  return res.status(200).send(`customer redact completed on ${shop}`);
 };
 
 export default withMiddleware("verifyHmac")(handler);
