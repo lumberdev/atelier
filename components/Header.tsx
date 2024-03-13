@@ -67,7 +67,7 @@ const Header: FC<{
   return (
     <div
       className="sticky left-0 top-0 z-10 lg:mb-4"
-      style={{ color: textColor }}
+      style={{ color: textColor, backgroundColor }}
     >
       {announcement && (
         <AnnouncementBar
