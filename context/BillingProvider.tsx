@@ -100,6 +100,7 @@ const BillingProvider: FC<{ children: ReactNode }> = ({ children }) => {
       )
         return;
 
+      router.replace("/app/onboarding");
       setShowCancelActionModal(false);
     },
   });
