@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import isShopAvailable from "@/utils/middleware/isShopAvailable";
 import {
   Badge,
@@ -14,6 +15,7 @@ import {
   BlockStack,
 } from "@shopify/polaris";
 import { useRouter } from "next/router";
+import { useBilling } from "@/context/BillingProvider";
 import usePublication from "@/lib/hooks/app/usePublication";
 import CampaignListing from "@/components/campaign/List";
 import { useStoreSettings } from "@/lib/hooks/app/useStoreSettings";
@@ -30,6 +32,7 @@ const AppHomePage = () => {
     settings: { shop: domain, domain: identifier },
   } = useStoreSettings();
   const { id: publicationId, listing, isLoading } = usePublication();
+  const { subscription, subsLoading } = useBilling();
 
   const availableCollectionCount = listing.length;
   const unassignedCollections = listing.filter((item) => !item.isCampaign);
@@ -44,6 +47,10 @@ const AppHomePage = () => {
     (acc, item) => (item.isActive ? acc + 1 : acc),
     0
   );
+
+  useEffect(() => {
+    if(!subsLoading && !subscription) router.replace("/app/onboarding");
+  }, [subsLoading, subscription])
 
   if (isLoading)
     return (
