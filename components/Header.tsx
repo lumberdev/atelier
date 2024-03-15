@@ -131,7 +131,7 @@ const Header: FC<{
               </a>
             </li>
             {categories.map((category) => (
-              <li>
+              <li key={category}>
                 <a
                   className="cursor-pointer"
                   onClick={(event) => filterProducts(event, category)}
