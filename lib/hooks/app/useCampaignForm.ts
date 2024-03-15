@@ -69,7 +69,7 @@ export const useCampaignForm = ({
     const image = supabaseStorage.getPublicUrl(
       initialValues.acpBackgroundImage
     );
-    return image?.data.publicUrl ?? "";
+    return image?.data.publicUrl ? `${image?.data.publicUrl}?version=${Date.now()}` : "";
   });
   const [imageFile, setImageFile] = useState<File>();
 
@@ -151,7 +151,7 @@ export const useCampaignForm = ({
       const storageResponse = await supabaseStorage.upload(
         `${shopId}/${fileName}.${fileExt}`,
         imageFile,
-        { upsert: true }
+        { upsert: true, cacheControl: '60' }
       );
       const image = storageResponse.data?.path ?? "";
 
