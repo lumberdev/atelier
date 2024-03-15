@@ -72,7 +72,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
 
     return {
       "--atelier-bg-color": finalBgColor,
-      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}")`
+      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}?version=${Date.now()}")`
     }
   }
 
@@ -82,7 +82,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         {backgroundImage && (
           <div className="relative">
             <img
-              src={backgroundImage}
+              src={`${backgroundImage}?version=${Date.now()}`}
               className="object-cover object-center w-full h-full"
               alt=""
             />
@@ -94,7 +94,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         >
           {logo && (
             <div className="relative mb-8">
-              <img src={logo} />
+              <img src={`${logo}?version=${Date.now()}`} />
             </div>
           )}
 
@@ -142,7 +142,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
       <div className="relative flex w-11/12 max-w-xl flex-col items-center px-4 py-12 font-assistant text-atelier-darkblue text-center md:justify-center md:p-8">
         {logo && (
           <div className="relative mb-8">
-            <img src={logo} />
+            <img src={`${logo}?version=${Date.now()}`} />
           </div>
         )}
 
