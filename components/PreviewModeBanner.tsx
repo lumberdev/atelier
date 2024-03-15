@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import Container from "./general/Container";
 import { useRouter } from "next/router";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
@@ -7,6 +7,7 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
   canPreviewAccessPage = false,
 }) => {
   const router = useRouter();
+  const [isPasswordPage, setIsPasswordPage] = useState(false);
 
   const closePreview = () => {
     document.cookie = "preview_token=;path=/;max-age=-1";
@@ -17,6 +18,10 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
     const [pathname] = router.asPath.split("?");
     router.replace(pathname, undefined, { shallow: true });
   }, []);
+
+  useEffect(() => {
+    setIsPasswordPage(router.asPath.includes("/password"));
+  }, [router.pathname]);
 
   return (
     <aside className="fixed bottom-0 left-0 right-0 bg-brand-3 shadow-md">
@@ -29,12 +34,13 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
           {canPreviewAccessPage && (
             <div className="relative">
               <select
-                defaultValue={
-                  router.asPath.includes("/password") ? "password" : "campaign"
-                }
+                value={isPasswordPage ? "password" : "campaign"}
+                defaultValue={isPasswordPage ? "password" : "campaign"}
                 onChange={({ target: { value } }) => {
                   if (value === "password")
-                    return router.push(router.asPath + "/password");
+                    return router.push(
+                      "/" + router.asPath.split("/")[1] + "/password"
+                    );
 
                   router.push(router.asPath.split("/password")[0]);
                 }}
