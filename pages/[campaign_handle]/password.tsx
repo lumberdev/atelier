@@ -94,7 +94,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         >
           {logo && (
             <div className="relative mb-8">
-              <img src={`${logo}?version=${Date.now()}`} />
+              <img src={logo} />
             </div>
           )}
 
@@ -142,7 +142,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
       <div className="relative flex w-11/12 max-w-xl flex-col items-center px-4 py-12 font-assistant text-atelier-darkblue text-center md:justify-center md:p-8">
         {logo && (
           <div className="relative mb-8">
-            <img src={`${logo}?version=${Date.now()}`} />
+            <img src={logo} />
           </div>
         )}
 

@@ -31,6 +31,7 @@ export const useStoreMetadataForm = ({
   } = useStoreSettings();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [faviconPath, setFaviconPath] = useState<string>("");
   const [faviconUrl, setFaviconUrl] = useState<string>(() => {
     if (!favicon) return "";
     const image = supabaseStorage.getPublicUrl(favicon);
@@ -105,7 +106,8 @@ export const useStoreMetadataForm = ({
 
       if (theme.favicon) {
         const url = supabaseStorage.getPublicUrl(theme.favicon);
-        setFaviconUrl(url.data.publicUrl ?? "");
+        setFaviconPath(theme.favicon);
+        setFaviconUrl(url.data.publicUrl ? `${url.data.publicUrl}?version=${Date.now()}` : "");
       }
     },
   });
@@ -154,12 +156,17 @@ export const useStoreMetadataForm = ({
     }
 
     upsertTheme({
-      data: { ...fields, borderRadius: Number(fields.borderRadius) || 0, },
+      data: { 
+        ...fields, 
+        favicon: faviconUrl ? faviconPath : "", 
+        borderRadius: Number(fields.borderRadius) || 0, 
+      },
     });
   });
 
   return {
     faviconUrl,
+    setFaviconUrl,
     imageFile,
     setImageFile,
     onSubmit,

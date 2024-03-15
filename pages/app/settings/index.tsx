@@ -50,6 +50,7 @@ const SettingsPage = () => {
 
   const {
     faviconUrl,
+    setFaviconUrl,
     imageFile: faviconImgFile,
     setImageFile: setFaviconImgFile,
     onSubmit: onSubmitMetadata,
@@ -57,6 +58,11 @@ const SettingsPage = () => {
   } = useStoreMetadataForm({
     onUpsert: () => triggerToast("Store metadata updated"),
   })
+
+  const removeFavicon = () => {
+    setFaviconImgFile(null);
+    setFaviconUrl("");
+  }
 
   const removeImage = () => {
     setImageFile(null);
@@ -143,11 +149,11 @@ const SettingsPage = () => {
                   <Text variant="headingSm" as="h3">
                     Favicon
                   </Text>
-                  {faviconImgFile && (
+                  {(faviconImgFile || faviconUrl) && (
                     <Button 
                       tone="critical"
                       variant="plain"
-                      onClick={() => setFaviconImgFile(null)}
+                      onClick={() => removeFavicon()}
                     >Remove</Button>
                   )}
                 </InlineStack>
@@ -172,7 +178,7 @@ const SettingsPage = () => {
                     </InlineStack>
                   )}
 
-                  {!faviconImgFile && <DropZone.FileUpload />}
+                  {!faviconImgFile && !faviconUrl && <DropZone.FileUpload />}
                 </DropZone>
                 <Text variant="bodySm" as="span" tone="subdued">Default favicon will be retrieved from the current merchant website.</Text>
                 <InlineGrid alignItems="center">
