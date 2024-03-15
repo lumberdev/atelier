@@ -22,7 +22,7 @@ const LogoTitle: React.FC<LogoTitleProps> = ({
     >
       {/* Switching to img tag, Next/Image caching and showing stale images since image url stays the same when logo is updated */}
       <img
-        src={`${logo}?version=${Date.now()}`}
+        src={logo}
         alt={title}
         width="auto"
         height={48}
