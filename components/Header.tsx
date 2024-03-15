@@ -18,12 +18,6 @@ const Header: FC<{
   announcementBgColor?: string;
   announcementTextColor?: string;
   categories?: string[];
-  allProducts?: Awaited<
-    ReturnType<typeof getProductListing>
-  >["products"]["nodes"];
-  setProducts?: (
-    products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]
-  ) => void;
 }> = ({
   campaignHandle,
   title,
@@ -31,8 +25,6 @@ const Header: FC<{
   announcementBgColor,
   announcementTextColor,
   categories = [],
-  allProducts = [],
-  setProducts = () => {},
 }) => {
   const {
     global: { backgroundColor, logoPosition, logo },
@@ -45,16 +37,11 @@ const Header: FC<{
 
   const textColor = getTextColor(backgroundColor);
 
-  function filterProducts(
+  function handleNavigate(
     event: MouseEvent<HTMLElement>,
     category: string = null
   ) {
     event.preventDefault();
-
-    // Set products to display
-    category
-      ? setProducts(allProducts.filter((prod) => prod.tags.includes(category)))
-      : setProducts(allProducts);
 
     // Set query string
     if (category) {
@@ -125,7 +112,7 @@ const Header: FC<{
             <li>
               <a
                 className="cursor-pointer"
-                onClick={(event) => filterProducts(event)}
+                onClick={(event) => handleNavigate(event)}
               >
                 All
               </a>
@@ -134,7 +121,7 @@ const Header: FC<{
               <li key={category}>
                 <a
                   className="cursor-pointer"
-                  onClick={(event) => filterProducts(event, category)}
+                  onClick={(event) => handleNavigate(event, category)}
                 >
                   {category.replace("atelier:", "")}
                 </a>
@@ -143,7 +130,7 @@ const Header: FC<{
           </ul>
           {/* Mobile Navigation */}
           <div className="lg:hidden">
-            <MobileNav categories={categories} onClick={filterProducts} />
+            <MobileNav categories={categories} onClick={handleNavigate} />
           </div>
         </div>
 
