@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { FC } from "react";
 import Header from "@/components/Header";

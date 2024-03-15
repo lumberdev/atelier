@@ -45,9 +45,9 @@ const Header: FC<{
 
     // Set query string
     if (category) {
-      router.replace(`${baseCampaignPath}?category=${category}`);
+      router.push(`${baseCampaignPath}?category=${category}`);
     } else {
-      router.replace(baseCampaignPath);
+      router.push(baseCampaignPath);
     }
   }
 
@@ -72,27 +72,30 @@ const Header: FC<{
           })}
         />
 
-        {
-          logo ? (
-            <LogoTitle
-              title={title}
-              handle={campaignHandle}
+        {logo ? (
+          <LogoTitle
+            title={title}
+            handle={campaignHandle}
+            className={`col-start-2 row-start-1 justify-center ${classNames({
+              "text-left lg:col-start-1 lg:justify-start":
+                logoPosition !== "center",
+              "text-center lg:col-start-2": logoPosition === "center",
+            })}`}
+            logo={logo}
+          />
+        ) : (
+          title && (
+            <h1
               className={`col-start-2 row-start-1 justify-center ${classNames({
                 "text-left lg:col-start-1 lg:justify-start":
                   logoPosition !== "center",
                 "text-center lg:col-start-2": logoPosition === "center",
               })}`}
-              logo={logo}
-            />
-          ) : title && (
-            <h1 className={`col-start-2 row-start-1 justify-center ${classNames({
-              "text-left lg:col-start-1 lg:justify-start" : logoPosition !== "center",
-              "text-center lg:col-start-2": logoPosition === "center"
-            })}`}>
+            >
               {title}
             </h1>
           )
-        }
+        )}
 
         <div
           className={`header-menu col-start-1 row-start-1 items-center justify-end
@@ -105,7 +108,8 @@ const Header: FC<{
           <ul
             className={`hidden items-center justify-center gap-12 text-center lg:flex ${classNames(
               {
-                "lg:justify-start": logoPosition === "center" || (!logo && !title),
+                "lg:justify-start":
+                  logoPosition === "center" || (!logo && !title),
               }
             )}`}
           >
