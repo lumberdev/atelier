@@ -18,12 +18,6 @@ const Header: FC<{
   announcementBgColor?: string;
   announcementTextColor?: string;
   categories?: string[];
-  allProducts?: Awaited<
-    ReturnType<typeof getProductListing>
-  >["products"]["nodes"];
-  setProducts?: (
-    products: Awaited<ReturnType<typeof getProductListing>>["products"]["nodes"]
-  ) => void;
 }> = ({
   campaignHandle,
   title,
@@ -31,8 +25,6 @@ const Header: FC<{
   announcementBgColor,
   announcementTextColor,
   categories = [],
-  allProducts = [],
-  setProducts = () => {},
 }) => {
   const {
     global: { backgroundColor, logoPosition, logo },
@@ -45,22 +37,17 @@ const Header: FC<{
 
   const textColor = getTextColor(backgroundColor);
 
-  function filterProducts(
+  function handleNavigate(
     event: MouseEvent<HTMLElement>,
     category: string = null
   ) {
     event.preventDefault();
 
-    // Set products to display
-    category
-      ? setProducts(allProducts.filter((prod) => prod.tags.includes(category)))
-      : setProducts(allProducts);
-
     // Set query string
     if (category) {
-      router.replace(`${baseCampaignPath}?category=${category}`);
+      router.push(`${baseCampaignPath}?category=${category}`);
     } else {
-      router.replace(baseCampaignPath);
+      router.push(baseCampaignPath);
     }
   }
 
@@ -85,27 +72,30 @@ const Header: FC<{
           })}
         />
 
-        {
-          logo ? (
-            <LogoTitle
-              title={title}
-              handle={campaignHandle}
+        {logo ? (
+          <LogoTitle
+            title={title}
+            handle={campaignHandle}
+            className={`col-start-2 row-start-1 justify-center ${classNames({
+              "text-left lg:col-start-1 lg:justify-start":
+                logoPosition !== "center",
+              "text-center lg:col-start-2": logoPosition === "center",
+            })}`}
+            logo={logo}
+          />
+        ) : (
+          title && (
+            <h1
               className={`col-start-2 row-start-1 justify-center ${classNames({
                 "text-left lg:col-start-1 lg:justify-start":
                   logoPosition !== "center",
                 "text-center lg:col-start-2": logoPosition === "center",
               })}`}
-              logo={logo}
-            />
-          ) : title && (
-            <h1 className={`col-start-2 row-start-1 justify-center ${classNames({
-              "text-left lg:col-start-1 lg:justify-start" : logoPosition !== "center",
-              "text-center lg:col-start-2": logoPosition === "center"
-            })}`}>
+            >
               {title}
             </h1>
           )
-        }
+        )}
 
         <div
           className={`header-menu col-start-1 row-start-1 items-center justify-end
@@ -118,23 +108,24 @@ const Header: FC<{
           <ul
             className={`hidden items-center justify-center gap-12 text-center lg:flex ${classNames(
               {
-                "lg:justify-start": logoPosition === "center" || (!logo && !title),
+                "lg:justify-start":
+                  logoPosition === "center" || (!logo && !title),
               }
             )}`}
           >
             <li>
               <a
                 className="cursor-pointer"
-                onClick={(event) => filterProducts(event)}
+                onClick={(event) => handleNavigate(event)}
               >
                 All
               </a>
             </li>
             {categories.map((category) => (
-              <li>
+              <li key={category}>
                 <a
                   className="cursor-pointer"
-                  onClick={(event) => filterProducts(event, category)}
+                  onClick={(event) => handleNavigate(event, category)}
                 >
                   {category.replace("atelier:", "")}
                 </a>
@@ -143,7 +134,7 @@ const Header: FC<{
           </ul>
           {/* Mobile Navigation */}
           <div className="lg:hidden">
-            <MobileNav categories={categories} onClick={filterProducts} />
+            <MobileNav categories={categories} onClick={handleNavigate} />
           </div>
         </div>
 

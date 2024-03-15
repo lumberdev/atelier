@@ -13,6 +13,7 @@ import getThemeConfig from "@/lib/theme/getThemeConfig";
 import clientProvider from "@/utils/clientProvider";
 import { useTheme } from "@/context/ThemeProvider";
 import CampaignHeader from "@/components/CampaignHeader";
+import { useSearchParams } from "next/navigation";
 
 interface PageProps extends RequiredStorePageProps {
   collection: Awaited<ReturnType<typeof getCampaignCollection>>;
@@ -37,8 +38,13 @@ const CampaignPage: FC<PageProps> = ({
   const {
     global: { favicon },
   } = useTheme();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category");
   const [prodList, setProdList] = useState(listing.products.nodes || []);
   const [prodCategories, setProdCategories] = useState<string[]>([]);
+  const [filteredProdList, setFilteredProdList] = useState(
+    listing.products.nodes
+  );
 
   useEffect(() => {
     const faviconElem = document.querySelector("head .favicon");
@@ -57,6 +63,16 @@ const CampaignPage: FC<PageProps> = ({
     }
   }, [prodList]);
 
+  useEffect(() => {
+    if (currentCategory) {
+      setFilteredProdList(
+        prodList.filter((prod) => prod.tags.includes(currentCategory))
+      );
+    } else {
+      setFilteredProdList(prodList);
+    }
+  }, [currentCategory, prodList]);
+
   return (
     <div className="min-h-screen">
       <Header
@@ -65,8 +81,6 @@ const CampaignPage: FC<PageProps> = ({
         announcement={announcement}
         announcementBgColor={announcementBgColor}
         announcementTextColor={announcementTextColor}
-        allProducts={listing.products.nodes}
-        setProducts={setProdList}
         categories={prodCategories}
       />
       <CampaignHeader
@@ -74,7 +88,7 @@ const CampaignPage: FC<PageProps> = ({
         campaignDescription={campaignDescription}
       />
 
-      <ProductGrid handle={collection.handle} products={prodList} />
+      <ProductGrid handle={collection.handle} products={filteredProdList} />
     </div>
   );
 };
