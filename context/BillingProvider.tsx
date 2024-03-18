@@ -15,7 +15,7 @@ import { useMutation, useQuery } from "react-query";
 interface IBillingContext {
   subscription?: CurrentSubscription;
   subsLoading: boolean;
-  subscribe: ({ plan }: { plan: "STARTER" | "PREMIUM" }) => void;
+  subscribe: ({ plan }: { plan: "BETA" | "STARTER" | "PREMIUM" }) => void;
   cancel: () => void;
 }
 

@@ -39,7 +39,7 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
                 onChange={({ target: { value } }) => {
                   if (value === "password")
                     return router.push(
-                      "/" + router.asPath.split("/")[1] + "/password"
+                      router.asPath.split("?")[0] + "/password"
                     );
 
                   router.push(router.asPath.split("/password")[0]);
