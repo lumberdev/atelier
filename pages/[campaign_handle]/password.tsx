@@ -136,20 +136,27 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
 
   return (
     <div
-      className="bg-atelier bg-blend-overlay bg-cover bg-center relative flex h-screen w-screen flex-col items-center justify-center p-8"
+      className={`
+        bg-atelier bg-blend-overlay bg-cover bg-center relative h-screen w-screen md:p-8
+        md:flex flex-col items-center justify-center 
+        grid grid-rows-12 justify-items-center
+      `}
       style={bgColorWithOpacity("B2") as CSSProperties}
     >
-      <div className="relative flex w-11/12 max-w-xl flex-col items-center px-4 py-12 font-assistant text-atelier-darkblue text-center md:justify-center md:p-8">
-        {logo && (
-          <div className="relative mb-8">
-            <img src={logo} />
-          </div>
-        )}
+      {logo && (
+        <div className="relative mt-8">
+          <img src={logo} />
+        </div>
+      )}
+      <div className={`
+        flex w-full max-w-xl flex-col items-center px-5 py-12 font-assistant text-atelier-darkblue text-center row-span-10
+        md:relative md:justify-center md:p-8
+      `}>
 
-        <h1 className="mb-2 text-5xl font-semibold">{headline}</h1>
-        <p className="mb-8 text-base font-normal">{body}</p>
+        <h1 className="mb-8 text-5xl leading-tight font-semibold">{headline}</h1>
+        <p className="mb-8 text-base leading-normal font-normal">{body}</p>
 
-        <form onSubmit={onSubmit} className="mb-8 w-80 max-w-full">
+        <form onSubmit={onSubmit} className="mb-8 max-w-80 w-full">
           <div className="flex w-full items-stretch overflow-hidden rounded-md border border-solid border-atelier-darkblue">
             <input
               className="py-3.5 px-5 flex-1 text-black text-base font-assistant font-regular"
@@ -173,7 +180,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         )}
       </div>
 
-      <div className="absolute p-2 w-full bottom-8">
+      <div className="md:absolute p-2 w-full bottom-8">
         <p className="text-sm text-atelier-darkblue text-center font-assistant font-normal">
           powered by <span className="font-bold">Atelier</span>
         </p>
