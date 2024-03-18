@@ -44,7 +44,7 @@ const BillingProvider: FC<{ children: ReactNode }> = ({ children }) => {
     queryFn: () =>
       fetch("/api/apps/billing").then((response) => response.json()),
     onSuccess: ({ subscriptions }) => {
-      if (!subscriptions.length) {
+      if (!subscriptions?.length) {
         router.replace("/app/onboarding");
         return;
       }
