@@ -53,8 +53,6 @@ const ProductDetailPage: FC<PageProps> = ({
         announcement={announcement}
         announcementBgColor={announcementBgColor}
         announcementTextColor={announcementTextColor}
-        allProducts={listing.products.nodes}
-        setProducts={setProdList}
         categories={prodCategories}
       />
 

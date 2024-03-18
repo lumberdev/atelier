@@ -72,7 +72,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
 
     return {
       "--atelier-bg-color": finalBgColor,
-      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}")`
+      "--atelier-bg-image": layout === "STACKED" ? "" : `url("${bgImg}?version=${Date.now()}")`
     }
   }
 
@@ -82,7 +82,7 @@ const CampaignPasswordPage = ({ handle }: PageProps) => {
         {backgroundImage && (
           <div className="relative">
             <img
-              src={backgroundImage}
+              src={`${backgroundImage}?version=${Date.now()}`}
               className="object-cover object-center w-full h-full"
               alt=""
             />

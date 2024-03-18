@@ -76,14 +76,14 @@ const getThemeConfig = async ({
   const [campaign] = campaigns;
 
   const campaignFaviconUrl = theme.favicon
-    ? supabaseStorage.getPublicUrl(favicon).data.publicUrl
+    ? `${supabaseStorage.getPublicUrl(theme.favicon).data.publicUrl}?version=${Date.now()}`
     : "";
   const themeFaviconUrl = favicon
-    ? `https://${shop}/cdn/shop/files/${favicon.split("/").reverse()[0]}`
+    ? `https://${shop}/cdn/shop/files/${favicon.split("/").reverse()[0]}?version=${Date.now()}`
     : "";
 
   const campaignLogo = theme.logo
-    ? supabaseStorage.getPublicUrl(theme.logo).data.publicUrl
+    ? `${supabaseStorage.getPublicUrl(theme.logo).data.publicUrl}?version=${Date.now()}`
     : "";
 
   return {

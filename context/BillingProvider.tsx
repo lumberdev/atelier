@@ -14,11 +14,13 @@ import { useMutation, useQuery } from "react-query";
 
 interface IBillingContext {
   subscription?: CurrentSubscription;
+  subsLoading: boolean;
   subscribe: ({ plan }: { plan: "STARTER" | "PREMIUM" }) => void;
   cancel: () => void;
 }
 
 const BillingContext = createContext<IBillingContext>({
+  subsLoading: false,
   subscribe: () => {},
   cancel: () => {},
 });
@@ -100,6 +102,8 @@ const BillingProvider: FC<{ children: ReactNode }> = ({ children }) => {
       )
         return;
 
+      setSubscription(undefined);
+      router.replace("/app/onboarding");
       setShowCancelActionModal(false);
     },
   });
@@ -108,6 +112,7 @@ const BillingProvider: FC<{ children: ReactNode }> = ({ children }) => {
     <BillingContext.Provider
       value={{
         subscription,
+        subsLoading: isLoading,
         subscribe,
         cancel: () => setShowCancelActionModal(true),
       }}

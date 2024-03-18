@@ -5,6 +5,7 @@ import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
 import ThemeColorDropdown from "@/components/ThemeColorDropdown";
 import ThemeColorPicker from "@/components/ThemeColorPicker";
+import SkeletonTemplate from "@/components/SkeletonTemplate";
 import {
   Button,
   Card,
@@ -31,7 +32,11 @@ const SettingsPage = () => {
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
   const router = useRouter();
-  const { subscription, cancel } = useBilling();
+  const { subscription, subsLoading, cancel } = useBilling();
+
+  useEffect(() => {
+    if(!subsLoading && !subscription) router.replace("/app/onboarding");
+  }, [subsLoading, subscription])
 
   const {
     logoUrl,
@@ -50,6 +55,7 @@ const SettingsPage = () => {
 
   const {
     faviconUrl,
+    setFaviconUrl,
     imageFile: faviconImgFile,
     setImageFile: setFaviconImgFile,
     onSubmit: onSubmitMetadata,
@@ -57,6 +63,11 @@ const SettingsPage = () => {
   } = useStoreMetadataForm({
     onUpsert: () => triggerToast("Store metadata updated"),
   })
+
+  const removeFavicon = () => {
+    setFaviconImgFile(null);
+    setFaviconUrl("");
+  }
 
   const removeImage = () => {
     setImageFile(null);
@@ -93,7 +104,9 @@ const SettingsPage = () => {
     if (initial) setFirstTimeSetup(true);
   }, []);
 
-  return (
+  return subsLoading ? (
+    <SkeletonTemplate />
+  ) : (
     <Page title="Settings">
       <Layout>
         <Layout.AnnotatedSection
@@ -143,11 +156,11 @@ const SettingsPage = () => {
                   <Text variant="headingSm" as="h3">
                     Favicon
                   </Text>
-                  {faviconImgFile && (
+                  {(faviconImgFile || faviconUrl) && (
                     <Button 
                       tone="critical"
                       variant="plain"
-                      onClick={() => setFaviconImgFile(null)}
+                      onClick={() => removeFavicon()}
                     >Remove</Button>
                   )}
                 </InlineStack>
@@ -172,7 +185,7 @@ const SettingsPage = () => {
                     </InlineStack>
                   )}
 
-                  {!faviconImgFile && <DropZone.FileUpload />}
+                  {!faviconImgFile && !faviconUrl && <DropZone.FileUpload />}
                 </DropZone>
                 <Text variant="bodySm" as="span" tone="subdued">Default favicon will be retrieved from the current merchant website.</Text>
                 <InlineGrid alignItems="center">

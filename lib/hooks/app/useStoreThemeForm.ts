@@ -94,7 +94,7 @@ export const useStoreThemeForm = ({
       if (theme.logo) {
         const url = supabaseStorage.getPublicUrl(theme.logo);
         setLogoPath(theme.logo);
-        setLogoUrl(url.data.publicUrl ?? "");
+        setLogoUrl(url.data.publicUrl ? `${url.data.publicUrl}?version=${Date.now()}` : "");
       }
     },
   });
@@ -128,7 +128,7 @@ export const useStoreThemeForm = ({
       const storageResponse = await supabaseStorage.upload(
         `${shopId}/${fileName}.${fileExt}`,
         imageFile,
-        { upsert: true }
+        { upsert: true, cacheControl: '60' }
       );
       const logo = storageResponse.data?.path ?? "";
 
