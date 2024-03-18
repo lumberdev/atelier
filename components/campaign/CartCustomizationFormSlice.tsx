@@ -18,7 +18,7 @@ const CartCustomizationFormSlice: FC<{
     <Card>
       <BlockStack gap="400">
         <Text variant="headingSm" as="h3">
-          Store Details
+          Cart Details
         </Text>
 
         <Controller

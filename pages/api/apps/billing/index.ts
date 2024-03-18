@@ -63,6 +63,10 @@ router.get(async (req, res) => {
 });
 
 const SUBSCRIPTION_PLAN = {
+  BETA: {
+    name: "Beta",
+    price: 19.0,
+  },
   STARTER: {
     name: "Starter",
     price: 49.0,
