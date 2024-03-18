@@ -5,6 +5,7 @@ import { useStoreMetadataForm } from "@/lib/hooks/app/useStoreMetadataForm";
 import { useToast } from "@/lib/hooks/app/useToast";
 import ThemeColorDropdown from "@/components/ThemeColorDropdown";
 import ThemeColorPicker from "@/components/ThemeColorPicker";
+import SkeletonTemplate from "@/components/SkeletonTemplate";
 import {
   Button,
   Card,
@@ -31,7 +32,11 @@ const SettingsPage = () => {
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
   const router = useRouter();
-  const { subscription, cancel } = useBilling();
+  const { subscription, subsLoading, cancel } = useBilling();
+
+  useEffect(() => {
+    if(!subsLoading && !subscription) router.replace("/app/onboarding");
+  }, [subsLoading, subscription])
 
   const {
     logoUrl,
@@ -99,7 +104,9 @@ const SettingsPage = () => {
     if (initial) setFirstTimeSetup(true);
   }, []);
 
-  return (
+  return subsLoading ? (
+    <SkeletonTemplate />
+  ) : (
     <Page title="Settings">
       <Layout>
         <Layout.AnnotatedSection
