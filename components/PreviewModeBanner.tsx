@@ -7,6 +7,7 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
   canPreviewAccessPage = false,
 }) => {
   const router = useRouter();
+  console.log("router aspath", router);
   const [isPasswordPage, setIsPasswordPage] = useState(false);
 
   const closePreview = () => {
@@ -39,7 +40,7 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
                 onChange={({ target: { value } }) => {
                   if (value === "password")
                     return router.push(
-                      router.asPath.split("?")[0] + "/password"
+                      `/${router.query["campaign_handle"]}/password`
                     );
 
                   router.push(router.asPath.split("/password")[0]);
