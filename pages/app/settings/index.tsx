@@ -22,7 +22,7 @@ import {
   Toast,
   BlockStack,
 } from "@shopify/polaris";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
@@ -31,6 +31,7 @@ const SettingsPage = () => {
   const [firstTimeSetup, setFirstTimeSetup] = useState(false);
   const { errors, settings, updateStoreDomain, isUpdatingStoreDomain } =
     useStoreSettings();
+  const [validationErrorMsg, setValidationErrorMsg] = useState(null);
   const router = useRouter();
   const { subscription, subsLoading, cancel } = useBilling();
 
@@ -104,6 +105,25 @@ const SettingsPage = () => {
     if (initial) setFirstTimeSetup(true);
   }, []);
 
+  // validates domain name 
+  useEffect(() => {
+    if(domain == settings.domain) {
+      setValidationErrorMsg(null);
+      return;
+    }
+
+    // subdomain can contain letters, numbers, or hyphens
+    // the others should be marked as invalid
+    // the subdomain length should also be greater than 1
+    const validationRegex = /^[a-zA-Z0-9\-]{2,}$/;
+
+    if(validationRegex.test(domain)) {
+      setValidationErrorMsg(null);
+    } else {
+      setValidationErrorMsg("Invalid domain name - can only contain letters, numbers, and hyphens, length being at least 2");
+    }
+  }, [domain])
+
   return subsLoading ? (
     <SkeletonTemplate />
   ) : (
@@ -125,14 +145,14 @@ const SettingsPage = () => {
                   error={
                     errors["UNAVAILABLE_DOMAIN"]
                       ? errors["UNAVAILABLE_DOMAIN"]
-                      : null
+                      : validationErrorMsg
                   }
                   connectedRight={
                     <Button
                       variant="primary"
                       submit
                       loading={isUpdatingStoreDomain}
-                      disabled={!domain || domain == settings.domain}
+                      disabled={ domain == settings.domain || validationErrorMsg ? true : false}
                     >
                       Save
                     </Button>
