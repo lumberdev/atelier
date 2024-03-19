@@ -7,7 +7,6 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
   canPreviewAccessPage = false,
 }) => {
   const router = useRouter();
-  console.log("router aspath", router);
   const [isPasswordPage, setIsPasswordPage] = useState(false);
 
   const closePreview = () => {
