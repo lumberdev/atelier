@@ -29,7 +29,17 @@ router.get(async (req, res) => {
 
 router.put(async (req, res) => {
   const shop = req.user_session.shop;
+  const host = req.headers.host.split(".")[0];
   const { domain } = JSON.parse(req.body) as { domain: string };
+
+  if(host == domain) {
+    return res.status(404).json({
+      error: {
+        code: "UNAVAILABLE_DOMAIN",
+        message: "Domain cannot be the same as the hostname"
+      }
+    });
+  }
 
   const matchingDomainStore = await prisma.stores.findUnique({
     where: { identifier: domain },
