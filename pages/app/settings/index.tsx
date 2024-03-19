@@ -115,12 +115,12 @@ const SettingsPage = () => {
     // subdomain can contain letters, numbers, or hyphens
     // the others should be marked as invalid
     // the subdomain length should also be greater than 1
-    const validationRegex = /^[a-zA-Z0-9\-]{2,}$/;
+    const validationRegex = /^[a-z0-9\-]{2,}$/;
 
     if(validationRegex.test(domain)) {
       setValidationErrorMsg(null);
     } else {
-      setValidationErrorMsg("Invalid domain name - can only contain letters, numbers, and hyphens, length being at least 2");
+      setValidationErrorMsg("Invalid domain name - can only contain lowercase letters, numbers, and hyphens, length at least 2");
     }
   }, [domain])
 
