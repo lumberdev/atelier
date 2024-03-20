@@ -20,7 +20,7 @@ const Footer = () => {
           </div>
           <div className="flex justify-end gap-[1rem] text-xs underline md:gap-[3rem] md:text-sm">
             <Link href="/pages/privacy">Privacy</Link>
-            <Link href="/pages/terms">Terms</Link>
+            <Link href="/pages/faq">FAQ</Link>
           </div>
         </div>
       </div>
