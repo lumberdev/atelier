@@ -46,21 +46,12 @@
   "pricings": {
     "pricing": [
       {
-        "title": "FREE TRIAL",
-        "rate": "8-WEEKS FREE TRIAL",
+        "title": "Beta Mode",
+        "rate": "8-WEEKS FREE TRIAL + $19 / MONTH (90% OFF)",
         "features": [
-          "Lorem ipsum dolor",
-          "Lorem ipsum dolor",
-          "Lorem ipsum dolor"
-        ]
-      },
-      {
-        "title": "STARTER",
-        "rate": "$19 / month + $0.08 per transaction",
-        "features": [
-          "Create up to 3 mini stores",
-          "Atelier Logo in the footer",
-          "Basic customization options"
+          "Create unlimited, password-protected private sales",
+          "Publish collections exclusively to Atelier",
+          "White glove support for a full year"
         ]
       }
     ]
