@@ -47,7 +47,7 @@
     "pricing": [
       {
         "title": "FREE TRIAL",
-        "rate": "30-DAY FREE TRIAL",
+        "rate": "8-WEEKS FREE TRIAL",
         "features": [
           "Lorem ipsum dolor",
           "Lorem ipsum dolor",
@@ -61,17 +61,6 @@
           "Create up to 3 mini stores",
           "Atelier Logo in the footer",
           "Basic customization options"
-        ]
-      },
-      {
-        "title": "PRO",
-        "rate": "$19 / month + $0.08 per transaction",
-        "features": [
-          "Unlimited mini stores",
-          "Unlimited mini stores",
-          "Remove Atelier logo",
-          "Access to exclusive templates",
-          "Enhanced analytics for in-depth insights"
         ]
       }
     ]
