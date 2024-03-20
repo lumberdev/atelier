@@ -27,7 +27,7 @@ const OnboardingPage = () => {
           <Text as="p" variant="bodyLg">
             Atelier is fully functional but we decided to release a discounted version to early adopters in exchange for feedback.
             <br />
-            All subscriptions are 90% off for a full year. You  won't be charged during the first 8 weeks.
+            All subscriptions are 80% off for a full year. You  won't be charged during the first 8 weeks.
           </Text>
         </BlockStack>
 
@@ -36,10 +36,10 @@ const OnboardingPage = () => {
             <Card>
               <BlockStack gap="400">
                 <Text as="h6" variant="headingMd" fontWeight="medium">
-                  Beta Mode | Free Trial + 90% off
+                  Beta Mode | Free Trial + 80% off
                 </Text>
                 <InlineStack gap="200">
-                  <Text as="span" variant="headingXl" tone="subdued"><s>$199</s></Text>
+                  <Text as="span" variant="headingXl" tone="subdued"><s>$99</s></Text>
                   <Text as="p" variant="headingXl">$19 / month</Text>
                 </InlineStack>
                 <Text as="p" tone="success" fontWeight="semibold">
