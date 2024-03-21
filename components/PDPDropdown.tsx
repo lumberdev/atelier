@@ -20,8 +20,9 @@ const PDPDropdown: FC<{
             id={option.name}
             className="border border-stroke-1 px-3 py-2 bg-white"
             onChange={changeValue}
+            defaultValue={""}
             >
-            <option value="" disabled selected>{option.name}</option>
+            <option value="" disabled>{option.name}</option>
             {option.values.map((value, index) => (
                 <option value={value} key={index}>
                 {value}

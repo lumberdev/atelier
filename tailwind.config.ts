@@ -8,6 +8,7 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
     "./context/**/*.{ts,tsx}",
+    "node_modules/flowbite-react/lib/esm/**/*.js",
   ],
   prefix: "",
   theme: {
@@ -40,7 +41,16 @@ const config = {
         "atelier-background": "var(--atelier-background-color)",
         "atelier-text": "var(--atelier-text-color)",
         "atelier-darkblue": "#15206B",
-        "dropdown-empty": "#121212"
+        "dropdown-empty": "#121212",
+        "b4b4b4": "#b4b4b4",
+      },
+      height: {
+        "80vw": "80vw",
+      },
+      spacing: {
+        "minus-4": "-1rem",
+        "minus-6": "-1.5rem",
+        "minus-8": "-2rem",
       },
       keyframes: {
         "accordion-down": {
@@ -68,7 +78,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("flowbite/plugin"),
+  ],
 } satisfies Config;
 
 export default config;

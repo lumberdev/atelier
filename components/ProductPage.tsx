@@ -6,7 +6,7 @@ import PDPDropdown from "@/components/PDPDropdown";
 import getProductDetails from "@/lib/campaign/getProductDetails";
 import { useCart } from "@/context/CartProvider";
 import { useTheme } from "@/context/ThemeProvider";
-import { checkTargetForNewValues } from "framer-motion";
+import ImageSlider from "@/components/ImageSlider";
 
 const ProductPage: FC<{
   product: Awaited<ReturnType<typeof getProductDetails>>;
@@ -63,11 +63,10 @@ const ProductPage: FC<{
   };
 
 
-
   return (
-    <div className="container mx-auto p-8">
+    <div className="w-full max-w-screen-2xl mx-auto md:px-4 md:py-8">
       <div className="xs:gap-16 relative grid grid-cols-1 gap-0 md:grid-cols-2">
-        <div className="px-8">
+        <div className="px-4 hidden md:block ">
           {product.images.nodes.map((image, index) => (
             <img
               src={image.url}
@@ -77,8 +76,11 @@ const ProductPage: FC<{
             />
           ))}
         </div>
+        <div className="md:hidden max-w-xl w-full mx-auto">
+          <ImageSlider imageUrls={product.images.nodes.map((image) => image.url)} />
+        </div>
         <div
-          className="sticky top-40 h-fit w-96 px-8 font-assistant"
+          className="md:sticky md:top-40 py-8 mt-4 md:py-0 h-fit w-full max-w-96 px-8 md:px-4 font-assistant mx-auto md:mx-0"
           style={
             {
               "--atelier-text-color": getTextColor(backgroundColor),
@@ -129,7 +131,11 @@ const ProductPage: FC<{
             </PrimaryButton>
           </form>
 
-          <p className="text-atelier-text text-sm font-normal mb-4">{product.description}</p>
+          {/* <div className="text-atelier-text text-sm font-normal mb-4">{product.descriptionHtml}</div> */}
+          <div 
+            className="text-atelier-text text-sm font-normal mb-4"
+            dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+          />
         </div>
       </div>
     </div>

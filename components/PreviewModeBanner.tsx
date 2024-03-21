@@ -35,7 +35,6 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
             <div className="relative">
               <select
                 value={isPasswordPage ? "password" : "campaign"}
-                defaultValue={isPasswordPage ? "password" : "campaign"}
                 onChange={({ target: { value } }) => {
                   if (value === "password")
                     return router.push(
