@@ -64,7 +64,7 @@ const ProductPage: FC<{
 
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto md:px-4 md:py-8">
+    <div className="md:container mx-auto md:px-4 md:py-8">
       <div className="xs:gap-16 relative grid grid-cols-1 gap-0 md:grid-cols-2">
         <div className="px-4 hidden md:block ">
           {product.images.nodes.map((image, index) => (
