@@ -64,7 +64,7 @@ const Header: FC<{
         />
       )}
 
-      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
+      <Container variant={"lg"} className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
         <div
           className={classNames({
             "col-start-1": logoPosition === "center",

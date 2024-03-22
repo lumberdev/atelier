@@ -9,7 +9,7 @@ const Container: FC<{
   return (
     <div
       className={classnames(
-        "mx-auto w-full max-w-7xl xl:max-w-[1420px]",
+        "mx-auto w-full max-w-7xl xl:max-w-[1420px] py-2",
         {
           "px-2": variant === "sm",
           "px-4": variant === "md",
