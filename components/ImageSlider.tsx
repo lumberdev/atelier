@@ -36,8 +36,8 @@ const ImageSlider = ({ imageUrls }) => {
     return (
         <div className="h-80vw">
             <Carousel slide={false} theme={customTheme}>
-                {imageUrls.map((url:string) => (
-                    <img src={url} alt="..." />
+                {imageUrls.map((url:string, index: number) => (
+                    <img key={index} src={url} alt="..." />
                 ))}
             </Carousel>
         </div>
