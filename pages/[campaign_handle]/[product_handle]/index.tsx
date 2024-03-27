@@ -11,6 +11,7 @@ import { RequiredStorePageProps } from "@/lib/types";
 import getStorefrontAccessToken from "@/lib/auth/getStorefrontAccessToken";
 import clientProvider from "@/utils/clientProvider";
 import getThemeConfig from "@/lib/theme/getThemeConfig";
+import { useTheme } from "@/context/ThemeProvider";
 
 interface PageProps extends RequiredStorePageProps {
   listing: Awaited<ReturnType<typeof getProductListing>>;
@@ -32,8 +33,17 @@ const ProductDetailPage: FC<PageProps> = ({
   announcementTextColor,
   campaignTitle,
 }) => {
+  const {
+    global: { favicon },
+  } = useTheme();
   const [prodList, setProdList] = useState(listing.products.nodes || []);
   const [prodCategories, setProdCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const faviconElem = document.querySelector("head .favicon");
+
+    faviconElem["href"] = favicon;
+  }, [favicon]);
 
   useEffect(() => {
     if (!prodCategories || prodCategories.length <= 0) {

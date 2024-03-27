@@ -43,7 +43,7 @@ const MobileNav = ({
       onOpenChange={setOpenDrawer}
     >
       <Drawer.Trigger aria-label="Open mobile nav drawer" className="relative">
-        <NavigationMenu stroke={textColor} />
+        <NavigationMenu fill={textColor} />
       </Drawer.Trigger>
 
       <Drawer.Portal>
