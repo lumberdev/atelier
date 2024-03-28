@@ -1,13 +1,18 @@
 import { useState, MouseEvent } from "react";
 import { Drawer } from "vaul";
-import MenuIcon from "@/assets/icons/navigation-menu.svg";
+import { NavigationMenu } from "@/assets/icons/Icons";
 import CloseIcon from "@/assets/icons/x.svg";
+import { useTheme } from "@/context/ThemeProvider";
+import { getTextColor } from "@/lib/helper/colors";
 
 const MobileNav = ({
     categories,
     onClick
 }) => {
+  const { global: { backgroundColor } } = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const textColor = getTextColor(backgroundColor);
 
   function handleClick(event: MouseEvent<HTMLElement>, category:string = null) {
     onClick(event, category);
@@ -38,7 +43,7 @@ const MobileNav = ({
       onOpenChange={setOpenDrawer}
     >
       <Drawer.Trigger aria-label="Open mobile nav drawer" className="relative">
-        <MenuIcon />
+        <NavigationMenu fill={textColor} />
       </Drawer.Trigger>
 
       <Drawer.Portal>

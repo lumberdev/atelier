@@ -48,8 +48,6 @@ const PreviewModeBanner: FC<{ canPreviewAccessPage?: boolean }> = ({
                 <option value="campaign">Campaign Page</option>
                 <option value="password">Password Page</option>
               </select>
-
-              <ChevronDownIcon className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />
             </div>
           )}
         </div>

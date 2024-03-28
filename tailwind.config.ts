@@ -48,6 +48,7 @@ const config = {
         "80vw": "80vw",
       },
       spacing: {
+        "4.5": "1.125rem",
         "minus-4": "-1rem",
         "minus-6": "-1.5rem",
         "minus-8": "-2rem",

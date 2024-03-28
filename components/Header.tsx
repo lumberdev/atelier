@@ -64,7 +64,7 @@ const Header: FC<{
         />
       )}
 
-      <Container className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
+      <Container variant={"lg"} className="grid w-full grid-cols-[1fr_3fr_1fr] items-center justify-between transition-all lg:relative lg:px-16 lg:py-4">
         <div
           className={classNames({
             "col-start-1": logoPosition === "center",
@@ -98,7 +98,7 @@ const Header: FC<{
         )}
 
         <div
-          className={`header-menu col-start-1 row-start-1 items-center justify-end
+          className={`header-menu flex col-start-1 row-start-1 items-center justify-start
             ${classNames({
               "lg:col-start-2": (logo || title) && logoPosition !== "center",
               "lg:col-start-1": logoPosition === "center" || (!logo && !title),
@@ -133,7 +133,7 @@ const Header: FC<{
             ))}
           </ul>
           {/* Mobile Navigation */}
-          <div className="lg:hidden">
+          <div className="lg:hidden h-[40px]">
             <MobileNav categories={categories} onClick={handleNavigate} />
           </div>
         </div>

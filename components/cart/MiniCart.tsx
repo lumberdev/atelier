@@ -1,5 +1,5 @@
 import { Drawer } from "vaul";
-import CartIcon from "@/assets/icons/shopping-cart.svg";
+import { CartIcon } from "@/assets/icons/Icons";
 import { useCart } from "@/context/CartProvider";
 import CloseIcon from "@/assets/icons/x.svg";
 import EmptyCart from "./EmptyState";
@@ -11,6 +11,8 @@ import { getTextColor } from "@/lib/helper/colors";
 const MiniCart = () => {
   const { cart, isLoading, miniCartOpen, onMiniCartOpenChange } = useCart();
   const { global, cart: cartTheme } = useTheme();
+
+  const textColor = getTextColor(global.backgroundColor);
 
   if (isLoading) return null;
 
@@ -33,11 +35,14 @@ const MiniCart = () => {
       onOpenChange={onMiniCartOpenChange}
     >
       <Drawer.Trigger aria-label="Open cart drawer" className="relative">
-        <CartIcon />
+        <CartIcon  fill={textColor}/>
         {cart?.totalQuantity > 0 && (
           <span
-            className="bg-atelier-primary absolute -right-2 -top-3 flex aspect-square h-5 w-5 items-center justify-center rounded-full text-center text-[10px]"
-            style={{ color: getTextColor(global.primaryColor) }}
+            className="absolute left-2/4 top-2/4 flex aspect-square h-4.5 w-4.5 items-center justify-center rounded-full text-center text-[10px]"
+            style={{ 
+              backgroundColor: textColor,
+              color: getTextColor(textColor)
+            }}
           >
             {cart.totalQuantity}
           </span>
